@@ -1,0 +1,43 @@
+#root {
+  min-height: 100vh;
+}
+
+.welcome {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 2rem;
+}
+
+.welcome__content {
+  width: min(100%, 42rem);
+  padding: clamp(2rem, 7vw, 5rem);
+  border: 1px solid #dfe5e2;
+  border-radius: 1.5rem;
+  background: #ffffff;
+  box-shadow: 0 1.5rem 5rem rgb(31 58 48 / 8%);
+}
+
+.welcome__eyebrow {
+  margin: 0 0 1rem;
+  color: #26745a;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.welcome h1 {
+  margin: 0;
+  color: #17382c;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  letter-spacing: -0.06em;
+  line-height: 1.05;
+}
+
+.welcome__description {
+  max-width: 32rem;
+  margin: 1.5rem 0 0;
+  color: #52635b;
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
