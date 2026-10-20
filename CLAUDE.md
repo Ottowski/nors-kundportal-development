@@ -36,4 +36,11 @@ There is no test runner or linter configured yet for either side.
 ## Workflow notes
 
 - PRs use the template at `.github/PULL_REQUEST_TEMPLATE/teamets-projekt.md` (final-version commit link, team info, links to shared docs). Individual written reports go to Disco as Markdown and must not be added to the repo.
-- `.venv`, `node_modules` and `.env` files are git-ignored; don't commit them.
+- `.venv`, `node_modules` and `.env` are git-ignored; don't commit them.
+
+## Restrictions
+
+- Never run any git commands (no status, diff, add, commit, push, branch, etc.). The user handles all git operations.
+- Never read, open, grep, or otherwise access these secret files, and don't print their contents:
+  - `frontend/.env.local`
+  - `backend/.env`
