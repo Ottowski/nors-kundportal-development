@@ -2,30 +2,34 @@
 
 ## Problem
 
-_Ej ifyllt ännu._
+Exempel: vilket problem har kunder/kundservice idag som NORS ska lösa, och varför är det värt att lösa?
 
 ## Syfte
 
-_Ej ifyllt ännu._
+Exempel: varför gör ni detta projekt - vad ska det leda till för kund, kundservice eller team?
 
 ## Önskat resultat
 
-_Ej ifyllt ännu._
+Exempel: vad ska finnas klart vid examinationen - vilken funktionalitet och vilken kvalitet?
 
 ## Avgränsning
 
 ### Ingår
 
-_Ej ifyllt ännu._
+Status, Lista (detaljer), Skapa (beslutat vecka 4, se `veckostatus.md`.)
 
 ### Ingår inte
 
-_Ej ifyllt ännu._
+Inloggning, e-post, molndrift (beslutat vecka 4, se `veckostatus.md`.)
 
 ## Teknikval (med motivering)
 
-_Ej ifyllt ännu._
+Backend: FastAPI (Python 3.10+). Frontend: React (JavaScript, ingen TypeScript) med Vite. Se `CLAUDE.md` för arkitekturöversikt.
+
+Motivering: ej ifylld ännu (flaggat som kvarstående i veckostatus vecka 4-5 - ansvarig: ?
 
 ## Arbetsfördelning
 
-_Ej ifyllt ännu._
+Otto (Backend), Sravani (Testing), Ruben (Databas/Query), Nathalie (Frontend). Ej satt i sten, vi hjälps åt.
+
+Preliminär fördelning från vecka 4 (se veckostatus vecka 4, punkt 8).
