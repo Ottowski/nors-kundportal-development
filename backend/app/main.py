@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.routers.arende_router import router as arende_router
+
 app = FastAPI(
     title="Kundserviceportalen NORS API",
     description="Backend API for the Kundserviceportalen NORS team project.",
@@ -14,6 +16,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(arende_router)
 
 
 @app.get("/")
