@@ -1,7 +1,7 @@
 # Kundserviceportalen NORS
 
 A blank starter project for the NORS team, with a Python/FastAPI backend and a
-React/JavaScript frontend.
+React/TypeScript frontend.
 
 ## Requirements
 
@@ -61,6 +61,21 @@ npm run dev
 ```
 
 Open the local URL printed by Vite (normally <http://localhost:5173>).
+
+Other frontend commands:
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev:mock` | Runs the UI on mocked API data (MSW). No backend needed. |
+| `npm test` | Runs tests in watch mode (Vitest + Testing Library). |
+| `npm run check` | Full build cycle: Prettier check, ESLint, TypeScript, tests, production build. |
+| `npm run format` | Formats code with Prettier. |
+
+## API tests (Postman)
+
+Import `docs/api/kundportal.postman_collection.json` and
+`docs/api/kundportal.postman_environment.json` in Postman, or run them from the
+terminal. See [docs/api/README.md](docs/api/README.md).
 
 ## Team development
 
