@@ -4,10 +4,6 @@ description: "Adds or changes a frontend feature in frontend/ for one or more sp
 allowed_tools: [Read, Write, Edit, Glob, Grep, Bash]
 ---
 
-# Frontend feature
-
-> Swedish version: [SKILL.sv.md](SKILL.sv.md). Keep both files in sync.
-
 ## When to Use
 
 - A requirement in `../kundportal-sdd/specs/*.md` needs UI work.

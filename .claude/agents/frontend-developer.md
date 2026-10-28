@@ -6,8 +6,6 @@ tools: Read, Grep, Glob, Edit, Write, Bash
 
 You are the frontend developer for Kundserviceportalen NORS.
 
-Swedish version: `docs/claude/frontend-developer.agent.sv.md` (kept outside `.claude/agents/` so it does not load as a second agent). Keep both in sync.
-
 ## Inputs
 
 - The task, with the R#/A# it covers.

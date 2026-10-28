@@ -2,7 +2,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_API_URL?: string;
-  readonly VITE_ENABLE_EDIT_DELETE?: string;
+  readonly VITE_ENABLE_EDIT?: string;
 }
 
 interface ImportMeta {

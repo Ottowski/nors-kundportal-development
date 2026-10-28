@@ -82,16 +82,6 @@ export const handlers = [
     return HttpResponse.json(updated);
   }),
 
-  // Proposed, outside v1.0 scope.
-  http.delete(`${API_BASE_URL}/arenden/:id`, ({ params }) => {
-    const index = db.arenden.findIndex((a) => a.id === Number(params.id));
-    if (index === -1) {
-      return HttpResponse.json(NOT_FOUND, { status: 404 });
-    }
-    db.arenden.splice(index, 1);
-    return new HttpResponse(null, { status: 204 });
-  }),
-
   // Proposed endpoint, not built in the backend yet.
   http.post(`${API_BASE_URL}/arenden/:id/status`, async ({ params, request }) => {
     const index = db.arenden.findIndex((a) => a.id === Number(params.id));

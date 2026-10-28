@@ -14,7 +14,7 @@ type ListState =
 
 type Panel =
   | { kind: "closed" }
-  | { kind: "view"; id: number; confirmDelete?: boolean }
+  | { kind: "view"; id: number }
   | { kind: "edit"; arende: Arende }
   | { kind: "create" };
 
@@ -28,7 +28,6 @@ function App() {
   const [list, setList] = useState<ListState>({ kind: "loading" });
   const [filter, setFilter] = useState<ArendeFilter>({});
   const [panel, setPanel] = useState<Panel>({ kind: "closed" });
-  const [notice, setNotice] = useState<string | null>(null);
 
   const load = useCallback(() => {
     setList({ kind: "loading" });
@@ -54,23 +53,12 @@ function App() {
   }, []);
 
   function open(next: Panel) {
-    setNotice(null);
     setPanel(next);
   }
 
   function handleSaved(arende: Arende) {
     upsert(arende);
     open({ kind: "view", id: arende.id });
-  }
-
-  function handleDeleted(id: number) {
-    setList((prev) =>
-      prev.kind === "loaded"
-        ? { kind: "loaded", arenden: prev.arenden.filter((a) => a.id !== id) }
-        : prev,
-    );
-    setPanel({ kind: "closed" });
-    setNotice("Ärendet togs bort.");
   }
 
   const close = () => setPanel({ kind: "closed" });
@@ -100,11 +88,6 @@ function App() {
       <div className={panel.kind === "closed" ? "layout" : "layout layout--with-panel"}>
         <main className="card">
           <SearchFilterBar onChange={setFilter} />
-          {notice && (
-            <p role="status" className="notice">
-              {notice}
-            </p>
-          )}
           {list.kind === "loading" && <p role="status">Laddar ärenden…</p>}
           {list.kind === "error" && (
             <div role="alert" className="alert">
@@ -121,7 +104,6 @@ function App() {
               selectedId={selectedId}
               onSelect={(id) => open({ kind: "view", id })}
               onEdit={(arende) => open({ kind: "edit", arende })}
-              onDelete={(id) => open({ kind: "view", id, confirmDelete: true })}
             />
           )}
         </main>
@@ -131,11 +113,9 @@ function App() {
             {panel.kind === "view" && (
               <ArendeDetail
                 id={panel.id}
-                confirmDelete={panel.confirmDelete}
                 onClose={close}
                 onChanged={upsert}
                 onEdit={(arende) => open({ kind: "edit", arende })}
-                onDeleted={handleDeleted}
               />
             )}
             {panel.kind === "edit" && (

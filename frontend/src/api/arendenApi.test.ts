@@ -5,7 +5,6 @@ import { ApiError, NETWORK_ERROR_MESSAGE, VALIDATION_ERROR_MESSAGE } from "./api
 import {
   API_BASE_URL,
   createArende,
-  deleteArende,
   getArende,
   listArenden,
   updateArende,
@@ -77,13 +76,13 @@ describe("arendenApi", () => {
   it("updates status and rejects invalid status (R8, R9)", async () => {
     expect((await updateStatus(1, "Pågående")).status).toBe("Pågående");
     // @ts-expect-error invalid status on purpose
-    const error = await catchError(updateStatus(1, "Raderad"));
+    const error = await catchError(updateStatus(1, "Ogiltig"));
     expect(error.status).toBe(422);
     expect(error.fieldErrors.status).toBe("Ogiltig status");
   });
 });
 
-describe("arendenApi proposed edit/delete (out of v1.0 scope, mock only)", () => {
+describe("arendenApi proposed editing (out of v1.0 scope, mock only)", () => {
   it("updates editable fields and keeps status, id and skapad", async () => {
     const before = await getArende(1);
     const updated = await updateArende(1, { ...valid, rubrik: "Ändrad rubrik" });
@@ -104,15 +103,5 @@ describe("arendenApi proposed edit/delete (out of v1.0 scope, mock only)", () =>
 
   it("returns 404 when editing a missing case", async () => {
     expect((await catchError(updateArende(999, valid))).status).toBe(404);
-  });
-
-  it("deletes a case", async () => {
-    await deleteArende(2);
-    expect((await catchError(getArende(2))).status).toBe(404);
-    expect((await listArenden()).map((a) => a.id)).toEqual([1, 3]);
-  });
-
-  it("returns 404 when deleting a missing case", async () => {
-    expect((await catchError(deleteArende(999))).status).toBe(404);
   });
 });

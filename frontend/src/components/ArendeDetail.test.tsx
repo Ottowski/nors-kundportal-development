@@ -8,7 +8,7 @@ import { server } from "../mocks/node";
 import { ArendeDetail } from "./ArendeDetail";
 
 function renderDetail(id = 1) {
-  const props = { onClose: vi.fn(), onChanged: vi.fn(), onEdit: vi.fn(), onDeleted: vi.fn() };
+  const props = { onClose: vi.fn(), onChanged: vi.fn(), onEdit: vi.fn() };
   render(<ArendeDetail id={id} {...props} />);
   return props;
 }
@@ -65,7 +65,7 @@ describe("ArendeDetail", () => {
         return HttpResponse.json({ ...arende, status: "Avslutat" });
       }),
     );
-    const props = { onClose: vi.fn(), onChanged: vi.fn(), onEdit: vi.fn(), onDeleted: vi.fn() };
+    const props = { onClose: vi.fn(), onChanged: vi.fn(), onEdit: vi.fn() };
     const { rerender } = render(<ArendeDetail id={1} {...props} />);
     await userEvent.setup().selectOptions(await screen.findByLabelText("Ändra status"), "Avslutat");
     rerender(<ArendeDetail id={2} {...props} />);
@@ -87,37 +87,5 @@ describe("ArendeDetail", () => {
     expect(onEdit).toHaveBeenCalledWith(
       expect.objectContaining({ id: 1, rubrik: "Faktura saknas" }),
     );
-  });
-
-  it("Ta bort asks for confirmation; Avbryt keeps the case", async () => {
-    const { onDeleted } = renderDetail();
-    const user = userEvent.setup();
-    await user.click(await screen.findByRole("button", { name: "Ta bort" }));
-
-    expect(screen.getByText(/Det går inte att ångra/)).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Avbryt" }));
-    expect(onDeleted).not.toHaveBeenCalled();
-    expect(db.arenden).toHaveLength(3);
-  });
-
-  it("confirmed delete removes the case", async () => {
-    const { onDeleted } = renderDetail();
-    const user = userEvent.setup();
-    await user.click(await screen.findByRole("button", { name: "Ta bort" }));
-    await user.click(screen.getByRole("button", { name: "Ja, ta bort" }));
-
-    await vi.waitFor(() => expect(onDeleted).toHaveBeenCalledWith(1));
-    expect(db.arenden.map((a) => a.id)).toEqual([2, 3]);
-  });
-
-  it("shows a message when delete fails", async () => {
-    server.use(http.delete(`${API_BASE_URL}/arenden/:id`, () => HttpResponse.error()));
-    const { onDeleted } = renderDetail();
-    const user = userEvent.setup();
-    await user.click(await screen.findByRole("button", { name: "Ta bort" }));
-    await user.click(screen.getByRole("button", { name: "Ja, ta bort" }));
-
-    expect(await screen.findByRole("alert")).toHaveTextContent("Kunde inte nå servern");
-    expect(onDeleted).not.toHaveBeenCalled();
   });
 });

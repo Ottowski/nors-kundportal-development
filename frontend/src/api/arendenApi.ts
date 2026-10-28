@@ -46,7 +46,3 @@ export function updateStatus(id: number, status: ArendeStatus): Promise<Arende> 
 export function updateArende(id: number, data: ArendeCreate): Promise<Arende> {
   return request<Arende>(`/arenden/${id}`, { method: "PUT", body: JSON.stringify(data) });
 }
-
-export function deleteArende(id: number): Promise<void> {
-  return request<void>(`/arenden/${id}`, { method: "DELETE" });
-}

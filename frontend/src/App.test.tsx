@@ -22,6 +22,7 @@ describe("App", () => {
     render(<App />);
     expect(screen.getByRole("heading", { level: 1, name: "Alla ärenden" })).toBeInTheDocument();
     expect(await rowTitles()).toEqual(["Fel på faktura", "Kan inte logga in", "Faktura saknas"]);
+    expect(screen.queryByRole("button", { name: /ta bort/i })).not.toBeInTheDocument();
     expect(panel()).not.toBeInTheDocument();
   });
 
@@ -102,19 +103,6 @@ describe("App", () => {
     expect(await rowTitles()).toContain("Faktura saknas (okt)");
   });
 
-  it("delete in the panel removes the row and closes the panel", async () => {
-    render(<App />);
-    const user = userEvent.setup();
-    await rowTitles();
-    await user.click(screen.getByText("Kan inte logga in"));
-    await user.click(await screen.findByRole("button", { name: "Ta bort" }));
-    await user.click(screen.getByRole("button", { name: "Ja, ta bort" }));
-
-    await screen.findByText("Ärendet togs bort.");
-    expect(await rowTitles()).toEqual(["Fel på faktura", "Faktura saknas"]);
-    expect(panel()).not.toBeInTheDocument();
-  });
-
   it("A14: search + filter combine; A15: no hits message; A16: spaces show all", async () => {
     render(<App />);
     const user = userEvent.setup();
@@ -165,21 +153,6 @@ describe("App", () => {
 
     const side = screen.getByRole("complementary", { name: "Redigera ärende" });
     expect(within(side).getByLabelText("Rubrik")).toHaveValue("Kan inte logga in");
-  });
-
-  it("delete icon in a row asks for confirmation before deleting", async () => {
-    render(<App />);
-    const user = userEvent.setup();
-    await rowTitles();
-    await user.click(screen.getByRole("button", { name: "Ta bort Kan inte logga in" }));
-
-    const side = await screen.findByRole("complementary", { name: "Ärendedetaljer" });
-    expect(await within(side).findByText(/Det går inte att ångra/)).toBeInTheDocument();
-    expect(db.arenden).toHaveLength(3);
-
-    await user.click(within(side).getByRole("button", { name: "Ja, ta bort" }));
-    await screen.findByText("Ärendet togs bort.");
-    expect(await rowTitles()).toEqual(["Fel på faktura", "Faktura saknas"]);
   });
 
   it("row icons do not trigger the row click", async () => {

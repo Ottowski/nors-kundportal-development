@@ -5,8 +5,8 @@ import { db } from "../mocks/handlers";
 import { server } from "../mocks/node";
 
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
-// Tests run with edit/delete on, as in `npm run dev:mock`. Tests for the off state stub it to false.
-beforeEach(() => vi.stubEnv("VITE_ENABLE_EDIT_DELETE", "true"));
+// Tests run with editing on, as in `npm run dev:mock`. Tests for the off state stub it to false.
+beforeEach(() => vi.stubEnv("VITE_ENABLE_EDIT", "true"));
 afterEach(() => {
   cleanup();
   vi.unstubAllEnvs();

@@ -108,39 +108,6 @@
   margin-top: 0;
 }
 
-.button.button--danger {
-  background: var(--color-error);
-}
-
-.button.button--danger-outline {
-  color: var(--color-error);
-  background: var(--color-surface);
-  border: 1px solid var(--color-error);
-}
-
-.confirm {
-  margin-top: var(--space-lg);
-  padding: var(--space-md);
-  border: 1px solid var(--color-error);
-  border-radius: 0.5rem;
-  background: var(--color-error-bg);
-}
-
-.confirm p {
-  margin: 0;
-}
-
-.confirm .actions {
-  margin-top: var(--space-md);
-}
-
-.notice {
-  margin: 0 0 var(--space-md);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: 0.5rem;
-  background: #e6f2ec;
-}
-
 .table__row {
   cursor: pointer;
 }
@@ -374,10 +341,6 @@ select {
 
 .icon-button--small:hover {
   background: var(--color-background);
-}
-
-.icon-button--danger {
-  color: var(--color-error);
 }
 
 .table__actions {

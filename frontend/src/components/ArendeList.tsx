@@ -1,7 +1,7 @@
 import type { Arende } from "../types/arende";
 import { formatDate } from "../utils/formatDate";
-import { EDIT_DELETE_UNAVAILABLE, isEditDeleteEnabled } from "../constants/features";
-import { DeleteIcon, EditIcon } from "./icons";
+import { EDIT_UNAVAILABLE, isEditEnabled } from "../constants/features";
+import { EditIcon } from "./icons";
 import { StatusBadge } from "./StatusBadge";
 
 interface Props {
@@ -10,11 +10,10 @@ interface Props {
   selectedId: number | null;
   onSelect: (id: number) => void;
   onEdit: (arende: Arende) => void;
-  onDelete: (id: number) => void;
 }
 
-export function ArendeList({ arenden, hasFilter, selectedId, onSelect, onEdit, onDelete }: Props) {
-  const editDelete = isEditDeleteEnabled();
+export function ArendeList({ arenden, hasFilter, selectedId, onSelect, onEdit }: Props) {
+  const editEnabled = isEditEnabled();
 
   if (arenden.length === 0) {
     return (
@@ -72,27 +71,14 @@ export function ArendeList({ arenden, hasFilter, selectedId, onSelect, onEdit, o
                   type="button"
                   className="icon-button icon-button--small"
                   aria-label={`Redigera ${arende.rubrik}`}
-                  title={editDelete ? "Redigera" : EDIT_DELETE_UNAVAILABLE}
-                  disabled={!editDelete}
+                  title={editEnabled ? "Redigera" : EDIT_UNAVAILABLE}
+                  disabled={!editEnabled}
                   onClick={(e) => {
                     e.stopPropagation();
                     onEdit(arende);
                   }}
                 >
                   <EditIcon />
-                </button>
-                <button
-                  type="button"
-                  className="icon-button icon-button--small icon-button--danger"
-                  aria-label={`Ta bort ${arende.rubrik}`}
-                  title={editDelete ? "Ta bort" : EDIT_DELETE_UNAVAILABLE}
-                  disabled={!editDelete}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onDelete(arende.id);
-                  }}
-                >
-                  <DeleteIcon />
                 </button>
               </td>
             </tr>
