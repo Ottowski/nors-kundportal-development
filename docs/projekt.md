@@ -1,32 +1,18 @@
 # Projekt
 
-## Problem
+Problem, syfte, önskat resultat och avgränsning står i [kravspecen](specs/kravspec.md).
 
-Exempel: vilket problem har kunder/kundservice idag som NORS ska lösa, och varför är det värt att lösa?
+## Teknikval
 
-## Syfte
+| Del      | Val                         | Status                                                                                                   |
+| -------- | --------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Backend  | FastAPI (Python 3.10+)      | I bruk                                                                                                   |
+| Lagring  | SQLite                      | Beslutat, se [beslut.md](beslut.md). Main lagrar fortfarande ärenden i minnet.                           |
+| Frontend | React + TypeScript med Vite | Beslutat, se [beslut.md](beslut.md). Main har fortfarande JavaScript-startern tills `frontend-v2` är mergad. |
 
-Exempel: varför gör ni detta projekt - vad ska det leda till för kund, kundservice eller team?
+Se `CLAUDE.md` för arkitekturöversikt.
 
-## Önskat resultat
-
-Exempel: vad ska finnas klart vid examinationen - vilken funktionalitet och vilken kvalitet?
-
-## Avgränsning
-
-### Ingår
-
-Status, Lista (detaljer), Skapa (beslutat vecka 4, se `veckostatus.md`.)
-
-### Ingår inte
-
-Inloggning, e-post, molndrift (beslutat vecka 4, se `veckostatus.md`.)
-
-## Teknikval (med motivering)
-
-Backend: FastAPI (Python 3.10+). Frontend: React (JavaScript, ingen TypeScript) med Vite. Se `CLAUDE.md` för arkitekturöversikt.
-
-Motivering: ej ifylld ännu (flaggat som kvarstående i veckostatus vecka 4-5 - ansvarig: ?
+Motivering: står per beslut i [beslut.md](beslut.md). Motiveringen för FastAPI och för TypeScript är inte ifylld ännu (flaggat som kvarstående i veckostatus vecka 4–5, ansvarig: ?).
 
 ## Arbetsfördelning
 
