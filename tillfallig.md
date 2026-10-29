@@ -19,10 +19,10 @@ Anta att vår första beskrivning bara säger:
 
 > När det finns en rapport ska användaren kunna ladda ner den med en knapp.
 
-| Konkret situation | Ger beskrivningen ett tydligt svar? |
-|---|---|
-| En rapport finns. Användaren klickar på knappen. | Ja: rapporten ska laddas ner. |
-| Ingen rapport finns. Användaren öppnar vyn. | Nej: det framgår inte om knappen ska döljas eller vara inaktiverad. |
+| Konkret situation                                | Ger beskrivningen ett tydligt svar?                                 |
+| ------------------------------------------------ | ------------------------------------------------------------------- |
+| En rapport finns. Användaren klickar på knappen. | Ja: rapporten ska laddas ner.                                       |
+| Ingen rapport finns. Användaren öppnar vyn.      | Nej: det framgår inte om knappen ska döljas eller vara inaktiverad. |
 
 I genomgångens exempel väljer vi att knappen alltid visas och är inaktiverad (disabled) när ingen rapport går att ladda ner. När en rapport finns är knappen aktiverad och kan starta nedladdningen. Valet förtydligar beskrivningen och kan uttryckas som ett acceptanskriterium:
 
@@ -46,15 +46,15 @@ Given anger utgångsläget, When handlingen och Then det förväntade resultatet
 
 ## Rubriker som hjälper oss att tänka
 
-| Rubrik | Vad den hjälper oss att reda ut |
-|---|---|
-| Syfte och användare | Varför behövs funktionen och för vem? Markera om syftet är ett eget förslag. |
-| Vad ingår? | Vilka delar och beteenden beskriver vi? |
-| Avgränsning: vad ingår inte? | Vad lämnar vi uttryckligen utanför? Hitta inte på avgränsningar och presentera dem som givna. |
-| Förutsättningar | Vad gäller innan en handling påbörjas, exempelvis vilka sektioner som är öppna från början? |
-| Beteendekrav: vad ska hända? | Vilka observerbara regler ska gälla? |
-| Acceptanskriterier: konkreta exempel att kontrollera | Vilket utgångsläge, vilken handling och vilket förväntat resultat prövar regeln? |
-| Antaganden och öppna frågor | Vad har vi själva föreslagit eller antagit, och vad saknar fortfarande svar? |
+| Rubrik                                               | Vad den hjälper oss att reda ut                                                               |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Syfte och användare                                  | Varför behövs funktionen och för vem? Markera om syftet är ett eget förslag.                  |
+| Vad ingår?                                           | Vilka delar och beteenden beskriver vi?                                                       |
+| Avgränsning: vad ingår inte?                         | Vad lämnar vi uttryckligen utanför? Hitta inte på avgränsningar och presentera dem som givna. |
+| Förutsättningar                                      | Vad gäller innan en handling påbörjas, exempelvis vilka sektioner som är öppna från början?   |
+| Beteendekrav: vad ska hända?                         | Vilka observerbara regler ska gälla?                                                          |
+| Acceptanskriterier: konkreta exempel att kontrollera | Vilket utgångsläge, vilken handling och vilket förväntat resultat prövar regeln?              |
+| Antaganden och öppna frågor                          | Vad har vi själva föreslagit eller antagit, och vad saknar fortfarande svar?                  |
 
 Rubriker hjälper både oss och AI att hitta regler, exempel och öppna frågor. Använd dem när de hjälper till att skilja innehåll åt. Fler rubriker gör inte automatiskt texten bättre.
 
@@ -62,8 +62,8 @@ Kvalitetskrav kan beskrivas separat när de behövs. ”Det ska vara lätt att a
 
 ## Beteendekrav och acceptanskriterium bredvid varandra
 
-| Beteendekrav: vad ska hända? | Acceptanskriterium: ett konkret exempel att kontrollera |
-|---|---|
+| Beteendekrav: vad ska hända?                                                   | Acceptanskriterium: ett konkret exempel att kontrollera                                                                                                                                                                 |
+| ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | R1. När en stängd sektion öppnas ska eventuell tidigare öppen sektion stängas. | **Utgångsläge:** Sektion 1 är öppen, övriga stängda. **Handling:** Användaren trycker på pilknappen vid rubrik 2. **Förväntat resultat:** Bara sektion 2 är öppen. Alla rubriker och pilknappar är fortfarande synliga. |
 
 Kravet beskriver regeln generellt. Exemplet beskriver en bestämd situation. R1 är ett enkelt ID som visar kopplingen. Ett krav kan behöva flera exempel. Tabellen är förklarande stöd; den egna specifikationen kan använda separata rubriker och listor.
@@ -137,7 +137,6 @@ Om du inte hittar en brist, säg det. Hitta inte på problem.
 
 Jämför synpunkterna med uppgiftsbeskrivningen. Välj vad du använder, nyanserar eller avvisar och skriv kort varför. En AI-synpunkt blir inte automatiskt ett krav. Spara gärna utkastet före och efter ändringen så att du kan se vad som förbättrades.
 
-
 Det här tränar du på
 Förklara spec-driven development i AI-stött arbete.
 Formulera prompts och specifikationer för relevanta AI-resultat.
@@ -185,7 +184,7 @@ Hur du väljer tester utifrån krav och förväntat beteende, inklusive gränsfa
 Hur du reproducerar ett fel och beskriver skillnaden mellan förväntat och faktiskt resultat.
 Hur du ger AI relevant kontext och använder förslagen för att undersöka en möjlig felorsak i taget.
 Hur du kontrollerar rotorsaken och prövar en rättning med regressionstester som fångar felet om det återkommer och kontrollerar tidigare fungerande beteenden.
-Hur du använder AI som stöd för dokumentation och granskar att den återger faktiska kontroller, resultat och kvarstående osäkerheter. 
+Hur du använder AI som stöd för dokumentation och granskar att den återger faktiska kontroller, resultat och kvarstående osäkerheter.
 
 Lärandemål
 Vi tränar följande mål. Under passet ligger fokus på testning och felsökning; prototyparbetet tillämpas i gruppens projekt. Självständigheten byggs upp över tid genom kursen.
@@ -262,3 +261,12 @@ Automatiserade tester för centrala beteenden har körts och resultaten är doku
 Varje students tekniska bidrag går att följa i projektet.
 Följ upp arbetet
 Ni får gärna ligga före och gå vidare med kommande delar när ni är redo. Visa ert faktiska läge i veckostatusen, även om ni hunnit längre eller har något kvar. Följ instruktionen Följ upp arbetet varje vecka på huvudsidan.
+
+Checklistan, som man kan bocka av när specen är klar:
+
+Varje regel har ett nummer.
+Varje regel har minst ett konkret exempel.
+Exemplen säger vad som inte ska försvinna eller ändras.
+Det som saknar svar står som öppen fråga.
+Egna förslag är märkta.
+En annan person kan bygga och kontrollera utifrån specen utan att fråga dig.
