@@ -25,7 +25,7 @@ npm run build
 npm run preview
 ```
 
-There is no test runner or linter configured yet for either side.
+Backend tests (from `backend/`): `python -m pytest`. `tests/test_omstart.py` starts real uvicorn processes against a temp DB via `NORS_DB_PATH` to check that cases survive a restart. No frontend tests and no linter are configured yet.
 
 ## Architecture
 
