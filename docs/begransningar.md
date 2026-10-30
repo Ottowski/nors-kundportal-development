@@ -4,7 +4,7 @@ Kursen kräver att gruppens underlag beskriver kända begränsningar, risker och
 
 ## Kända begränsningar
 
-_Ej ifyllt ännu._
+- Rubrik och beskrivning har ingen maxlängd, så mycket lång text avvisas inte (Q3 i [kravspec.md](specs/kravspec.md)).
 
 ## Risker
 

@@ -15,9 +15,9 @@ specificeras i [sok-filter.md](sok-filter.md). Arbetssättet beskrivs i
 | Lista och detaljer för valt ärende | R6, R7, A6, A7 | – |
 | Ändra status | R8, A8 | – |
 | Minst ett felfall med begripligt besked | R3, R9, R10, A2–A4, A9, A10 | "Begripligt" är inte definierat |
-| Ärendets fält (rubrik, beskrivning, kategori, prioritet, status, skapad) | "Ett ärende ska innehålla", R1 | Värden för kategori och prioritet är öppna (Q1, Q2) |
-| Kompletterande funktion, specificerad före implementation | R11 | `sok-filter.md` saknas |
-| Automatiserade tester med happy och error paths | [verifieringsplan.md](../verifieringsplan.md) (inget R) | Gränsfall för längd kräver beslutad maxlängd (Q3) |
+| Ärendets fält (rubrik, beskrivning, kategori, prioritet, status, skapad) | "Ett ärende ska innehålla", R1 | – |
+| Kompletterande funktion, specificerad före implementation | R11, [sok-filter.md](sok-filter.md) | Prototypen fanns före specen, se [beslut.md](../beslut.md) |
+| Automatiserade tester med happy och error paths | [verifieringsplan.md](../verifieringsplan.md) (inget R) | – |
 | Kan köras och demonstreras av någon annan | [README](../../README.md) (inget R) | Kan bli ett kvalitetskrav |
 | Bara påhittade kunduppgifter; lokal lösning; ingen drift, inget moln, inga integrationer; ingen AI-funktion | Avgränsning, "Ingår inte" | – |
 | Ska kunna bedömas utan personligt betalkonto | – | Saknas helt |
@@ -59,6 +59,7 @@ verifieras med automatiserade tester.
 - Integrationer med e-post eller andra kanaler
 - AI-funktion i produkten
 - Riktiga kunduppgifter – bara påhittad data
+- Kunduppgifter på ärendet (namn, e-post, telefon)
 - Radera ärenden
 - Redigera ett ärende utöver status dvs **bara** status ska kunna ändras på ett ärende
 
@@ -71,19 +72,19 @@ noll eller flera ärenden.
 
 - **Rubrik**
   - **Obligatoriskt:** Ja, anges av handläggaren
-  - **Regel:** Får inte vara tom eller bara mellanslag. Maxlängd: se Q3
+  - **Regel:** Får inte vara tom eller bara mellanslag. Ingen maxlängd
 
 - **Beskrivning**
   - **Obligatoriskt:** Ja, anges av handläggaren
-  - **Regel:** Får inte vara tom eller bara mellanslag. Maxlängd: se Q3
+  - **Regel:** Får inte vara tom eller bara mellanslag. Ingen maxlängd
 
 - **Kategori**
   - **Obligatoriskt:** Ja, anges av handläggaren
-  - **Regel:** Ett av de tillåtna värdena (se Q1)
+  - **Regel:** Ett av värdena Fakturering, Teknik, Leverans eller Övrigt, med exakt samma stavning och skiftläge. Väljs i en lista utan förvalt värde
 
 - **Prioritet**
   - **Obligatoriskt:** Ja, anges av handläggaren
-  - **Regel:** Ett av de tillåtna värdena (se Q2)
+  - **Regel:** Ett av värdena Låg, Medel eller Hög, med exakt samma stavning och skiftläge. Väljs i en lista utan förvalt värde
 
 - **Status**
   - **Obligatoriskt:** Sätts automatiskt
@@ -100,9 +101,9 @@ noll eller flera ärenden.
 - **R3 – Allt eller inget:** Om någon uppgift är ogiltig sparas inget ärende, och användaren får ett begripligt besked om vad som är fel.
 - **R4 – Tillåtna värden:** Kategori och prioritet måste vara ett av de tillåtna värdena.
 - **R5 – Beständig lagring:** Skapade ärenden och statusändringar finns kvar efter att applikationen startats om.
-- **R6 – Lista:** Alla ärenden visas i en lista med minst rubrik, status, prioritet och skapad-tid. Nyaste först *(mitt förslag)*.
+- **R6 – Lista:** Alla ärenden visas i en lista med minst rubrik, status, prioritet och skapad-tid. Nyaste först, och högst id först vid samma skapad-tid.
 - **R7 – Detaljer:** När ett ärende väljs visas alla dess fält.
-- **R8 – Ändra status:** Status kan ändras till ett av de tillåtna värdena. Övriga fält ändras inte.
+- **R8 – Ändra status:** Status kan ändras till ett av de tillåtna värdena. Alla byten är tillåtna, även från *Avslutat*. Övriga fält ändras inte.
 - **R9 – Ogiltig status:** En status som inte är tillåten avvisas, tidigare status ligger kvar och användaren får ett begripligt besked.
 - **R10 – Ärende saknas:** Om ett ärende som inte finns efterfrågas får användaren ett begripligt besked *(mitt förslag)*.
 - **R11 – Sökning och filtrering:** Specificeras i [sok-filter.md](sok-filter.md).
@@ -181,34 +182,34 @@ noll eller flera ärenden.
 
 ## Kvalitetskrav
 
-Inga kvalitetskrav är beslutade ännu. Kursen kräver minst ett, se Q7.
+- **K1 – Tangentbord:** Alla funktioner kan nås och aktiveras med tangentbord, utan mus. *Förslag (Ruben och Nathalie).* **Kontrolleras genom:** manuell genomgång av hela flödet med bara tangentbord: registrera, öppna ett ärende, ändra status, söka och filtrera.
 
 ## Antaganden och öppna frågor
 
 - **Q1 – Vilka kategorier ska finnas?**
   - **Varför det spelar roll:** Behövs för R4 och för filtreringen
-  - **Status:** Öppen
+  - **Status:** Besvarad 2026-10-30, Ruben och Nathalie: Fakturering, Teknik, Leverans och Övrigt, som i `frontend-v2`. Övrigt gör att alla ärenden går att registrera. Jämförelsen är exakt och värdet väljs i en lista utan förvalt värde
 
 - **Q2 – Vilka prioriteter ska finnas (t.ex. Låg/Medel/Hög)?**
   - **Varför det spelar roll:** Behövs för R4
-  - **Status:** Öppen
+  - **Status:** Besvarad 2026-10-30, Ruben och Nathalie: Låg, Medel och Hög, som i `frontend-v2`. Jämförelse och lista som för kategori
 
 - **Q3 – Vilka maxlängder gäller för rubrik och beskrivning?**
   - **Varför det spelar roll:** Gränsfall: både exakt vid gränsen och över den måste ha en regel
-  - **Status:** Öppen
+  - **Status:** Besvarad 2026-10-30, Ruben och Nathalie: Ingen maxlängd, som i `frontend-v2`. A3 prövar gränsfallet med bara mellanslag. Känd begränsning, se [begransningar.md](../begransningar.md)
 
 - **Q4 – Får man gå tillbaka från *Avslutat*?**
   - **Varför det spelar roll:** Påverkar R8 och vilka statusändringar som är giltiga
-  - **Status:** Öppen
+  - **Status:** Besvarad 2026-10-30, Ruben och Nathalie: Ja, alla byten mellan tillåtna statusar är tillåtna, som i `frontend-v2`
 
 - **Q5 – Ska ärendet innehålla kunduppgifter (namn, e-post, telefon)?**
   - **Varför det spelar roll:** Läraren nämnde validering av t.ex. telefonnummer. Kräver i så fall egna regler
-  - **Status:** Öppen
+  - **Status:** Besvarad 2026-10-30, Ruben och Nathalie: Nej, som i `frontend-v2`
 
 - **Q6 – I vilken ordning ska listan visas?**
-  - **Varför det spelar roll:** R6 har ett förslag som inte är beslutat
-  - **Status:** Öppen
+  - **Varför det spelar roll:** R6 hade ett förslag som inte var beslutat
+  - **Status:** Besvarad 2026-10-30, Ruben och Nathalie: Nyaste först, och högst id först vid samma skapad-tid, som i `frontend-v2`
 
 - **Q7 – Vilket kvalitetskrav (K1) ska gälla, och hur kontrolleras det?**
-  - **Varför det spelar roll:** Kursen kräver minst ett kontrollerbart icke-funktionellt krav, märkt som eget förslag
-  - **Status:** Öppen
+  - **Varför det spelar roll:** Kursens övningsmaterial anger minst ett kontrollerbart icke-funktionellt krav, märkt som eget förslag, se [uppdrag.md](../uppdrag.md)
+  - **Status:** Besvarad 2026-10-30, Ruben och Nathalie: K1, tangentbord, kontrolleras manuellt
