@@ -1,4 +1,4 @@
-> Kursens uppgiftsbeskrivning för examinationsuppgiften, ordagrant. Ändra inte texten. Våra tolkningar och beslut står i [specs/kravspec.md](specs/kravspec.md).
+> Kursens uppgiftsbeskrivning för examinationsuppgiften, ordagrant. Ändra inte texten. Våra tolkningar och beslut står i [specs/kravspec.md](specs/kravspec.md). Avsnittet "Från kursens övningsmaterial" längst ner är ett tillägg och ingår inte i uppgiftsbeskrivningen.
 
 # **Bygg Kundserviceportalen med AI-stöd**
 
@@ -74,3 +74,19 @@ Arbetet utvecklas tillsammans med veckornas undervisning. Ni behöver inte kunna
 Arbeta löpande med både lösningen och dokumentationen. Använd GitHub för att planera uppgifter, följa förändringar och granska varandras bidrag. Gör ansvar, frågor och nästa steg tydliga så att arbetet kan fortsätta även när ni arbetar vid olika tider.
 
 Varje team använder en egen fork och samma löpande PR till kursens gemensamma GitHub-repository. Startinstruktionerna finns på undersidan för vecka 5.
+
+---
+
+# Från kursens övningsmaterial
+
+Det här ingår inte i uppgiftsbeskrivningen ovan. Citaten är ordagranna.
+
+Övningen "Skriv specifikation v1" anger i sin specstruktur:
+
+> **Kvalitetskrav**
+>
+> Minst ett kontrollerbart icke-funktionellt krav, märkt som ditt eget övningsförslag. Ange hur det kan kontrolleras.
+
+"Starterkit: Börja skriva en specifikation" säger:
+
+> Kvalitetskrav kan beskrivas separat när de behövs.
