@@ -1,4 +1,4 @@
-# Kundserviceportalen – kravspecifikation
+# Kundserviceportalen  kravspecifikation
 
 Specen beskriver vad lösningen ska göra i kärnflödet. Kursens uppgiftsbeskrivning
 finns ordagrant i [uppdrag.md](../uppdrag.md). Tillägget sökning och filtrering
