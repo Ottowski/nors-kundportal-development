@@ -21,6 +21,8 @@ Kundserviceportalen NORS: a blank team-project starter (course/examination conte
 Applies when presenting options, recommending a path, or answering a "should we…" question — not when carrying out a task that is already decided.
 
 Challenge before answering. Check each point against code, docs or data rather than memory:
+Backend tests (from `backend/`): `python -m pytest`. `tests/test_omstart.py` starts real uvicorn processes against a temp DB via `NORS_DB_PATH` to check that cases survive a restart. No frontend tests and no linter are configured yet.
+API tests: Postman collection in `docs/api/` (see `docs/api/README.md`), run with `npx newman run docs/api/kundportal.postman_collection.json -e docs/api/kundportal.postman_environment.json`.
 
 - **Wrong assumptions**: which premise in the question, or in your own first answer, does not hold?
 - **What could fail**: edge cases, existing data, course/examination requirements, and the next feature that has to build on this.
