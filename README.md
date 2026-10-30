@@ -50,28 +50,13 @@ API:t finns på <http://127.0.0.1:8000>. För att prova det interaktivt, öppna
 
 Svaret ska ha status `201 Created`. API:t sätter id, status och
 skapad-tid automatiskt. Använd **GET `/arenden`** för att lista ärenden eller
-**GET `/arenden/{arende_id}`** för att hämta ett ärende. Ärendena lagras i
-minnet och försvinner när API-servern stoppas.
-The response should have status `201 Created`. The API sets the ID, status, and
-creation time automatically. Use **GET `/arenden`** to list cases or
-**GET `/arenden/{arende_id}`** to retrieve one case. Cases are stored in a
-SQLite file (`backend/app/data/nors.db`, or the path in `NORS_DB_PATH`) and
-remain after the API server restarts.
+**GET `/arenden/{arende_id}`** för att hämta ett ärende. Ärendena lagras i en
+SQLite-fil (`backend/app/data/nors.db`, eller sökvägen i `NORS_DB_PATH`) och
+finns kvar när API-servern startas om.
 
 Stoppa servern genom att gå till terminalen där den körs och trycka **Ctrl+C**.
 
-## Run tests
-
-With the backend environment activated, from `backend`:
-
-```powershell
-python -m pytest
-```
-
-The tests start their own API server against a temporary database, so the
-server does not need to be running and `nors.db` is not changed.
-
-## Run the frontend
+## Kör frontenden
 
 I en andra terminal, från projektets rot:
 
@@ -85,8 +70,15 @@ npm run dev
 
 ## Kör testerna
 
-Det finns inga automatiserade tester ännu. När de finns står kommandona här och
-i [docs/verifieringsplan.md](docs/verifieringsplan.md).
+Med backendmiljön aktiverad, från `backend`:
+
+```powershell
+python -m pytest
+```
+
+Testerna startar en egen API-server mot en temporär databas, så servern behöver
+inte vara igång och `nors.db` ändras inte. Vilka tester som finns och vad de
+kontrollerar står i [docs/verifieringsplan.md](docs/verifieringsplan.md).
 
 ## Utveckling i teamet
 

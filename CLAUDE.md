@@ -21,8 +21,6 @@ Kundserviceportalen NORS: a blank team-project starter (course/examination conte
 Applies when presenting options, recommending a path, or answering a "should we…" question — not when carrying out a task that is already decided.
 
 Challenge before answering. Check each point against code, docs or data rather than memory:
-Backend tests (from `backend/`): `python -m pytest`. `tests/test_omstart.py` starts real uvicorn processes against a temp DB via `NORS_DB_PATH` to check that cases survive a restart. No frontend tests and no linter are configured yet.
-API tests: Postman collection in `docs/api/` (see `docs/api/README.md`), run with `npx newman run docs/api/kundportal.postman_collection.json -e docs/api/kundportal.postman_environment.json`.
 
 - **Wrong assumptions**: which premise in the question, or in your own first answer, does not hold?
 - **What could fail**: edge cases, existing data, course/examination requirements, and the next feature that has to build on this.
@@ -39,25 +37,25 @@ If the premises hold, say so in one line. Don't invent objections.
 
 ## Commands
 
-Setup, run and test commands live in `README.md` (backend: `uvicorn app.main:app --reload` from `backend/`; frontend: `npm run dev` from `frontend/`). Don't restate them here. The README shows PowerShell activation; on macOS/Linux use `source .venv/bin/activate`. There is no test runner or linter configured yet for either side.
+Setup, run and test commands live in `README.md` (backend: `uvicorn app.main:app --reload` from `backend/`; frontend: `npm run dev` from `frontend/`; tests: `python -m pytest` from `backend/`). Don't restate them here. The README shows PowerShell activation; on macOS/Linux use `source .venv/bin/activate`. `tests/test_omstart.py` starts real uvicorn processes against a temp DB via `NORS_DB_PATH` to check that cases survive a restart. No frontend tests and no linter are configured yet.
 
 ## Architecture
 
 - `backend/app/main.py` — single FastAPI `app` (`app.main:app`) with `/` and `/health`, mounts the routers. CORS is restricted to the Vite dev origins (`http://localhost:5173`, `http://127.0.0.1:5173`); if the frontend runs on another port/host, update `allow_origins` there.
 - `frontend/src/` — `main.jsx` mounts `App.jsx`; currently only a welcome page. No API client or Vite dev proxy exists, so the frontend must call the backend by its full URL (`http://127.0.0.1:8000`), which is why CORS is configured.
 - Dependencies are unpinned in `backend/requirements.txt`; add new ones there or in `frontend/package.json`.
-- Decided but not yet on main: SQLite storage and a TypeScript frontend (being rebuilt on `frontend-v2`). See `docs/beslut.md`.
+- Decided but not yet on main: a TypeScript frontend (being rebuilt on `frontend-v2`). See `docs/beslut.md`.
 
 ### Adding new backend code
 
 Layers under `backend/app/`, one file per resource (`arende` is the reference example). Never put routes or storage logic in `main.py`.
 
 1. **Schemas** — `schemas/<resurs>.py`: Pydantic models (`<Resurs>Create`, `<Resurs>`) and enums. Validation lives here.
-2. **Repository** — `repositories/<resurs>_repository.py`: an abstract `<Resurs>Repository` contract, its implementations (in-memory today, SQLite later) and a `get_<resurs>_repository()` dependency. Swapping storage must not touch routers.
+2. **Repository** — `repositories/<resurs>_repository.py`: an abstract `<Resurs>Repository` contract, the in-memory implementation and a `get_<resurs>_repository()` dependency. Swapping storage must not touch routers.
 3. **Router** — `routers/<resurs>_router.py`: `APIRouter` with `prefix` and `tags`, repository injected via `Depends`, no storage logic. Mount it with `app.include_router(...)` in `main.py`.
 4. **Tests** — `backend/tests/`, named after the acceptance criterion (see Documentation).
 
-**SQLite layer** (decided in `docs/beslut.md`, not yet on this branch): the connection setup lives in `app/db.py`, the database file in `app/data/nors.db`, and each resource gets `repositories/sqlite_<resurs>_repository.py` implementing the same abstract contract as the in-memory one. Only `get_<resurs>_repository()` changes to return the SQLite implementation; schemas and routers stay untouched. Include a test that data survives a restart (`tests/test_omstart.py`).
+**SQLite layer** (decided in `docs/beslut.md`): the connection setup lives in `app/db.py`, the database file in `app/data/nors.db` (or the path in `NORS_DB_PATH`), and each resource gets `repositories/sqlite_<resurs>_repository.py` implementing the same abstract contract as the in-memory one. `main.py` switches to it with `app.dependency_overrides[get_<resurs>_repository]`; schemas and routers stay untouched. Include a test that data survives a restart (`tests/test_omstart.py`).
 
 ### Adding new frontend code
 
