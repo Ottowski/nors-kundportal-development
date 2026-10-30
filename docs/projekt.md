@@ -1,21 +1,28 @@
 # Projekt
 
-Problem, syfte, önskat resultat och avgränsning står i [kravspecen](specs/kravspec.md).
+Problem, syfte, önskat resultat och avgränsning står i [kravspecen](specs/kravspec.md). Motiveringen till varje val står i [beslut.md](beslut.md).
 
 ## Teknikval
 
-| Del      | Val                         | Status                                                                                                   |
-| -------- | --------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Backend  | FastAPI (Python 3.10+)      | I bruk                                                                                                   |
-| Lagring  | SQLite                      | Beslutat, se [beslut.md](beslut.md). Main lagrar fortfarande ärenden i minnet.                           |
-| Frontend | React + TypeScript med Vite | Beslutat, se [beslut.md](beslut.md). Main har fortfarande JavaScript-startern tills `frontend-v2` är mergad. |
+| Del              | Val                      | Status                                                                                   |
+| ---------------- | ------------------------ | ---------------------------------------------------------------------------------------- |
+| Backend          | Python 3.10+ med FastAPI | Används på `main`.                                                                       |
+| Lagring          | SQLite                   | Används på `main` sedan PR #2. Ärendena finns kvar när appen startas om.                 |
+| Frontend         | React med Vite           | Kom med startprojektet och används.                                                      |
+| Språk i frontend | TypeScript               | Beslutat. Byggs på branchen `frontend-v2`. `main` har fortfarande JavaScript.            |
+| Tester           | pytest (backend)         | Används på `main` sedan PR #2. Det finns ett test: att ärenden finns kvar efter omstart. |
 
-Se `CLAUDE.md` för arkitekturöversikt.
-
-Motivering: står per beslut i [beslut.md](beslut.md). Motiveringen för FastAPI och för TypeScript är inte ifylld ännu (flaggat som kvarstående i veckostatus vecka 4–5, ansvarig: ?).
+Översikt över hur koden är uppbyggd finns i [CLAUDE.md](../CLAUDE.md). Hur man kör appen och testerna står i [README.md](../README.md).
 
 ## Arbetsfördelning
 
-Otto (Backend), Sravani (Testing), Ruben (Databas/Query), Nathalie (Frontend). Ej satt i sten, vi hjälps åt.
+Alla hjälps åt, men var och en har ett huvudansvar.
 
-Preliminär fördelning från vecka 4 (se veckostatus vecka 4, punkt 8).
+| Person   | Huvudansvar             |
+| -------- | ----------------------- |
+| Otto     | Backend                 |
+| Ruben    | Databas                 |
+| Sravani  | Testning                |
+| Nathalie | Frontend, dokumentation |
+
+Fördelningen bestämdes vecka 4, se [veckostatus](veckostatus.md).
