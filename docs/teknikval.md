@@ -1,4 +1,4 @@
-# Projekt
+# Teknikval och arbetsfördelning
 
 Problem, syfte, önskat resultat och avgränsning står i [kravspecen](specs/kravspec.md). Motiveringen till varje val står i [beslut.md](beslut.md).
 

@@ -10,7 +10,7 @@ Här samlar teamet all dokumentation för projektet. `docs/` är enda källan: s
 | [specs/kravspec.md](specs/kravspec.md)               | Kärnflödet: krav, acceptanskriterier, kvalitetskrav, öppna frågor | Den som äger delen      |
 | [specs/sok-filter.md](specs/sok-filter.md)           | Tillägget sökning och filtrering                                  | Den som äger delen      |
 | [specs/spec-driven-dev.md](specs/spec-driven-dev.md) | Vad spec-driven utveckling är och hur vi arbetar                  | Alla                    |
-| [projekt.md](projekt.md)                             | Teknikval och arbetsfördelning                                    | Alla                    |
+| [teknikval.md](teknikval.md)                         | Teknikval och arbetsfördelning                                    | Alla                    |
 | [beslut.md](beslut.md)                               | Projektövergripande beslut med motivering och alternativ          | Alla                    |
 | [ai-arbetssatt.md](ai-arbetssatt.md)                 | Hur teamet arbetar med AI, återanvändbara prompter                | Alla                    |
 | [agentuppdrag/](agentuppdrag/)                       | Ett dokument per avgränsat agentuppdrag                           | Den som leder uppdraget |
