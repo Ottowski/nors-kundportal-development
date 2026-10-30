@@ -25,7 +25,8 @@ npm run build
 npm run preview
 ```
 
-There is no test runner or linter configured yet for either side.
+Backend tests (from `backend/`): `python -m pytest`. `tests/test_omstart.py` starts real uvicorn processes against a temp DB via `NORS_DB_PATH` to check that cases survive a restart. No frontend tests and no linter are configured yet.
+API tests: Postman collection in `docs/api/` (see `docs/api/README.md`), run with `npx newman run docs/api/kundportal.postman_collection.json -e docs/api/kundportal.postman_environment.json`.
 
 ## Architecture
 
