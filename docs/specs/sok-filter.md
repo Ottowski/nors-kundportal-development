@@ -37,16 +37,16 @@ Acceptanskriterierna utgår från de här påhittade ärendena:
 
 ## Beteendekrav
 
-- **SF-R1 – Fritextsökning:** Ett ärende visas om rubriken eller beskrivningen innehåller söktexten, även som en del av ett ord *(förslag, se SF-Q1)*. Stora och små bokstäver spelar ingen roll, inte heller för å, ä och ö.
-- **SF-R2 – Filter:** Listan kan filtreras på status, kategori och prioritet. Varje filter har ett värde åt gången *(förslag, se SF-Q5)* eller "Alla", som är förvalt.
+- **SF-R1 – Fritextsökning:** Ett ärende visas om rubriken eller beskrivningen innehåller söktexten, även som en del av ett ord. Stora och små bokstäver spelar ingen roll, inte heller för å, ä och ö.
+- **SF-R2 – Filter:** Listan kan filtreras på status, kategori och prioritet. Varje filter har ett värde åt gången eller "Alla", som är förvalt.
 - **SF-R3 – Kombination:** Ett ärende visas bara om det uppfyller både söktexten och alla valda filter.
 - **SF-R4 – Inga träffar:** När inget ärende matchar visas "Inga ärenden matchar".
-- **SF-R5 – Tom söktext:** Mellanslag före och efter söktexten räknas inte. Söktext med bara mellanslag räknas som tom *(förslag, se SF-Q3)*.
+- **SF-R5 – Tom söktext:** Mellanslag före och efter söktexten räknas inte. Söktext med bara mellanslag räknas som tom.
 - **SF-R6 – Specialtecken:** Alla tecken i söktexten behandlas som vanlig text.
 - **SF-R7 – Ordning:** Träffarna visas i samma ordning som listan (R6).
 - **SF-R8 – Ingen ändring:** Sökning och filtrering ändrar inga ärenden. När söktext och filter rensas visas alla ärenden igen.
-- **SF-R9 – När det slår igenom:** Ett filter gäller direkt. Söktexten gäller när handläggaren trycker Enter eller på knappen Sök *(förslag, se SF-Q2)*.
-- **SF-R10 – Längd på söktexten:** Söktexten kan vara högst 100 tecken *(förslag, se SF-Q4)*.
+- **SF-R9 – När det slår igenom:** Ett filter gäller direkt. Söktexten gäller när handläggaren trycker Enter eller på knappen Sök.
+- **SF-R10 – Längd på söktexten:** Söktexten kan vara högst 100 tecken.
 
 ## Acceptanskriterier
 
@@ -144,30 +144,24 @@ K1 i [kravspec.md](kravspec.md) gäller även sökfältet och filtren. Tillägge
 
 - **SF-Q1 – Ska delar av ord hittas?**
   - **Varför det spelar roll:** Avgör SF-R1 och SF-A5
-  - **Förslag (från `frontend-v2`):** Ja
-  - **Status:** Öppen
+  - **Status:** Besvarad 2026-10-30, Ruben och Nathalie: Ja, som i `frontend-v2`
 
 - **SF-Q2 – När ska söktexten slå igenom?**
   - **Varför det spelar roll:** Avgör SF-R9 och SF-A13
-  - **Förslag (från `frontend-v2`):** När handläggaren trycker Enter eller på Sök. Filter gäller direkt
-  - **Status:** Öppen
+  - **Status:** Besvarad 2026-10-30, Ruben och Nathalie: När handläggaren trycker Enter eller på Sök. Filter gäller direkt, som i `frontend-v2`
 
 - **SF-Q3 – Ska söktext med bara mellanslag räknas som tom?**
   - **Varför det spelar roll:** Avgör SF-R5 och SF-A11
-  - **Förslag (från `frontend-v2`):** Ja
-  - **Status:** Öppen
+  - **Status:** Besvarad 2026-10-30, Ruben och Nathalie: Ja, som i `frontend-v2`
 
 - **SF-Q4 – Ska sökfältet ha en maxlängd?**
   - **Varför det spelar roll:** Avgör SF-R10 och SF-A14. Rubrik och beskrivning saknar maxlängd, så en längre text går inte att söka på i sin helhet
-  - **Förslag (från `frontend-v2`):** Ja, 100 tecken
-  - **Status:** Öppen
+  - **Status:** Besvarad 2026-10-30, Ruben och Nathalie: Ja, 100 tecken, som i `frontend-v2`
 
 - **SF-Q5 – Räcker ett värde åt gången i varje filter?**
   - **Varför det spelar roll:** Avgör SF-R2 och avgränsningen
-  - **Förslag (från `frontend-v2`):** Ja
-  - **Status:** Öppen
+  - **Status:** Besvarad 2026-10-30, Ruben och Nathalie: Ja, som i `frontend-v2`
 
 - **SF-Q6 – Får sökningen göras i webbläsaren, på den lista som redan är hämtad?**
   - **Varför det spelar roll:** Backend har ingen sökfunktion. Svaret avgör avgränsningen och att testerna blir frontendtester
-  - **Förslag (från `frontend-v2`):** Ja
-  - **Status:** Öppen
+  - **Status:** Besvarad 2026-10-30, Ruben och Nathalie: Ja, som i `frontend-v2`

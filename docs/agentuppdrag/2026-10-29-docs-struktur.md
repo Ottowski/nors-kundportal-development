@@ -80,4 +80,4 @@ Agentens egna kontroller, som inte ersätter teamets granskning:
 - `docs/specs/sok-filter.md` finns inte ännu; länkarna dit är trasiga tills den skrivs.
 - Fält markerade `?` i `docs/beslut.md` behöver fyllas i.
 - PR-mallen ändras inte; teamet bedömde att den nya strukturen räcker. Kursen kräver ändå länkar till underlaget och veckostatusen i den löpande PR:ens beskrivning (`indid.md` rad 112 och 121), så de läggs in direkt på GitHub.
-- `tillfallig.md`, `examination.md` och `indid.md` ligger kvar tills teamet har granskat att innehållet är flyttat.
+- `tillfallig.md`, `examination.md` och `indid.md` låg kvar tills teamet hade granskat att innehållet var flyttat. De raderades 2026-10-30 och finns kvar i git-historiken.

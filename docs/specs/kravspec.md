@@ -10,17 +10,17 @@ specificeras i [sok-filter.md](sok-filter.md). Arbetssättet beskrivs i
 
 | Uppdragets krav | Täcks av | Lucka |
 | --- | --- | --- |
-| Registrera ärende och validera obligatorisk information | R1–R4, A1–A4 | – |
+| Registrera ärende och validera obligatorisk information | R1–R4, A1–A4, A11 | – |
 | Ärenden finns kvar efter omstart | R5, A5, A8 | – |
-| Lista och detaljer för valt ärende | R6, R7, A6, A7 | – |
+| Lista och detaljer för valt ärende | R6, R7, A6, A7, A12 | – |
 | Ändra status | R8, A8 | – |
-| Minst ett felfall med begripligt besked | R3, R9, R10, A2–A4, A9, A10 | "Begripligt" är inte definierat |
+| Minst ett felfall med begripligt besked | R3, R9, R10, R12, A2–A4, A9–A11 | – |
 | Ärendets fält (rubrik, beskrivning, kategori, prioritet, status, skapad) | "Ett ärende ska innehålla", R1 | – |
 | Kompletterande funktion, specificerad före implementation | R11, [sok-filter.md](sok-filter.md) | Prototypen fanns före specen, se [beslut.md](../beslut.md) |
 | Automatiserade tester med happy och error paths | [verifieringsplan.md](../verifieringsplan.md) (inget R) | – |
 | Kan köras och demonstreras av någon annan | [README](../../README.md) (inget R) | Kan bli ett kvalitetskrav |
 | Bara påhittade kunduppgifter; lokal lösning; ingen drift, inget moln, inga integrationer; ingen AI-funktion | Avgränsning, "Ingår inte" | – |
-| Ska kunna bedömas utan personligt betalkonto | – | Saknas helt |
+| Ska kunna bedömas utan personligt betalkonto | Avgränsning, "Ingår inte" | – |
 
 ## Problem
 
@@ -58,6 +58,7 @@ verifieras med automatiserade tester.
 - Produktionsdrift (localhost t.ex.) och molninfrastruktur
 - Integrationer med e-post eller andra kanaler
 - AI-funktion i produkten
+- Tjänster som kräver betalkonto
 - Riktiga kunduppgifter – bara påhittad data
 - Kunduppgifter på ärendet (namn, e-post, telefon)
 - Radera ärenden
@@ -105,8 +106,9 @@ noll eller flera ärenden.
 - **R7 – Detaljer:** När ett ärende väljs visas alla dess fält.
 - **R8 – Ändra status:** Status kan ändras till ett av de tillåtna värdena. Alla byten är tillåtna, även från *Avslutat*. Övriga fält ändras inte.
 - **R9 – Ogiltig status:** En status som inte är tillåten avvisas, tidigare status ligger kvar och användaren får ett begripligt besked.
-- **R10 – Ärende saknas:** Om ett ärende som inte finns efterfrågas får användaren ett begripligt besked *(mitt förslag)*.
+- **R10 – Ärende saknas:** Om ett ärende som inte finns efterfrågas får användaren ett begripligt besked.
 - **R11 – Sökning och filtrering:** Specificeras i [sok-filter.md](sok-filter.md).
+- **R12 – Begripligt besked:** Ett begripligt besked är på svenska och innehåller inget tekniskt felmeddelande.
 
 ## Acceptanskriterier
 
@@ -122,21 +124,21 @@ noll eller flera ärenden.
 - **Utgångsläge:** Två ärenden finns
 - **Handling:** Handläggaren försöker skapa ett ärende utan rubrik
 - **Förväntat resultat:** Ärendet avvisas med ett begripligt besked. Det finns fortfarande två ärenden
-- **Kontrollerar:** R2, R3
+- **Kontrollerar:** R2, R3, R12
 
 ### A3
 
 - **Utgångsläge:** Två ärenden finns
 - **Handling:** Handläggaren anger en rubrik med bara mellanslag
 - **Förväntat resultat:** Samma som A2
-- **Kontrollerar:** R2, R3
+- **Kontrollerar:** R2, R3, R12
 
 ### A4
 
 - **Utgångsläge:** Två ärenden finns
 - **Handling:** Handläggaren anger en kategori som inte är tillåten
 - **Förväntat resultat:** Ärendet avvisas med ett begripligt besked. Inget nytt ärende sparas
-- **Kontrollerar:** R3, R4
+- **Kontrollerar:** R3, R4, R12
 
 ### A5
 
@@ -171,14 +173,28 @@ noll eller flera ärenden.
 - **Utgångsläge:** Ett ärende har status *Nytt*
 - **Handling:** Status försöker ändras till ett ogiltigt värde
 - **Förväntat resultat:** Ändringen avvisas med ett begripligt besked. Status är fortfarande *Nytt*
-- **Kontrollerar:** R9
+- **Kontrollerar:** R9, R12
 
 ### A10
 
 - **Utgångsläge:** Inget ärende med det id:t finns
 - **Handling:** Handläggaren försöker öppna det
 - **Förväntat resultat:** Ett begripligt besked visas
-- **Kontrollerar:** R10
+- **Kontrollerar:** R10, R12
+
+### A11
+
+- **Utgångsläge:** Två ärenden finns
+- **Handling:** Handläggaren anger en prioritet som inte är tillåten
+- **Förväntat resultat:** Ärendet avvisas med ett begripligt besked. Inget nytt ärende sparas
+- **Kontrollerar:** R3, R4, R12
+
+### A12
+
+- **Utgångsläge:** Tre ärenden finns, skapade vid olika tidpunkter
+- **Handling:** Handläggaren öppnar listan
+- **Förväntat resultat:** Det senast skapade ärendet visas först och det äldsta sist
+- **Kontrollerar:** R6
 
 ## Kvalitetskrav
 
