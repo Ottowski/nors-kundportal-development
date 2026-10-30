@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Kundserviceportalen NORS: a blank team-project starter (course/examination context, Swedish-language UI and docs) with a FastAPI backend and a React + TypeScript + Vite frontend. The two halves are independent apps run in separate terminals; there is no root-level build or workspace setup (the root `package-lock.json` is empty and unused — dependencies live in `frontend/`).
+Kundserviceportalen NORS: a blank team-project starter (course/examination context, Swedish-language UI and docs) with a FastAPI backend and a React (JavaScript, no TypeScript) + Vite frontend. The two halves are independent apps run in separate terminals; there is no root-level build or workspace setup (the root `package-lock.json` is empty and unused — dependencies live in `frontend/`).
 
 ## Commands
 
@@ -20,11 +20,9 @@ Frontend (from `frontend/`, Node 20.19+ or 22.12+):
 
 ```
 npm install
-npm run dev        # Vite dev server against real backend, http://localhost:5173
-npm run dev:mock   # same UI on MSW mocks (no backend needed; includes proposed endpoints)
-npm test           # Vitest watch; npm run test:run for one pass
-npm run check      # full cycle: prettier check, eslint, tsc, tests, build (CI runs this)
-npm run format     # prettier --write
+npm run dev       # Vite dev server, http://localhost:5173
+npm run build
+npm run preview
 ```
 
 Backend tests (from `backend/`): `python -m pytest`. `tests/test_omstart.py` starts real uvicorn processes against a temp DB via `NORS_DB_PATH` to check that cases survive a restart. No frontend tests and no linter are configured yet.
@@ -33,11 +31,7 @@ API tests: Postman collection in `docs/api/` (see `docs/api/README.md`), run wit
 ## Architecture
 
 - `backend/app/main.py` — single FastAPI `app` (`app.main:app`) with `/` and `/health`. CORS is restricted to the Vite dev origins (`http://localhost:5173`, `http://127.0.0.1:5173`); if the frontend runs on another port/host, update `allow_origins` there.
-- `frontend/src/` — `main.tsx` mounts `App.tsx` (and starts the MSW worker in `--mode mock`). `api/arendenApi.ts` is the only place that calls `fetch`; it normalizes FastAPI errors (`detail` string or 422 list) into `ApiError` with per-field messages. Base URL is `VITE_API_URL` or `http://127.0.0.1:8000` (no Vite proxy, hence CORS).
-- `frontend/src/mocks/handlers.ts` mirrors the backend and also serves the proposed `POST /arenden/{id}/status`. Tests use it via `msw/node` (`src/test/setup.ts`); `db.reset()` runs after each test.
-- Search/filter runs in the frontend on the loaded list (`utils/filterArenden.ts`) because the backend has no search endpoint (open question Q9). Category/priority values in `constants/arende.ts` are provisional proposals (Q1/Q2).
-- Edit/delete (outside v1.0 scope, no backend API) are gated by `isEditDeleteEnabled()` in `constants/features.ts`: on in `--mode mock`, off otherwise unless `VITE_ENABLE_EDIT_DELETE=true`. Tests stub it to `true` in `src/test/setup.ts`.
-- Spec and requirement ids (R#, A#, Q#) live in the sibling repo `../kundportal-sdd/specs/`.
+- `frontend/src/` — `main.jsx` mounts `App.jsx`; currently only a welcome page. No API client or Vite dev proxy exists, so the frontend must call the backend by its full URL (`http://127.0.0.1:8000`), which is why CORS is configured.
 - Dependencies are unpinned in `backend/requirements.txt`; add new ones there or in `frontend/package.json`.
 
 ## Workflow notes
