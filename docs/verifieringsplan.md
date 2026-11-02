@@ -17,7 +17,7 @@ Frontenden på `frontend-v2` byggdes innan specen var klar, och den har redan eg
 För varje A# som berör frontenden gör vi så här innan koden läggs in i `main`:
 
 1. **Hitta testet.** Vilket befintligt test hör till kriteriet? Finns inget skriver vi ett nytt.
-2. **Jämför med specen.** Kontrollerar testet samma utgångsläge, handling och förväntade resultat som kriteriet, även det som *inte* ska ändras? Om inte rättar vi testet, inte specen.
+2. **Jämför med specen.** Kontrollerar testet samma utgångsläge, handling och förväntade resultat som kriteriet, även det som _inte_ ska ändras? Om inte rättar vi testet, inte specen.
 3. **Rätta koden** om den gör något annat än specen säger.
 4. **Pröva att testet kan misslyckas.** Ett test som skrivs efter koden kan råka alltid gå igenom. Vi ändrar koden tillfälligt så att den gör fel och kontrollerar att testet då misslyckas.
 5. **Byt namn** så att testet börjar med id:t, till exempel `A2: …` eller `SF-A1: …`.
@@ -44,7 +44,7 @@ A5 körs på `main`. Övriga test med namn finns på `frontend-v2` och går mot 
 | A2     | R2, R3, R12  | Error path | API, komponent | `A2: rejects missing title, nothing saved`                                                                        | Planerad  | –                    | ?        |
 | A3     | R2, R3, R12  | Gränsfall  | API, komponent | `A3: title with only spaces counts as empty`                                                                      | Planerad  | –                    | ?        |
 | A4     | R3, R4, R12  | Error path | API, komponent | `A4: shows backend field error and keeps input`                                                                   | Planerad  | –                    | ?        |
-| A5     | R5           | Happy path | API            | `test_arende_finns_kvar_efter_omstart`                                                                            | Genomförd | Passerade 2026-10-30 | ?        |
+| A5     | R5           | Happy path | API            | `test_arende_finns_kvar_efter_omstart`                                                                            | Genomförd | Passerade 2026-10-30 | Nathalie |
 | A6     | R6           | Happy path | Komponent      | `A6: list columns are title, status, priority and created`                                                        | Planerad  | –                    | ?        |
 | A7     | R7           | Happy path | Komponent      | `A7: shows all fields of the case`, `A7: clicking a row opens details in the side panel, list stays visible`      | Planerad  | –                    | ?        |
 | A8     | R5, R8       | Happy path | API, komponent | `A8: changes status, other fields unchanged`, `A8: status change in the panel is reflected by the list filter`    | Planerad  | –                    | ?        |
@@ -74,24 +74,23 @@ A5 körs på `main`. Övriga test med namn finns på `frontend-v2` och går mot 
 
 ## Testnivå och motivering
 
-_Ej ifyllt ännu._
-_(Exempel: enhetstester, integrationstester eller manuella tester - och varför just den nivån räcker för projektet.)_
+Nivån för varje kriterium står i kolumnen Nivå i tabellen ovan.
+
+- **API (pytest):** regler och lagring kontrolleras i backend, där de finns. Testet visar att rätt ärende sparas och att inget sparas vid fel.
+- **Komponent (Vitest):** det handläggaren ser, till exempel felmeddelanden och listans kolumner.
+- **Enhet (Vitest):** sökning, filter och sortering. Snabba tester, så vi kan pröva många fall.
+- **Manuell:** det som är svårt att automatisera, till exempel att allt går att göra med tangentbord (K1).
+
+Vi testar inte genom hela gränssnittet. Kursen kräver det inte och det tar lång tid att bygga.
 
 ## Resultat
 
-| Datum | Commit | Kommando | Utfall |
-| ----- | ------ | -------- | ------ |
+| Datum      | Commit                       | Kommando                           | Utfall   |
+| ---------- | ---------------------------- | ---------------------------------- | -------- |
 | 2026-10-30 | Ej committad, branch `specs` | `python -m pytest` från `backend/` | 1 passed |
-
-## Manuella kontroller
-
-| Vad | Vem | Datum | Resultat |
-| --- | --- | ----- | -------- |
-|     |     |       |          |
-
-_Ej ifyllt ännu._
 
 ## Begränsningar
 
-_Ej ifyllt ännu._
-_(Exempel: vad testas inte, och varför - t.ex. tidsbrist, saknad miljö eller medveten avgränsning.)_
+- Frontendtesterna går mot mockar. Inget automatiskt test visar att frontend och backend fungerar ihop.
+- Testerna från `frontend-v2` skrevs efter koden och har inte jämförts med specen ännu.
+- Bara A5 är kört än. Övriga rader är planerade.
