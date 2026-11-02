@@ -8,6 +8,25 @@ Planen visar vilka tester som finns, varför vi valt dem och vad körningarna vi
 - Vi tar med happy paths, error paths (felaktig indata och misslyckade operationer) och gränsfall utifrån reglerna, till exempel text med bara mellanslag eller inmatning vid och över en längdgräns.
 - När ett fel hittas beskriver vi förväntat och faktiskt resultat, rättar och lägger till ett regressionstest som fångar felet om det återkommer.
 
+## Kod som byggdes före specen (`frontend-v2`)
+
+Frontenden på `frontend-v2` byggdes innan specen var klar, och den har redan egna tester. Där arbetar vi därför baklänges: vi börjar med koden och testerna som finns och kontrollerar dem mot specen. Vanligtvis går det tvärtom, från spec till test till kod. Beslutet står i [beslut.md](beslut.md).
+
+**Specen gäller, inte koden.** Att ett test går igenom visar bara att koden gör det testet kontrollerar. Det visar inte att koden gör det specen kräver.
+
+För varje A# som berör frontenden gör vi så här innan koden läggs in i `main`:
+
+1. **Hitta testet.** Vilket befintligt test hör till kriteriet? Finns inget skriver vi ett nytt.
+2. **Jämför med specen.** Kontrollerar testet samma utgångsläge, handling och förväntade resultat som kriteriet, även det som *inte* ska ändras? Om inte rättar vi testet, inte specen.
+3. **Rätta koden** om den gör något annat än specen säger.
+4. **Pröva att testet kan misslyckas.** Ett test som skrivs efter koden kan råka alltid gå igenom. Vi ändrar koden tillfälligt så att den gör fel och kontrollerar att testet då misslyckas.
+5. **Byt namn** så att testet börjar med id:t, till exempel `A2: …` eller `SF-A1: …`.
+6. **Kör testet**, skriv in resultatet under [Resultat](#resultat) och ändra status till Genomförd.
+
+Testerna på `frontend-v2` går mot mockar, alltså låtsasdata i stället för det riktiga API:t. De visar därför inte att frontend och backend fungerar ihop. Kriterier som handlar om lagring kontrolleras också med API-tester mot backend.
+
+Om specen visar sig vara fel eller ofullständig ändrar vi inte specen i smyg för att den ska passa koden. Vi skriver en öppen fråga i specen och beslutar i teamet.
+
 ## Hur testerna körs
 
 - **Backend:** `python -m pytest` från `backend/`.
@@ -17,7 +36,7 @@ Planen visar vilka tester som finns, varför vi valt dem och vad körningarna vi
 
 Testnamn börjar med id:t, till exempel `test_a2_saknad_rubrik_avvisas` (pytest) eller `it("A2: avvisar ärende utan rubrik")` (Vitest). Specen säger vilket R ett A kontrollerar; den här tabellen säger vilket test som kontrollerar ett A.
 
-A5 körs på `main`. Övriga test med namn finns på `frontend-v2` och går mot mockar. De har inte körts eller jämförts med kriterierna ännu, och de får namn efter id:t när koden läggs in i `main`. Deras A11–A16 gäller sökning och blir `SF-A#`. `–` i kolumnen Test betyder att inget test finns än, och `?` att teamet inte har bestämt ännu. Nivån är ett förslag tills avsnittet om testnivå är ifyllt.
+A5 körs på `main`. Övriga test med namn finns på `frontend-v2` och går mot mockar. De har inte körts eller jämförts med kriterierna ännu. Det görs enligt [Kod som byggdes före specen](#kod-som-byggdes-före-specen-frontend-v2), och då får de namn efter id:t. Deras A11–A16 gäller sökning och blir `SF-A#`. `–` i kolumnen Test betyder att inget test finns än, och `?` att teamet inte har bestämt ännu. Nivån är ett förslag tills avsnittet om testnivå är ifyllt.
 
 | A#/K#  | R#           | Typ        | Nivå           | Test                                                                                                              | Status    | Senaste resultat     | Ansvarig |
 | ------ | ------------ | ---------- | -------------- | ----------------------------------------------------------------------------------------------------------------- | --------- | -------------------- | -------- |
