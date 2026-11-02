@@ -1,0 +1,115 @@
+# Agentuppdrag: Frontend – rätta frontend-v2 mot specen
+
+- **Ansvarig:** Ruben
+- **Datum:** 2026-11-03
+- **Agent och verktyg:** Claude Code (Claude Opus 5.5) i VS Code, med skillen `verifiera-mot-spec`
+- **PR:** ?
+
+## Före
+
+### Mål
+
+Frontenden på `frontend-v2` ska följa specen innan den läggs in i `main`, enligt "Kod som byggdes före specen" i [verifieringsplan.md](../verifieringsplan.md):
+
+1. **Kärnflödet:** A1–A4, A6–A10 och A12 har varsitt test i frontenden som prövar det kriteriet kräver.
+2. **Sökning och filtrering:** SF-A1–SF-A14 i [sok-filter.md](../specs/sok-filter.md) har varsitt test, och testnamnen börjar med `SF-A#`.
+3. **Redigeringen tas bort** ur kod, tester och mockar, eftersom bara status får ändras ([beslut.md](../beslut.md), 2026-10-30).
+4. **Mockarna svarar som backend**, enligt besluten i [backenduppdraget](2026-11-02-backend-status-och-varden.md): felmeddelanden, tillåtna värden och statusändringen.
+
+### Kontext
+
+- [CLAUDE.md](../../CLAUDE.md): regler och frontendens struktur.
+- [kravspec.md](../specs/kravspec.md) och [sok-filter.md](../specs/sok-filter.md).
+- [verifieringsplan.md](../verifieringsplan.md): de sex stegen och spårbarhetstabellen.
+- [beslut.md](../beslut.md): besluten 2026-10-29 och 2026-10-30.
+- "Plan och vårt beslut" i [backenduppdraget](2026-11-02-backend-status-och-varden.md): kontraktet för statusändringen och felmeddelandena.
+- `.claude/skills/verifiera-mot-spec/SKILL.md` och `frontend/src/`.
+
+### Avgränsning
+
+- **Får ändras:** `frontend/` (kod, tester och mockar), i `docs/verifieringsplan.md` frontendens rader, Resultat och Begränsningar, frontendavsnitten i `CLAUDE.md`, och skillen och agentdefinitionen i `.claude/`.
+- **Får inte ändras:** `backend/`, `docs/specs/`, övriga delar av `docs/` (även `docs/api/`), kontraktet för statusändringen, `backend/.env` och `frontend/.env.local`. Inga nya funktioner.
+- **Ingår inte:** A5 och A11, som bara prövas i backend, och K1, som teamet kontrollerar manuellt.
+- Om specen är oklar eller verkar fel ändras den inte. Agenten listar det som en fråga, och teamet beslutar.
+
+### Faktiska behörigheter
+
+Claude Code i VS Code, i auto-läge, på Rubens dator. Agenten kan:
+
+- läsa och skriva filer i repot och köra skalkommandon,
+- köra `npm run check` i `frontend/` (Node 24.22, npm 11.19) och `python -m pytest` i `backend/`.
+
+CI kör `npm run check` med Node 22 på varje PR som ändrar `frontend/` (`.github/workflows/frontend.yml`).
+
+`CLAUDE.md` förbjuder git-kommandon och åtkomst till `backend/.env` och `frontend/.env.local`. Det är inte prövat om verktyget stoppar dem tekniskt, så den gränsen vilar på instruktionen.
+
+### Kontrollpunkter
+
+Agenten stannar och väntar på teamet:
+
+1. Efter planen, innan någon fil ändras.
+2. Innan ett nytt beroende läggs till.
+3. Före PR:en, med utfallet av `npm run check`. Teamet kör också `npm run check` och `python -m pytest` själva innan PR:en skapas.
+4. Om ett test inte kan gå igenom utan att specen, backend eller kontraktet ändras.
+
+### Klart när
+
+- `npm run check` i `frontend/` går igenom, och `python -m pytest` i `backend/` går fortfarande igenom.
+- Varje A# och SF-A# i målet har minst ett test vars namn börjar med id:t (`A2: …`, `SF-A1: …`) och som prövar utgångsläge, handling och förväntat resultat i specen.
+- Varje sådant test har setts misslyckas när koden gjorde fel.
+- Ingen redigering finns kvar: ingen `PUT /arenden/{id}` i mockarna, ingen flagga och inga tester för redigering.
+- Mockarna ger samma felmeddelanden som besluten i backenduppdraget.
+- `docs/verifieringsplan.md` visar testnamn, status och resultat för frontendens rader.
+- Teamet har granskat ändringarna. Agenten kör inga git-kommandon.
+
+### Instruktionen
+
+> Du ska undersöka och planera ett avgränsat frontenduppdrag i Kundserviceportalen NORS, på branchen frontend-v2. Ändra inga filer i det här steget.
+>
+> ## Läs först
+> - docs/agentuppdrag/2026-11-03-frontend-mot-spec.md: mål, avgränsning, kontrollpunkter och klart när för det här uppdraget
+> - CLAUDE.md, docs/specs/kravspec.md och docs/specs/sok-filter.md
+> - docs/verifieringsplan.md, särskilt "Kod som byggdes före specen" och spårbarhetstabellen
+> - "Plan och vårt beslut" i docs/agentuppdrag/2026-11-02-backend-status-och-varden.md
+> - .claude/skills/verifiera-mot-spec/SKILL.md
+> - frontend/src/
+>
+> ## Det här vet vi redan
+> Kontrollera varje punkt i koden. Säg till om något inte stämmer.
+> - npm run check gick igenom 2026-11-02: 58 tester i 6 filer, och bygget lyckades.
+> - Sökningens tester heter fortfarande A11–A16 (filterArenden.test.ts och App.test.tsx) och krockar med kärnspecens A11 och A12. Några har inget id alls.
+> - Redigeringen finns kvar: isEditEnabled() i constants/features.ts, PUT /arenden/:id i mocks/handlers.ts och tester i App.test.tsx, App.disabledFeatures.test.tsx, ArendeForm.test.tsx, ArendeDetail.test.tsx och arendenApi.test.ts.
+> - Verifieringsplanen saknar test för SF-A5, SF-A8, SF-A13 och SF-A14.
+> - Mockarna skiljer sig från besluten i backenduppdraget: de svarar "Field required", kontrollerar inte kategori och prioritet, och ger 404 före 422 vid statusändring.
+> - Kommentaren i constants/arende.ts säger att kategorier och prioriteter inte är beslutade. De beslutades 2026-10-30 (Q1 och Q2).
+> - .claude/agents/frontend-developer.md pekar på docs/api/README.md för kontraktet, men den filen handlar om Postman. Skillen hänvisar till handlingsplan.md, som inte finns i repot.
+> - A11 har bara nivån API i verifieringsplanen, men skillen nämner ett formulärtest för A11.
+>
+> ## Avgränsning
+> Undersök bara. Följ avgränsningen i agentuppdraget. Föreslå inga nya funktioner.
+>
+> ## Det här vill jag ha tillbaka
+> 1. Läget per A# och SF-A#: vilket test som hör till, om det prövar det kriteriet kräver, och om koden gör det specen säger.
+> 2. Beslut som teamet behöver ta, med för- och nackdelar. Märk ditt eget förslag som förslag.
+> 3. En plan i små steg. Ange vilka A# och SF-A# varje steg gör klara.
+>
+> Stanna sedan och vänta tills vi har godkänt planen. Ändra inga filer förrän vi har sagt ja.
+
+## Efter
+
+### Plan och vårt beslut
+
+### Granskning
+
+- **Granskad av:**
+- **Vad vi hittade:**
+- **Arbete utanför uppdraget som togs bort:**
+- **Accepterat, ändrat eller avvisat, och varför:**
+
+### Verifiering
+
+| Kommando | Resultat | Datum |
+| -------- | -------- | ----- |
+|          |          |       |
+
+### Avvikelser och öppna frågor
