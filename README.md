@@ -68,6 +68,50 @@ npm run dev
 
 Öppna den lokala adressen som Vite skriver ut (normalt <http://localhost:5173>).
 
+Frontenden anropar API:t på `http://127.0.0.1:8000`.
+
+## Kör hela programmet
+
+Frontenden hämtar och sparar ärenden via API:t, så båda delarna måste vara
+igång samtidigt. Öppna två terminaler från projektets rot.
+
+Terminal 1, backend. **Första gången** måste du skapa den virtuella miljön och
+installera beroendena (det behöver bara göras en gång):
+
+```powershell
+cd backend
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python -m uvicorn app.main:app --reload
+```
+
+**Senare gånger** räcker det att aktivera miljön och starta servern:
+
+```powershell
+cd backend
+.\.venv\Scripts\Activate.ps1
+python -m uvicorn app.main:app --reload
+```
+
+Om PowerShell vägrar köra `Activate.ps1` (felet "running scripts is disabled"),
+kör `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` en gång och försök
+igen. Du ser att miljön är aktiv när `(.venv)` står först på kommandoraden. På
+macOS och Linux aktiverar du med `source .venv/bin/activate`.
+
+Terminal 2, frontend:
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Öppna sedan <http://localhost:5173>. Där kan du skapa ärenden och se listan
+över ärenden. Om sidan visar "Kunde inte nå servern" är backenden inte igång.
+Frontenden måste köras på port 5173, annars blockerar CORS anropen (se
+`allow_origins` i `backend/app/main.py`).
+
 ## Kör testerna
 
 Med backendmiljön aktiverad, från `backend`:
