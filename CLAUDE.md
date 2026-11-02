@@ -43,7 +43,7 @@ Setup, run and test commands live in `README.md` (backend: `uvicorn app.main:app
 
 - `backend/app/main.py` — single FastAPI `app` (`app.main:app`) with `/` and `/health`, mounts the routers. CORS is restricted to the Vite dev origins (`http://localhost:5173`, `http://127.0.0.1:5173`); if the frontend runs on another port/host, update `allow_origins` there.
 - `frontend/src/` — `main.tsx` mounts `App.tsx` and starts the MSW worker in `--mode mock`. `api/arendenApi.ts` is the only place that calls `fetch`; it turns FastAPI errors (`detail` string or 422 list) into `ApiError` with per-field messages. The base URL is `VITE_API_URL` or `http://127.0.0.1:8000` (no Vite proxy, hence CORS).
-- `frontend/src/mocks/handlers.ts` mirrors the backend and also serves the proposed `POST /arenden/{id}/status`, which the backend does not have yet. Tests use it via `msw/node` (`src/test/setup.ts`); `db.reset()` runs after each test.
+- `frontend/src/mocks/handlers.ts` follows the rules, error texts and `POST /arenden/{id}/status` decided for the backend in `docs/agentuppdrag/2026-11-02-backend-status-och-varden.md`; the real backend does not have all of them yet. Tests use it via `msw/node` (`src/test/setup.ts`); `db.reset()` runs after each test.
 - Search and filtering run in the frontend on the loaded list (`utils/filterArenden.ts`), per `docs/specs/sok-filter.md`. The category and priority values in `constants/arende.ts` must match `docs/specs/kravspec.md`.
 - Dependencies are unpinned in `backend/requirements.txt`; add new ones there or in `frontend/package.json`.
 

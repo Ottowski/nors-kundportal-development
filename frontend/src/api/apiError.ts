@@ -43,7 +43,8 @@ export function toApiError(status: number, body: unknown): ApiError {
   return new ApiError(UNKNOWN_ERROR_MESSAGE, status);
 }
 
-// Pydantic prefixes custom validator messages with "Value error, ".
+// Pydantic prefixes custom validator messages with "Value error, ". The backend's planned
+// error handler removes it; until then this keeps the message free of technical text (R12).
 function stripPydanticPrefix(message: string): string {
   return message.replace(/^Value error,\s*/, "");
 }

@@ -135,5 +135,8 @@ Varje steg som ändrar ett test börjar med att testet ses misslyckas, vid behov
 | Steg 2: `npx vitest run src/App.test.tsx -t "A6"` innan kolumnen Åtgärder togs bort | Misslyckades: listan hade fem kolumnrubriker, testet väntade fyra | 2026-11-03 |
 | Steg 2: det nya testet "only status can be changed…" med en tillfällig knapp "Redigera" i detaljvyn | Misslyckades: knappen hittades | 2026-11-03 |
 | Steg 2: `npm run check` i `frontend/` | Format, lint, typer och bygge gick igenom. 45 tester i 5 filer passerade (förut 58 i 6 filer: 14 tester för redigering togs bort, 1 regressionstest kom till) | 2026-11-03 |
+| Steg 3: `npx vitest run src/api/arendenApi.test.ts` med de tre nya testerna för mockarna, före ändringen | Misslyckades: otillåten kategori och prioritet godtogs, saknat fält gav "Field required", och statusändring för okänt id gav 404 före 422 | 2026-11-03 |
+| Steg 3: testet för prefixet "Value error, " med borttagningen tillfälligt avstängd i `apiError.ts` | Misslyckades: prefixet fanns kvar i beskedet | 2026-11-03 |
+| Steg 3: `npm run check` i `frontend/` | Format, lint, typer och bygge gick igenom. 49 tester i 5 filer passerade | 2026-11-03 |
 
 ### Avvikelser och öppna frågor

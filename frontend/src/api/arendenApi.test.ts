@@ -1,6 +1,7 @@
 import { http, HttpResponse } from "msw";
 import { describe, expect, it } from "vitest";
 import { server } from "../mocks/node";
+import type { ArendeCreate } from "../types/arende";
 import { ApiError, NETWORK_ERROR_MESSAGE, VALIDATION_ERROR_MESSAGE } from "./apiError";
 import { API_BASE_URL, createArende, getArende, listArenden, updateStatus } from "./arendenApi";
 
@@ -43,10 +44,32 @@ describe("arendenApi", () => {
     expect(created.skapad).toBeTruthy();
   });
 
-  it("maps 422 to field errors and strips the pydantic prefix (R3)", async () => {
+  it("maps 422 to field errors (R3)", async () => {
     const error = await catchError(createArende({ ...valid, rubrik: "   " }));
     expect(error.status).toBe(422);
     expect(error.message).toBe(VALIDATION_ERROR_MESSAGE);
+    expect(error.fieldErrors).toEqual({ rubrik: "Får inte vara tomt eller bara mellanslag" });
+  });
+
+  // Today's backend still sends Pydantic's prefix until its error handler is in place.
+  it("strips Pydantic's prefix 'Value error, ' from field errors (R12)", async () => {
+    server.use(
+      http.post(`${API_BASE_URL}/arenden`, () =>
+        HttpResponse.json(
+          {
+            detail: [
+              {
+                type: "value_error",
+                loc: ["body", "rubrik"],
+                msg: "Value error, Får inte vara tomt eller bara mellanslag",
+              },
+            ],
+          },
+          { status: 422 },
+        ),
+      ),
+    );
+    const error = await catchError(createArende(valid));
     expect(error.fieldErrors).toEqual({ rubrik: "Får inte vara tomt eller bara mellanslag" });
   });
 
@@ -72,5 +95,38 @@ describe("arendenApi", () => {
     const error = await catchError(updateStatus(1, "Ogiltig"));
     expect(error.status).toBe(422);
     expect(error.fieldErrors.status).toBe("Ogiltig status");
+  });
+});
+
+// The mocks answer as decided for the backend in
+// docs/agentuppdrag/2026-11-02-backend-status-och-varden.md ("Plan och vårt beslut").
+describe("mocks follow the backend decisions", () => {
+  it("rejects a category and a priority that are not allowed, with the decided texts", async () => {
+    const error = await catchError(
+      createArende({ ...valid, kategori: "teknik", prioritet: "hög" }),
+    );
+    expect(error.status).toBe(422);
+    expect(error.fieldErrors).toEqual({
+      kategori: "Ogiltig kategori. Välj Fakturering, Teknik, Leverans eller Övrigt.",
+      prioritet: "Ogiltig prioritet. Välj Låg, Medel eller Hög.",
+    });
+  });
+
+  it("reports a missing field as 'Måste fyllas i'", async () => {
+    const missing = { ...valid, kategori: undefined } as unknown as ArendeCreate;
+    const error = await catchError(createArende(missing));
+    expect(error.status).toBe(422);
+    expect(error.fieldErrors).toEqual({ kategori: "Måste fyllas i" });
+  });
+
+  it("checks the status before the id: 422 before 404", async () => {
+    // @ts-expect-error invalid status on purpose
+    const invalid = await catchError(updateStatus(999, "Ogiltig"));
+    expect(invalid.status).toBe(422);
+    expect(invalid.fieldErrors.status).toBe("Ogiltig status");
+
+    const missing = await catchError(updateStatus(999, "Pågående"));
+    expect(missing.status).toBe(404);
+    expect(missing.message).toBe("Ärendet hittades inte");
   });
 });

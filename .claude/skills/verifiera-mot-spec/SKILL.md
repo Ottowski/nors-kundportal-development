@@ -59,5 +59,5 @@ Tänk på detta:
 - **Testerna går mot mockar** (`src/mocks/handlers.ts`). De visar inte att frontend och backend fungerar ihop.
 - **Sätt utgångsläget med `db.reset([...])`**, till exempel två ärenden för A2. `src/test/setup.ts` återställer mocken efter varje test. Lägger du till ny mockdata måste den återställas där också.
 - **MSW kör med `onUnhandledRequest: "error"`.** Ett test som anropar en endpoint utan handler misslyckas. Lägg till handlern, lätta inte på inställningen.
-- **Felbesked går via `ApiError`.** Mocken skickar `Value error, …` som Pydantic gör, och `toApiError` i `src/api/apiError.ts` tar bort prefixet. Ett test för R12 kan därför kontrollera att `Value error` inte syns.
+- **Felbesked går via `ApiError`.** Mocken svarar med backendens beslutade texter, utan prefixet `Value error, `. `toApiError` i `src/api/apiError.ts` tar ändå bort prefixet, eftersom dagens backend skickar det. Ett test för R12 kan låta mocken skicka prefixet med `server.use(...)` och kontrollera att `Value error` inte syns.
 - **Sök element på roll och etikett, inte på CSS-klass.** Etiketterna måste vara unika: filterraden heter "Filtrera kategori" för att inte krocka med formulärets "Kategori".

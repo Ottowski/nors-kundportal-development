@@ -33,7 +33,7 @@ export function createArende(data: ArendeCreate): Promise<Arende> {
   return request<Arende>("/arenden", { method: "POST", body: JSON.stringify(data) });
 }
 
-// Proposed endpoint, not in the backend yet. Served by MSW in tests and `npm run dev:mock`.
+// Agreed with the backend, which does not have it yet. Served by MSW in tests and `npm run dev:mock`.
 export function updateStatus(id: number, status: ArendeStatus): Promise<Arende> {
   return request<Arende>(`/arenden/${id}/status`, {
     method: "POST",

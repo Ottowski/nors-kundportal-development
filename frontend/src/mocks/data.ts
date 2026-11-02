@@ -1,6 +1,6 @@
 import type { Arende } from "../types/arende";
 
-// Made-up test data C1–C3 from kundportal-sdd/specs/sok-filter.md.
+// Made-up test data C1–C3 from docs/specs/sok-filter.md.
 export function seedArenden(): Arende[] {
   return [
     {

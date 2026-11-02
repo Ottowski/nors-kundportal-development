@@ -1,6 +1,6 @@
 import { http, HttpResponse } from "msw";
 import { API_BASE_URL } from "../api/arendenApi";
-import { STATUSAR } from "../constants/arende";
+import { KATEGORIER, PRIORITETER, STATUSAR } from "../constants/arende";
 import type { Arende, ArendeCreate, ArendeStatus } from "../types/arende";
 import { seedArenden } from "./data";
 
@@ -13,29 +13,66 @@ export const db = {
 };
 
 const NOT_FOUND = { detail: "Ärendet hittades inte" };
-const TEXT_FIELDS = ["rubrik", "beskrivning", "kategori", "prioritet"] as const;
 
-function validationError(field: string, msg: string) {
-  return HttpResponse.json(
-    { detail: [{ type: "value_error", loc: ["body", field], msg }] },
-    { status: 422 },
-  );
+// Rules and texts decided for the backend in
+// docs/agentuppdrag/2026-11-02-backend-status-och-varden.md ("Plan och vårt beslut").
+const MESSAGES = {
+  missing: "Måste fyllas i",
+  invalid: "Ogiltigt värde",
+  empty: "Får inte vara tomt eller bara mellanslag",
+  kategori: "Ogiltig kategori. Välj Fakturering, Teknik, Leverans eller Övrigt.",
+  prioritet: "Ogiltig prioritet. Välj Låg, Medel eller Hög.",
+  status: "Ogiltig status",
+} as const;
+
+interface FieldError {
+  type: string;
+  loc: string[];
+  msg: string;
 }
 
-// Same rules as ArendeCreate in backend/app/schemas/arende.py.
+function fieldError(field: string, type: string, msg: string): FieldError {
+  return { type, loc: ["body", field], msg };
+}
+
+function validationError(errors: FieldError[]) {
+  return HttpResponse.json({ detail: errors }, { status: 422 });
+}
+
+function asObject(input: unknown): Record<string, unknown> {
+  return typeof input === "object" && input !== null ? (input as Record<string, unknown>) : {};
+}
+
+// Like FastAPI, every invalid field is reported at once, in field order.
 function validateCreate(input: unknown): ArendeCreate | Response {
-  const body = (input ?? {}) as Partial<Record<keyof ArendeCreate, unknown>>;
-  for (const field of TEXT_FIELDS) {
-    if (typeof body[field] !== "string") {
-      return validationError(field, "Field required");
-    }
-  }
-  const values = body as ArendeCreate;
+  const body = asObject(input);
+  const errors: FieldError[] = [];
+
   for (const field of ["rubrik", "beskrivning"] as const) {
-    if (!values[field].trim()) {
-      return validationError(field, "Value error, Får inte vara tomt eller bara mellanslag");
+    const value = body[field];
+    if (!(field in body)) {
+      errors.push(fieldError(field, "missing", MESSAGES.missing));
+    } else if (typeof value !== "string") {
+      errors.push(fieldError(field, "string_type", MESSAGES.invalid));
+    } else if (!value.trim()) {
+      errors.push(fieldError(field, "value_error", MESSAGES.empty));
     }
   }
+
+  // Any value outside the list is rejected with the field's own text, also null and numbers.
+  const allowed = { kategori: KATEGORIER, prioritet: PRIORITETER };
+  for (const field of ["kategori", "prioritet"] as const) {
+    if (!(field in body)) {
+      errors.push(fieldError(field, "missing", MESSAGES.missing));
+    } else if (!allowed[field].includes(body[field] as string)) {
+      errors.push(fieldError(field, "value_error", MESSAGES[field]));
+    }
+  }
+
+  if (errors.length > 0) {
+    return validationError(errors);
+  }
+  const values = body as unknown as ArendeCreate;
   return {
     rubrik: values.rubrik.trim(),
     beskrivning: values.beskrivning.trim(),
@@ -67,17 +104,22 @@ export const handlers = [
     return HttpResponse.json(arende, { status: 201 });
   }),
 
-  // Proposed endpoint, not built in the backend yet.
+  // Agreed with the backend, which does not have it yet (step 4 of the backend agentuppdrag).
+  // Like FastAPI, the body is checked before the id, so an invalid status gives 422, not 404.
   http.post(`${API_BASE_URL}/arenden/:id/status`, async ({ params, request }) => {
+    const body = asObject(await request.json());
+    if (!("status" in body)) {
+      return validationError([fieldError("status", "missing", MESSAGES.missing)]);
+    }
+    const status = body.status as ArendeStatus;
+    if (!STATUSAR.includes(status)) {
+      return validationError([fieldError("status", "value_error", MESSAGES.status)]);
+    }
     const index = db.arenden.findIndex((a) => a.id === Number(params.id));
     if (index === -1) {
       return HttpResponse.json(NOT_FOUND, { status: 404 });
     }
-    const { status } = (await request.json()) as { status?: string };
-    if (!STATUSAR.includes(status as ArendeStatus)) {
-      return validationError("status", "Ogiltig status");
-    }
-    const updated = { ...db.arenden[index], status: status as ArendeStatus };
+    const updated = { ...db.arenden[index], status };
     db.arenden[index] = updated;
     return HttpResponse.json(updated);
   }),
