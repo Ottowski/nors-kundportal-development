@@ -17,8 +17,6 @@ Frontenden på `frontend-v2` byggdes före specen. Därför arbetar vi baklänge
 
 ## Regler
 
-Regel 1–4 och 6 ur `handlingsplan.md`.
-
 1. **Specen gäller, inte koden.** Gör koden något annat än [kravspec.md](../../../docs/specs/kravspec.md) eller [sok-filter.md](../../../docs/specs/sok-filter.md) säger, rättar ni koden. Är specen fel skriver ni en öppen fråga (Q#) i specen och beslutar i teamet. Ändra den inte i smyg. Beslutet står i [beslut.md](../../../docs/beslut.md).
 2. **Bara status får ändras på ett ärende.** All redigering ska bort (kravspec.md, "Ingår inte").
 3. **Ett test som går igenom räcker inte.** Testet ska kontrollera det som acceptanskriteriet säger, även det som _inte_ ska ändras.
@@ -29,7 +27,7 @@ För en agent betyder regel 1 och 4: ändra inte specen, utan rapportera avvikel
 
 ## Vad testet ska visa
 
-Sammanfattning av kravspec.md. Vid skillnad gäller kravspec.md. A5 prövas bara i backend.
+Sammanfattning av kravspec.md. Vid skillnad gäller kravspec.md. A5 och A11 prövas bara i backend.
 
 | A#  | Del                                                 | Testet ska visa                                                                                       |
 | --- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
@@ -37,7 +35,6 @@ Sammanfattning av kravspec.md. Vid skillnad gäller kravspec.md. A5 prövas bara
 | A2  | Formuläret                                          | Ärendet avvisas om rubriken saknas och ett begripligt besked visas. Det finns fortfarande två ärenden |
 | A3  | Formuläret                                          | Samma som A2, men rubriken består bara av mellanslag                                                  |
 | A4  | Formuläret                                          | En otillåten kategori avvisas med ett begripligt besked, och inget ärende sparas                      |
-| A11 | Formuläret                                          | En otillåten prioritet avvisas med ett begripligt besked, och inget ärende sparas                     |
 | A6  | Listan (`App.test.tsx`, `filterArenden.test.ts`)    | Tre ärenden visas med rubrik, status, prioritet och skapad-tid                                        |
 | A12 | Listan                                              | Det nyaste ärendet visas först och det äldsta sist                                                    |
 | A7  | Detaljvyn (`ArendeDetail.test.tsx`)                 | Alla fält visas för det valda ärendet                                                                 |
@@ -47,9 +44,9 @@ Sammanfattning av kravspec.md. Vid skillnad gäller kravspec.md. A5 prövas bara
 
 Tänk på detta:
 
-- A2, A3, A4 och A11 börjar med två ärenden. Testet ska börja med två och kontrollera att det fortfarande är två efteråt.
+- A2, A3 och A4 börjar med två ärenden. Testet ska börja med två och kontrollera att det fortfarande är två efteråt.
 - Ett begripligt besked är på svenska och innehåller inget tekniskt felmeddelande (R12).
-- Mocken för A8 och A9 ska svara som det anrop teamet och backend kom överens om i `docs/api/README.md`. Står det inte där än: rapportera det i stället för att gissa.
+- Mocken för A8 och A9 ska svara enligt kontraktet för statusändringen under "Plan och vårt beslut" i [backenduppdraget](../../../docs/agentuppdrag/2026-11-02-backend-status-och-varden.md). Står svaret inte där: rapportera det i stället för att gissa.
 - A8 kräver också att statusen finns kvar efter omstart. Det kan frontendtestet inte visa. Den delen prövas i backend.
 
 ### Sökning och filtrering (SF-A1–SF-A14)

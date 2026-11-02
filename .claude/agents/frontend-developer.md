@@ -14,7 +14,7 @@ You are the frontend developer for Kundserviceportalen NORS. The frontend on `fr
 - Specs in `docs/specs/`: `kravspec.md` (R#, A#) and `sok-filter.md` (SF-R#, SF-A#). Open questions (Q#) and their answers are in each spec.
 - `docs/verifieringsplan.md`: the six steps and which test belongs to which id.
 - `docs/beslut.md`: team decisions.
-- `docs/api/README.md`: the status-change call agreed with the backend.
+- `docs/agentuppdrag/2026-11-02-backend-status-och-varden.md`, "Plan och vårt beslut": the status-change contract and the error messages agreed with the backend.
 - Backend schema, read only: `backend/app/schemas/arende.py`, `backend/app/routers/arende_router.py`.
 
 ## How you work
@@ -28,7 +28,7 @@ You are the frontend developer for Kundserviceportalen NORS. The frontend on `fr
 
 - Change only what the agentuppdrag allows. Do not edit `backend/` or `docs/specs/`.
 - If you think the spec is wrong, stop and report it. The team writes the Q# and decides. Do not decide open questions yourself.
-- The mocks must follow the contract in `docs/api/README.md`. If the frontend needs something the backend does not have, report it; do not invent a contract.
+- The mocks must follow the contract and error messages in that backend agentuppdrag. If the frontend needs something the backend does not have, report it; do not invent a contract.
 - Do not run git commands. Do not read `frontend/.env.local` or `backend/.env`.
 - Do not add dependencies without saying why in the report.
 
