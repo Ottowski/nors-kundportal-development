@@ -1,9 +1,9 @@
 # Agentuppdrag: Backend – statusändring och tillåtna värden
 
-- **Ansvarig:** ?
+- **Ansvarig:** Ruben (planering och steg 1), Otto (steg 2–5)
 - **Datum:** 2026-11-02
 - **Agent och verktyg:** Claude Code (Claude Opus 5.5) i VS Code
-- **PR:** ?
+- **PR:** steg 1: ?, steg 2–5: ?
 
 ## Före
 
@@ -29,9 +29,8 @@ Kontraktet: `POST /arenden/{id}/status` med `{"status": "<värde>"}`. Svaret är
 
 ### Avgränsning
 
-- **Får ändras:** `backend/` (kod, tester och `requirements.txt`), exemplet på `POST /arenden` i `README.md` och raderna för A1–A5 och A8–A11 i `docs/verifieringsplan.md`.
+- **Får ändras:** `backend/` (kod, tester och `requirements.txt`), exemplet på `POST /arenden` i `README.md`, och i `docs/verifieringsplan.md` raderna för A1–A5 och A8–A11, texten ovanför spårbarhetstabellen, resultattabellen och avsnittet Begränsningar.
 - **Får inte ändras:** `frontend/`, `docs/specs/`, övriga delar av `docs/` (även `docs/api/`), frontendens kontrakt för statusändringen, `backend/.env`, `frontend/.env.local` och databasen `backend/app/data/nors.db`. Inga tester får skriva i den databasen. Inga nya funktioner, till exempel redigering av andra fält, radering eller filtrering i backend.
-- **Inte beslutat:** om resultattabellen och avsnittet Begränsningar i `docs/verifieringsplan.md` också får ändras.
 - Om specen är oklar eller verkar fel ändras den inte. Agenten listar det som en fråga, och teamet beslutar.
 
 ### Faktiska behörigheter
@@ -51,13 +50,15 @@ I en vanlig terminal på samma dator tog A5 4,1 s för två starter. Varför sta
 
 `CLAUDE.md` förbjuder git-kommandon och åtkomst till `backend/.env` och `frontend/.env.local`. Det är inte prövat om verktyget stoppar dem tekniskt, så den gränsen vilar på instruktionen. Att installera paket kräver nätverk och ändrar `.venv`; det är inte heller prövat. Under planeringen begränsade instruktionen agenten till att läsa och skriva det här utkastet.
 
+**Steg 2–5 (Otto):** fylls i innan Otto börjar.
+
 ### Kontrollpunkter
 
 Agenten stannar och väntar på teamet:
 
 1. Efter planen, innan någon kod skrivs.
 2. Innan ett nytt beroende läggs till i `requirements.txt` eller installeras i `.venv`.
-3. Efter varje steg i planen, med testutfallet, så att steget kan granskas för sig. Teamet kör också `python -m pytest` i en vanlig terminal innan nästa steg.
+3. Före PR:en, med testutfallet. Teamet kör också `python -m pytest` i en vanlig terminal innan PR:en skapas. Steg 1 granskades direkt efter steget.
 4. Om ett test inte kan gå igenom utan att `frontend/`, specen eller kontraktet ändras.
 5. Om A5 misslyckas av något annat skäl än uppdragets ändringar, till exempel för att servern startar långsamt.
 
@@ -125,6 +126,8 @@ Agenten stannar och väntar på teamet:
 >
 > Stanna sedan och vänta tills vi har godkänt planen. Skriv ingen kod förrän vi har sagt ja.
 
+**Steg 2–5 (Otto):** instruktionen läggs in här innan Otto börjar.
+
 ## Efter
 
 ### Plan och vårt beslut
@@ -162,7 +165,15 @@ Planen godkändes 2026-11-02 efter två ändringar från teamet. Testerna körs 
 | 4 | Tester för A8 (ändra status, starta om, övriga fält oförändrade), A9 (ogiltig status avvisas och den gamla statusen ligger kvar) och A10 (statusändring för ett okänt id ger 404). Sedan schemat, `update_status` i kontraktet och i båda repositoryn samtidigt, och endpointen. | A8, A9, A10 |
 | 5 | Verifieringsplanen enligt besluten. | – |
 
-Varje steg börjar med ett test som misslyckas, eller med en tillfällig ändring när koden redan fungerar. Agenten stannar efter varje steg.
+Varje steg börjar med ett test som misslyckas, eller med en tillfällig ändring när koden redan fungerar. Agenten stannar vid kontrollpunkterna.
+
+**Överlämning efter steg 1.** Steg 1 läggs in i `main` med en egen PR, så att arbetet på `frontend-v2` kan pågå samtidigt. Otto tar över steg 2–5 på en ny branch från `main`. Innan han börjar:
+
+- läser han besluten ovan och säger till om något behöver ändras,
+- fyller han i sina egna behörigheter under Faktiska behörigheter, eftersom de som står där gäller Rubens miljö,
+- lägger han in instruktionen för steg 2–5 under Instruktionen.
+
+Arbetet på `frontend-v2` ändrar också raderna för A1–A4 och A8–A10 i `docs/verifieringsplan.md`, så de kan krocka vid merge. Den som lägger in sin branch i `main` sist löser krocken.
 
 **Frågor om specen.** Specen ändras inte. Tills teamet säger annat gäller förslagen:
 
@@ -172,6 +183,8 @@ Varje steg börjar med ett test som misslyckas, eller med en tillfällig ändrin
 - **Inledande och avslutande mellanslag:** backend tar bort dem när rubrik och beskrivning sparas, men specen säger inget om det. Förslag: det testas inte förrän teamet har bestämt.
 
 ### Granskning
+
+**Steg 1**
 
 - **Granskad av:**
 - **Vad vi hittade:**
@@ -186,6 +199,7 @@ Tabellen visar agentens egna körningar i sandlådan. Teamets körningar i en va
 | -------- | -------- | ----- |
 | Steg 1: `python -m pytest -v` från `backend/` | 3 passed (A1, A5, A10) på 4,4 s | 2026-11-02 |
 | Steg 1: A1 och A10 mot en ändrad kopia av backend (status Pågående i stället för Nytt, tom lista, engelskt besked vid 404) | Varje ändring gav ett misslyckat test | 2026-11-02 |
+| Steg 1, Ruben i vanlig terminal på `backend-steg-1` (utgår från `main`): `python -m pytest -v` från `backend/` | 3 passed (A1, A5, A10) | 2026-11-02 |
 
 ### Avvikelser och öppna frågor
 
