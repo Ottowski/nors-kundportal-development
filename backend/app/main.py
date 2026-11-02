@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.repositories.arende_repository import get_arende_repository
+from app.repositories.sqlite_arende_repository import SqliteArendeRepository
 from app.routers.arende_router import router as arende_router
 
 app = FastAPI(
@@ -18,6 +20,10 @@ app.add_middleware(
 )
 
 app.include_router(arende_router)
+
+# Lokal koppling mot SQLite. Ta bort de här raderna för att gå tillbaka till minneslagring.
+_sqlite_repository = SqliteArendeRepository()
+app.dependency_overrides[get_arende_repository] = lambda: _sqlite_repository
 
 
 @app.get("/")

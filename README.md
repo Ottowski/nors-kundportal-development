@@ -1,17 +1,19 @@
 # Kundserviceportalen NORS
 
-A blank starter project for the NORS team, with a Python/FastAPI backend and a
-React/TypeScript frontend.
+Ett startprojekt för teamet NORS, med backend i Python/FastAPI och frontend i
+React/TypeScript.
 
-## Requirements
+All projektdokumentation finns i [docs/](docs/README.md).
 
-- Python 3.10 or newer
-- Node.js 20.19+ or 22.12+
+## Krav
+
+- Python 3.10 eller senare
+- Node.js 20.19+ eller 22.12+
 - npm
 
-## Run API
+## Kör API:t
 
-From the project root, set up the backend environment and start the API:
+Från projektets rot, sätt upp backendmiljön och starta API:t:
 
 ```powershell
 cd backend
@@ -21,8 +23,11 @@ python -m pip install -r requirements.txt
 python -m uvicorn app.main:app --reload
 ```
 
-Create the virtual environment and install dependencies only the first time.
-For later runs, open a terminal in the project root and run:
+På macOS och Linux aktiverar du miljön med `source .venv/bin/activate` i
+stället för `.\.venv\Scripts\Activate.ps1`.
+
+Den virtuella miljön och beroendena behöver bara skapas första gången.
+Senare räcker det att öppna en terminal i projektets rot och köra:
 
 ```powershell
 cd backend
@@ -30,9 +35,9 @@ cd backend
 python -m uvicorn app.main:app --reload
 ```
 
-The API is available at <http://127.0.0.1:8000>. To try it interactively, open
-<http://127.0.0.1:8000/docs>. Expand **POST `/arenden`**, click **Try it out**,
-enter an example request, and click **Execute**:
+API:t finns på <http://127.0.0.1:8000>. För att prova det interaktivt, öppna
+<http://127.0.0.1:8000/docs>. Fäll ut **POST `/arenden`**, klicka på
+**Try it out**, fyll i ett exempel och klicka på **Execute**:
 
 ```json
 {
@@ -43,16 +48,17 @@ enter an example request, and click **Execute**:
 }
 ```
 
-The response should have status `201 Created`. The API sets the ID, status, and
-creation time automatically. Use **GET `/arenden`** to list cases or
-**GET `/arenden/{arende_id}`** to retrieve one case. Cases are stored in memory
-and are cleared when the API server stops.
+Svaret ska ha status `201 Created`. API:t sätter id, status och
+skapad-tid automatiskt. Använd **GET `/arenden`** för att lista ärenden eller
+**GET `/arenden/{arende_id}`** för att hämta ett ärende. Ärendena lagras i en
+SQLite-fil (`backend/app/data/nors.db`, eller sökvägen i `NORS_DB_PATH`) och
+finns kvar när API-servern startas om.
 
-To stop the server, focus the terminal where it is running and press **Ctrl+C**.
+Stoppa servern genom att gå till terminalen där den körs och trycka **Ctrl+C**.
 
-## Run the frontend
+## Kör frontenden
 
-In a second terminal, from the project root:
+I en andra terminal, från projektets rot:
 
 ```powershell
 cd frontend
@@ -60,29 +66,48 @@ npm install
 npm run dev
 ```
 
-Open the local URL printed by Vite (normally <http://localhost:5173>).
+Öppna den lokala adressen som Vite skriver ut (normalt <http://localhost:5173>).
 
-Other frontend commands:
+## Kör testerna
 
-| Command | What it does |
+Med backendmiljön aktiverad, från `backend`:
+
+```powershell
+python -m pytest
+```
+
+Testerna startar en egen API-server mot en temporär databas, så servern behöver
+inte vara igång och `nors.db` ändras inte. Vilka tester som finns och vad de
+kontrollerar står i [docs/verifieringsplan.md](docs/verifieringsplan.md).
+
+Frontendtesterna går mot påhittad data (MSW-mockar), så backend behöver inte
+vara igång. Från `frontend`:
+
+```powershell
+npm run test:run
+```
+
+Fler kommandon från `frontend`:
+
+| Kommando | Vad det gör |
 | --- | --- |
-| `npm run dev:mock` | Runs the UI on mocked API data (MSW). No backend needed. |
-| `npm test` | Runs tests in watch mode (Vitest + Testing Library). |
-| `npm run check` | Full build cycle: Prettier check, ESLint, TypeScript, tests, production build. |
-| `npm run format` | Formats code with Prettier. |
+| `npm run dev:mock` | Kör gränssnittet mot påhittad data (MSW-mockar). Ingen backend behövs. |
+| `npm test` | Kör testerna och kör om dem när koden ändras (Vitest och Testing Library). |
+| `npm run check` | Hela kontrollen: Prettier, ESLint, TypeScript, testerna och bygget. Körs också i GitHub Actions. |
+| `npm run format` | Formaterar koden med Prettier. |
 
-## API tests (Postman)
+## API-tester (Postman)
 
-Import `docs/api/kundportal.postman_collection.json` and
-`docs/api/kundportal.postman_environment.json` in Postman, or run them from the
-terminal. See [docs/api/README.md](docs/api/README.md).
+Importera `docs/api/kundportal.postman_collection.json` och
+`docs/api/kundportal.postman_environment.json` i Postman, eller kör dem från
+terminalen. Se [docs/api/README.md](docs/api/README.md).
 
-## Team development
+## Utveckling i teamet
 
-- Keep API code in `backend/app` and UI code in `frontend/src`.
-- Create and activate the Python virtual environment before installing backend
-  dependencies.
-- Do not commit virtual environments, `node_modules`, or local `.env` files;
-  these are ignored by Git.
-- Add dependencies to `backend/requirements.txt` or `frontend/package.json` so
-  the rest of the team can install them.
+- Lägg API-kod i `backend/app` och UI-kod i `frontend/src`.
+- Skapa och aktivera Pythons virtuella miljö innan du installerar
+  backendberoenden.
+- Committa inte virtuella miljöer, `node_modules` eller lokala `.env`-filer;
+  de ignoreras av Git.
+- Lägg till beroenden i `backend/requirements.txt` eller
+  `frontend/package.json` så att resten av teamet kan installera dem.
