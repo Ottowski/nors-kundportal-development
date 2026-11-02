@@ -70,7 +70,7 @@ describe("App", () => {
     expect(await rowTitles()).toHaveLength(3);
   });
 
-  it("A7: clicking a row opens details in the side panel, list stays visible", async () => {
+  it("clicking a row opens details in the side panel, list stays visible", async () => {
     render(<App />);
     const user = userEvent.setup();
     await rowTitles();
@@ -162,7 +162,7 @@ describe("App", () => {
     expect(await screen.findByText("Inga ärenden matchar")).toBeInTheDocument();
   });
 
-  it("A8: status change in the panel is reflected by the list filter", async () => {
+  it("a status change in the panel is reflected by the list filter", async () => {
     render(<App />);
     const user = userEvent.setup();
     await rowTitles();
