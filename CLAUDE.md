@@ -37,7 +37,7 @@ If the premises hold, say so in one line. Don't invent objections.
 
 ## Commands
 
-Setup, run and test commands live in `README.md` (backend: `uvicorn app.main:app --reload` from `backend/`; frontend: `npm run dev` from `frontend/`, or `npm run dev:mock` to run on MSW mocks without a backend; tests: `python -m pytest` from `backend/` and `npm run test:run` from `frontend/`). Don't restate them here. The README shows PowerShell activation; on macOS/Linux use `source .venv/bin/activate`. `tests/test_omstart.py` starts real uvicorn processes against a temp DB via `NORS_DB_PATH` to check that cases survive a restart. `npm run check` in `frontend/` runs Prettier, ESLint, TypeScript, the tests and the build; CI (`.github/workflows/frontend.yml`) runs it.
+Setup, run and test commands live in `README.md` (backend: `uvicorn app.main:app --reload` from `backend/`; frontend: `npm run dev` from `frontend/`, or `npm run dev:mock` to run on MSW mocks without a backend; tests: `python -m pytest` from `backend/` and `npm run test:run` from `frontend/`). Don't restate them here. The README shows PowerShell activation; on macOS/Linux use `source .venv/bin/activate`. API tests run against a real uvicorn server, not TestClient (httpx is not installed). Use `kor_server` and `anrop` from `tests/server.py`; each test gets its own DB in `tmp_path` via `NORS_DB_PATH`, so `app/data/nors.db` is never touched. `npm run check` in `frontend/` runs Prettier, ESLint, TypeScript, the tests and the build; CI (`.github/workflows/frontend.yml`) runs it.
 
 ## Architecture
 

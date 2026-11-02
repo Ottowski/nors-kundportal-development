@@ -23,7 +23,7 @@ Det här har vi valt bort, se "Ingår inte" i [kravspec.md](specs/kravspec.md).
 - Status kan inte ändras ännu. Backend saknar den funktionen (R8).
 - Kategori och prioritet tar emot vilket värde som helst, eftersom de tillåtna värdena inte är inlagda i koden (R4).
 - Frontend på `main` är bara en startsida. Den nya frontenden finns på branchen `frontend-v2`.
-- Det finns ett automatiskt test (A5, att ärenden finns kvar efter omstart).
+- Automatiska tester finns bara för en del av kriterierna. Vilka som är körda står i [verifieringsplan.md](verifieringsplan.md).
 
 ## Risker
 
