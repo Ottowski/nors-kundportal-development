@@ -138,5 +138,8 @@ Varje steg som ändrar ett test börjar med att testet ses misslyckas, vid behov
 | Steg 3: `npx vitest run src/api/arendenApi.test.ts` med de tre nya testerna för mockarna, före ändringen | Misslyckades: otillåten kategori och prioritet godtogs, saknat fält gav "Field required", och statusändring för okänt id gav 404 före 422 | 2026-11-03 |
 | Steg 3: testet för prefixet "Value error, " med borttagningen tillfälligt avstängd i `apiError.ts` | Misslyckades: prefixet fanns kvar i beskedet | 2026-11-03 |
 | Steg 3: `npm run check` i `frontend/` | Format, lint, typer och bygge gick igenom. 49 tester i 5 filer passerade | 2026-11-03 |
+| Steg 4a: A2, A3 och A4 med formulärets egen kontroll och visningen av backendens fältfel tillfälligt avstängda | Alla tre misslyckades: inget besked visades | 2026-11-03 |
+| Steg 4a: A1 med mocken tillfälligt ändrad till status Pågående, och sedan med listan utan skapad-tid | Misslyckades båda gångerna: fel status sparades, skapad-tiden syntes inte | 2026-11-03 |
+| Steg 4a: `npm run check` i `frontend/` | Format, lint, typer och bygge gick igenom. 49 tester i 5 filer passerade | 2026-11-03 |
 
 ### Avvikelser och öppna frågor

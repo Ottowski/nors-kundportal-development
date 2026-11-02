@@ -3,9 +3,15 @@ import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { describe, expect, it, vi } from "vitest";
 import { API_BASE_URL } from "../api/arendenApi";
+import { seedArenden } from "../mocks/data";
 import { db } from "../mocks/handlers";
 import { server } from "../mocks/node";
 import { ArendeForm } from "./ArendeForm";
+
+// A2, A3 and A4 start with two cases.
+const startWithTwoCases = () => db.reset(seedArenden().slice(0, 2));
+
+const KATEGORI_ERROR = "Ogiltig kategori. Välj Fakturering, Teknik, Leverans eller Övrigt.";
 
 async function fill(values: Partial<Record<"rubrik" | "beskrivning", string>> = {}) {
   const user = userEvent.setup();
@@ -26,7 +32,7 @@ function renderCreate() {
 }
 
 describe("ArendeForm – create", () => {
-  it("A1: creates a case with status Nytt", async () => {
+  it("creates a case and passes it to onSaved", async () => {
     const { onSaved } = renderCreate();
     expect(screen.getByRole("heading", { name: "Nytt ärende" })).toBeInTheDocument();
     const user = await fill();
@@ -42,7 +48,8 @@ describe("ArendeForm – create", () => {
     expect(db.arenden).toHaveLength(4);
   });
 
-  it("A2: rejects missing title, nothing saved", async () => {
+  it("A2: a case without a title is rejected with a clear message; still two cases", async () => {
+    startWithTwoCases();
     const { onSaved } = renderCreate();
     const user = await fill({ rubrik: "" });
     await user.click(screen.getByRole("button", { name: "Skapa ärende" }));
@@ -50,7 +57,7 @@ describe("ArendeForm – create", () => {
     expect(screen.getByText("Rubrik måste fyllas i.")).toBeInTheDocument();
     expect(screen.getByLabelText("Rubrik")).toHaveAttribute("aria-invalid", "true");
     expect(onSaved).not.toHaveBeenCalled();
-    expect(db.arenden).toHaveLength(3);
+    expect(db.arenden).toHaveLength(2);
   });
 
   it("moves focus to the first invalid field on submit", async () => {
@@ -59,13 +66,16 @@ describe("ArendeForm – create", () => {
     expect(screen.getByLabelText("Rubrik")).toHaveFocus();
   });
 
-  it("A3: title with only spaces counts as empty", async () => {
-    renderCreate();
+  it("A3: a title with only spaces counts as empty; still two cases", async () => {
+    startWithTwoCases();
+    const { onSaved } = renderCreate();
     const user = await fill({ rubrik: "    " });
     await user.click(screen.getByRole("button", { name: "Skapa ärende" }));
 
     expect(screen.getByText("Rubrik måste fyllas i.")).toBeInTheDocument();
-    expect(db.arenden).toHaveLength(3);
+    expect(screen.getByLabelText("Rubrik")).toHaveAttribute("aria-invalid", "true");
+    expect(onSaved).not.toHaveBeenCalled();
+    expect(db.arenden).toHaveLength(2);
   });
 
   it("R2: shows a message for every missing field", async () => {
@@ -82,11 +92,14 @@ describe("ArendeForm – create", () => {
     }
   });
 
-  it("A4: shows backend field error and keeps input", async () => {
+  it("A4: a category that is not allowed is rejected with a clear message; nothing saved", async () => {
+    startWithTwoCases();
+    // The form only offers allowed categories, so the backend's rejection is simulated
+    // with the decided text (backend agentuppdrag, "Plan och vårt beslut").
     server.use(
       http.post(`${API_BASE_URL}/arenden`, () =>
         HttpResponse.json(
-          { detail: [{ loc: ["body", "kategori"], msg: "Value error, Ogiltig kategori" }] },
+          { detail: [{ type: "value_error", loc: ["body", "kategori"], msg: KATEGORI_ERROR }] },
           { status: 422 },
         ),
       ),
@@ -95,10 +108,12 @@ describe("ArendeForm – create", () => {
     const user = await fill();
     await user.click(screen.getByRole("button", { name: "Skapa ärende" }));
 
-    expect(await screen.findByText("Ogiltig kategori")).toBeInTheDocument();
+    expect(await screen.findByText(KATEGORI_ERROR)).toBeInTheDocument();
+    expect(screen.getByLabelText("Kategori")).toHaveAttribute("aria-invalid", "true");
     expect(screen.getByRole("alert")).toHaveTextContent("Kontrollera fälten och försök igen.");
     expect(screen.getByLabelText("Rubrik")).toHaveValue("Leverans försenad");
     expect(onSaved).not.toHaveBeenCalled();
+    expect(db.arenden).toHaveLength(2);
   });
 
   it("disables submit while saving", async () => {

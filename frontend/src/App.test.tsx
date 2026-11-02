@@ -6,6 +6,7 @@ import App from "./App";
 import { API_BASE_URL } from "./api/arendenApi";
 import { db } from "./mocks/handlers";
 import { server } from "./mocks/node";
+import { formatDate } from "./utils/formatDate";
 
 async function rowTitles() {
   const table = await screen.findByRole("table");
@@ -66,22 +67,35 @@ describe("App", () => {
     expect(panel()).not.toBeInTheDocument();
   });
 
-  it("A1: Nytt ärende opens the form in the panel; new case is first and shown", async () => {
+  it("A1: a valid case is saved with status Nytt and a created time, and shows in the list", async () => {
+    db.reset([]);
     render(<App />);
     const user = userEvent.setup();
-    await rowTitles();
+    expect(await screen.findByText("Inga ärenden ännu")).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Nytt ärende" }));
 
     const side = screen.getByRole("complementary", { name: "Nytt ärende" });
-    await user.type(within(side).getByLabelText("Rubrik"), "Ny leverans");
-    await user.type(within(side).getByLabelText("Beskrivning"), "Text");
+    await user.type(within(side).getByLabelText("Rubrik"), "Leverans försenad");
+    await user.type(within(side).getByLabelText("Beskrivning"), "Paketet har inte kommit.");
     await user.selectOptions(within(side).getByLabelText("Kategori"), "Leverans");
-    await user.selectOptions(within(side).getByLabelText("Prioritet"), "Låg");
+    await user.selectOptions(within(side).getByLabelText("Prioritet"), "Hög");
     await user.click(within(side).getByRole("button", { name: "Skapa ärende" }));
 
-    expect((await rowTitles())[0]).toBe("Ny leverans");
+    expect(await rowTitles()).toEqual(["Leverans försenad"]);
+    expect(db.arenden).toHaveLength(1);
+    const [saved] = db.arenden;
+    expect(saved).toMatchObject({ rubrik: "Leverans försenad", status: "Nytt" });
+    expect(Number.isNaN(Date.parse(saved.skapad))).toBe(false);
+
+    const row = within(screen.getByRole("table")).getAllByRole("row")[1];
+    expect(within(row).getByText("Nytt")).toBeInTheDocument();
+    expect(within(row).getByText(formatDate(saved.skapad))).toBeInTheDocument();
+
+    // After saving, the new case opens in the panel.
     const detail = await screen.findByRole("complementary", { name: "Ärendedetaljer" });
-    expect(await within(detail).findByRole("heading", { name: "Ny leverans" })).toBeInTheDocument();
+    expect(
+      await within(detail).findByRole("heading", { name: "Leverans försenad" }),
+    ).toBeInTheDocument();
   });
 
   it("only status can be changed: no edit option in the list or the details", async () => {
