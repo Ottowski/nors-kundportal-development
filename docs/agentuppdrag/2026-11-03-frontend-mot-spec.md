@@ -99,6 +99,28 @@ Agenten stannar och väntar på teamet:
 
 ### Plan och vårt beslut
 
+Planen godkändes 2026-11-03 utan ändringar. Teamet följde agentens förslag i alla fyra besluten.
+
+**Beslut**
+
+- **Mockarna:** de svarar med backendens beslutade texter, utan prefixet "Value error, ". Koden i `apiError.ts` som tar bort prefixet står kvar och får ett eget test, eftersom dagens backend skickar prefixet tills steg 2 i backenduppdraget är klart.
+- **Id i testnamn:** id:t sitter bara på testet som prövar kriteriet. Andra tester får beskrivande namn och står kvar, till exempel `App`: A7 (layouten) och `App`: A8 (listfiltret efter en statusändring).
+- **Tester utan id:** de står kvar, till exempel fokus på första ogiltiga fält, avstängd knapp under sparning och felmeddelande när API:t inte svarar.
+- **A4 och A11:** A4 prövas också i komponenten, där testet visar hur backendens fel visas. A11 prövas bara i API:t, eftersom felet visas på samma sätt.
+
+**Plan**
+
+| Steg | Innehåll | Klart |
+| ---- | -------- | ----- |
+| 1 | `.claude/`: rätt hänvisningar i agentdefinitionen och skillen, och A11 bort ur skillens tabell | – |
+| 2 | Redigeringen bort ur kod, mockar, tester och `CLAUDE.md`. Kolumnen Åtgärder försvinner, och testet för A6 får fyra kolumnrubriker | – |
+| 3 | Mockarna efter backendbesluten, med testerna i `arendenApi.test.ts`. Inaktuella kommentarer i de filer som ändras | – |
+| 4 | Kärnflödets tester mot specen: utgångsläge, alla fält och inget sparat vid fel | A1–A4, A6–A10, A12 |
+| 5 | Sökningens tester: nya namn, specens söktexter och fyra nya tester | SF-A1–SF-A14 |
+| 6 | Verifieringsplanen: testnamn, nivå och resultat. Sedan `npm run check` och `python -m pytest` | – |
+
+Varje steg som ändrar ett test börjar med att testet ses misslyckas, vid behov med en tillfällig felaktig ändring i koden. Agenten stannar före PR:en.
+
 ### Granskning
 
 - **Granskad av:**
@@ -110,6 +132,8 @@ Agenten stannar och väntar på teamet:
 
 | Kommando | Resultat | Datum |
 | -------- | -------- | ----- |
-|          |          |       |
+| Steg 2: `npx vitest run src/App.test.tsx -t "A6"` innan kolumnen Åtgärder togs bort | Misslyckades: listan hade fem kolumnrubriker, testet väntade fyra | 2026-11-03 |
+| Steg 2: det nya testet "only status can be changed…" med en tillfällig knapp "Redigera" i detaljvyn | Misslyckades: knappen hittades | 2026-11-03 |
+| Steg 2: `npm run check` i `frontend/` | Format, lint, typer och bygge gick igenom. 45 tester i 5 filer passerade (förut 58 i 6 filer: 14 tester för redigering togs bort, 1 regressionstest kom till) | 2026-11-03 |
 
 ### Avvikelser och öppna frågor

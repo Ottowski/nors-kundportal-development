@@ -2,14 +2,7 @@ import { http, HttpResponse } from "msw";
 import { describe, expect, it } from "vitest";
 import { server } from "../mocks/node";
 import { ApiError, NETWORK_ERROR_MESSAGE, VALIDATION_ERROR_MESSAGE } from "./apiError";
-import {
-  API_BASE_URL,
-  createArende,
-  getArende,
-  listArenden,
-  updateArende,
-  updateStatus,
-} from "./arendenApi";
+import { API_BASE_URL, createArende, getArende, listArenden, updateStatus } from "./arendenApi";
 
 const valid = { rubrik: "Ny", beskrivning: "Text", kategori: "Teknik", prioritet: "Hög" };
 
@@ -79,29 +72,5 @@ describe("arendenApi", () => {
     const error = await catchError(updateStatus(1, "Ogiltig"));
     expect(error.status).toBe(422);
     expect(error.fieldErrors.status).toBe("Ogiltig status");
-  });
-});
-
-describe("arendenApi proposed editing (out of v1.0 scope, mock only)", () => {
-  it("updates editable fields and keeps status, id and skapad", async () => {
-    const before = await getArende(1);
-    const updated = await updateArende(1, { ...valid, rubrik: "Ändrad rubrik" });
-    expect(updated).toMatchObject({
-      ...valid,
-      rubrik: "Ändrad rubrik",
-      id: 1,
-      status: before.status,
-    });
-    expect(updated.skapad).toBe(before.skapad);
-  });
-
-  it("rejects invalid edit with field errors", async () => {
-    const error = await catchError(updateArende(1, { ...valid, beskrivning: " " }));
-    expect(error.status).toBe(422);
-    expect(error.fieldErrors.beskrivning).toBeTruthy();
-  });
-
-  it("returns 404 when editing a missing case", async () => {
-    expect((await catchError(updateArende(999, valid))).status).toBe(404);
   });
 });

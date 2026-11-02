@@ -12,15 +12,10 @@ import { filterArenden, sortNewestFirst } from "./utils/filterArenden";
 type ListState =
   { kind: "loading" } | { kind: "error"; message: string } | { kind: "loaded"; arenden: Arende[] };
 
-type Panel =
-  | { kind: "closed" }
-  | { kind: "view"; id: number }
-  | { kind: "edit"; arende: Arende }
-  | { kind: "create" };
+type Panel = { kind: "closed" } | { kind: "view"; id: number } | { kind: "create" };
 
 const PANEL_LABEL: Record<Exclude<Panel["kind"], "closed">, string> = {
   view: "Ärendedetaljer",
-  edit: "Redigera ärende",
   create: "Nytt ärende",
 };
 
@@ -70,8 +65,7 @@ function App() {
   const hasFilter = Boolean(
     filter.q?.trim() || filter.status || filter.kategori || filter.prioritet,
   );
-  const selectedId =
-    panel.kind === "view" ? panel.id : panel.kind === "edit" ? panel.arende.id : null;
+  const selectedId = panel.kind === "view" ? panel.id : null;
 
   return (
     <div className="app">
@@ -103,7 +97,6 @@ function App() {
               hasFilter={hasFilter}
               selectedId={selectedId}
               onSelect={(id) => open({ kind: "view", id })}
-              onEdit={(arende) => open({ kind: "edit", arende })}
             />
           )}
         </main>
@@ -111,20 +104,7 @@ function App() {
         {panel.kind !== "closed" && (
           <aside className="card panel" aria-label={PANEL_LABEL[panel.kind]}>
             {panel.kind === "view" && (
-              <ArendeDetail
-                id={panel.id}
-                onClose={close}
-                onChanged={upsert}
-                onEdit={(arende) => open({ kind: "edit", arende })}
-              />
-            )}
-            {panel.kind === "edit" && (
-              <ArendeForm
-                key={panel.arende.id}
-                arende={panel.arende}
-                onSaved={handleSaved}
-                onCancel={() => open({ kind: "view", id: panel.arende.id })}
-              />
+              <ArendeDetail id={panel.id} onClose={close} onChanged={upsert} />
             )}
             {panel.kind === "create" && <ArendeForm onSaved={handleSaved} onCancel={close} />}
           </aside>

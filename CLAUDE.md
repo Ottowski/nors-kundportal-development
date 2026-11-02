@@ -45,7 +45,6 @@ Setup, run and test commands live in `README.md` (backend: `uvicorn app.main:app
 - `frontend/src/` — `main.tsx` mounts `App.tsx` and starts the MSW worker in `--mode mock`. `api/arendenApi.ts` is the only place that calls `fetch`; it turns FastAPI errors (`detail` string or 422 list) into `ApiError` with per-field messages. The base URL is `VITE_API_URL` or `http://127.0.0.1:8000` (no Vite proxy, hence CORS).
 - `frontend/src/mocks/handlers.ts` mirrors the backend and also serves the proposed `POST /arenden/{id}/status`, which the backend does not have yet. Tests use it via `msw/node` (`src/test/setup.ts`); `db.reset()` runs after each test.
 - Search and filtering run in the frontend on the loaded list (`utils/filterArenden.ts`), per `docs/specs/sok-filter.md`. The category and priority values in `constants/arende.ts` must match `docs/specs/kravspec.md`.
-- Editing behind `isEditEnabled()` in `constants/features.ts` is outside the spec and is being removed (see `docs/beslut.md`).
 - Dependencies are unpinned in `backend/requirements.txt`; add new ones there or in `frontend/package.json`.
 
 ### Adding new backend code

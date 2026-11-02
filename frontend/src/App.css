@@ -331,39 +331,6 @@ select {
   }
 }
 
-.icon-button--small {
-  display: inline-grid;
-  place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  color: var(--color-primary);
-}
-
-.icon-button--small:hover {
-  background: var(--color-background);
-}
-
-.table__actions {
-  white-space: nowrap;
-  text-align: right;
-}
-
-.table td.table__actions {
-  display: flex;
-  gap: var(--space-xs);
-  justify-content: flex-end;
-}
-
-.table th.table__actions {
-  text-align: right;
-}
-
-.hint {
-  margin: var(--space-sm) 0 0;
-  color: var(--color-text-muted);
-  font-size: 0.875rem;
-}
-
 .button:disabled,
 .icon-button:disabled {
   opacity: 0.45;

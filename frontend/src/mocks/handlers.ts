@@ -67,21 +67,6 @@ export const handlers = [
     return HttpResponse.json(arende, { status: 201 });
   }),
 
-  // Proposed, outside v1.0 scope: edit all fields except status, id and skapad.
-  http.put(`${API_BASE_URL}/arenden/:id`, async ({ params, request }) => {
-    const index = db.arenden.findIndex((a) => a.id === Number(params.id));
-    if (index === -1) {
-      return HttpResponse.json(NOT_FOUND, { status: 404 });
-    }
-    const result = validateCreate(await request.json());
-    if (result instanceof Response) {
-      return result;
-    }
-    const updated = { ...db.arenden[index], ...result };
-    db.arenden[index] = updated;
-    return HttpResponse.json(updated);
-  }),
-
   // Proposed endpoint, not built in the backend yet.
   http.post(`${API_BASE_URL}/arenden/:id/status`, async ({ params, request }) => {
     const index = db.arenden.findIndex((a) => a.id === Number(params.id));

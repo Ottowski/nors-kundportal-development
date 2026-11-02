@@ -8,7 +8,7 @@ import { server } from "../mocks/node";
 import { ArendeDetail } from "./ArendeDetail";
 
 function renderDetail(id = 1) {
-  const props = { onClose: vi.fn(), onChanged: vi.fn(), onEdit: vi.fn() };
+  const props = { onClose: vi.fn(), onChanged: vi.fn() };
   render(<ArendeDetail id={id} {...props} />);
   return props;
 }
@@ -65,7 +65,7 @@ describe("ArendeDetail", () => {
         return HttpResponse.json({ ...arende, status: "Avslutat" });
       }),
     );
-    const props = { onClose: vi.fn(), onChanged: vi.fn(), onEdit: vi.fn() };
+    const props = { onClose: vi.fn(), onChanged: vi.fn() };
     const { rerender } = render(<ArendeDetail id={1} {...props} />);
     await userEvent.setup().selectOptions(await screen.findByLabelText("Ändra status"), "Avslutat");
     rerender(<ArendeDetail id={2} {...props} />);
@@ -79,13 +79,5 @@ describe("ArendeDetail", () => {
     const { onClose } = renderDetail();
     await userEvent.setup().click(screen.getByRole("button", { name: "Stäng" }));
     expect(onClose).toHaveBeenCalled();
-  });
-
-  it("Redigera passes the loaded case to onEdit", async () => {
-    const { onEdit } = renderDetail();
-    await userEvent.setup().click(await screen.findByRole("button", { name: "Redigera" }));
-    expect(onEdit).toHaveBeenCalledWith(
-      expect.objectContaining({ id: 1, rubrik: "Faktura saknas" }),
-    );
   });
 });

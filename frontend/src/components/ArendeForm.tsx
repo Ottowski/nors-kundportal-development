@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { ApiError, UNKNOWN_ERROR_MESSAGE } from "../api/apiError";
-import { createArende, updateArende } from "../api/arendenApi";
+import { createArende } from "../api/arendenApi";
 import { KATEGORIER, PRIORITETER } from "../constants/arende";
 import type { Arende, ArendeCreate, FieldErrors } from "../types/arende";
 
@@ -23,30 +23,13 @@ function validate(values: ArendeCreate): FieldErrors {
   return errors;
 }
 
-// An existing case may hold a value outside the provisional lists (backend accepts any string).
-function withCurrent(options: readonly string[], current: string): readonly string[] {
-  return current && !options.includes(current) ? [...options, current] : options;
-}
-
 interface Props {
-  // Given: edit this case. Missing: create a new one.
-  arende?: Arende;
   onSaved: (arende: Arende) => void;
   onCancel: () => void;
 }
 
-export function ArendeForm({ arende, onSaved, onCancel }: Props) {
-  const isEdit = arende !== undefined;
-  const [values, setValues] = useState<ArendeCreate>(
-    arende
-      ? {
-          rubrik: arende.rubrik,
-          beskrivning: arende.beskrivning,
-          kategori: arende.kategori,
-          prioritet: arende.prioritet,
-        }
-      : EMPTY,
-  );
+export function ArendeForm({ onSaved, onCancel }: Props) {
+  const [values, setValues] = useState<ArendeCreate>(EMPTY);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -55,8 +38,7 @@ export function ArendeForm({ arende, onSaved, onCancel }: Props) {
     setValues((prev) => ({ ...prev, [field]: value }));
   }
 
-  // asNew: create a new case from the form values, even in edit mode ("Spara som nytt ärende").
-  async function save(asNew: boolean) {
+  async function save() {
     setFormError(null);
     const errors = validate(values);
     setFieldErrors(errors);
@@ -75,7 +57,7 @@ export function ArendeForm({ arende, onSaved, onCancel }: Props) {
     };
     setSubmitting(true);
     try {
-      onSaved(isEdit && !asNew ? await updateArende(arende.id, data) : await createArende(data));
+      onSaved(await createArende(data));
     } catch (error) {
       const apiError = error instanceof ApiError ? error : null;
       setFieldErrors(apiError?.fieldErrors ?? {});
@@ -87,7 +69,7 @@ export function ArendeForm({ arende, onSaved, onCancel }: Props) {
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    void save(false);
+    void save();
   }
 
   const errorId = (field: keyof ArendeCreate) =>
@@ -101,7 +83,7 @@ export function ArendeForm({ arende, onSaved, onCancel }: Props) {
 
   return (
     <form className="form" onSubmit={handleSubmit} noValidate aria-labelledby="form-title">
-      <h2 id="form-title">{isEdit ? "Redigera ärende" : "Nytt ärende"}</h2>
+      <h2 id="form-title">Nytt ärende</h2>
 
       <div className="field">
         <label htmlFor="rubrik">Rubrik</label>
@@ -139,7 +121,7 @@ export function ArendeForm({ arende, onSaved, onCancel }: Props) {
             aria-describedby={errorId("kategori")}
           >
             <option value="">Välj…</option>
-            {withCurrent(KATEGORIER, values.kategori).map((k) => (
+            {KATEGORIER.map((k) => (
               <option key={k}>{k}</option>
             ))}
           </select>
@@ -156,7 +138,7 @@ export function ArendeForm({ arende, onSaved, onCancel }: Props) {
             aria-describedby={errorId("prioritet")}
           >
             <option value="">Välj…</option>
-            {withCurrent(PRIORITETER, values.prioritet).map((p) => (
+            {PRIORITETER.map((p) => (
               <option key={p}>{p}</option>
             ))}
           </select>
@@ -172,18 +154,8 @@ export function ArendeForm({ arende, onSaved, onCancel }: Props) {
 
       <div className="actions">
         <button type="submit" className="button" disabled={submitting}>
-          {submitting ? "Sparar…" : isEdit ? "Spara ändringar" : "Skapa ärende"}
+          {submitting ? "Sparar…" : "Skapa ärende"}
         </button>
-        {isEdit && (
-          <button
-            type="button"
-            className="button button--secondary"
-            onClick={() => save(true)}
-            disabled={submitting}
-          >
-            Spara som nytt ärende
-          </button>
-        )}
         <button type="button" className="button button--secondary" onClick={onCancel}>
           Avbryt
         </button>

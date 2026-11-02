@@ -30,7 +30,7 @@ describe("App", () => {
     render(<App />);
     await rowTitles();
     const headers = screen.getAllByRole("columnheader").map((h) => h.textContent);
-    expect(headers).toEqual(["Rubrik", "Status", "Prioritet", "Skapad", "Åtgärder"]);
+    expect(headers).toEqual(["Rubrik", "Status", "Prioritet", "Skapad"]);
   });
 
   it("shows empty state when no cases exist", async () => {
@@ -84,23 +84,17 @@ describe("App", () => {
     expect(await within(detail).findByRole("heading", { name: "Ny leverans" })).toBeInTheDocument();
   });
 
-  it("edit in the panel updates list and details", async () => {
+  it("only status can be changed: no edit option in the list or the details", async () => {
     render(<App />);
     const user = userEvent.setup();
     await rowTitles();
+    expect(screen.queryByRole("button", { name: /redigera/i })).not.toBeInTheDocument();
+
     await user.click(screen.getByText("Faktura saknas"));
-    await user.click(await screen.findByRole("button", { name: "Redigera" }));
-
-    const side = screen.getByRole("complementary", { name: "Redigera ärende" });
-    await user.clear(within(side).getByLabelText("Rubrik"));
-    await user.type(within(side).getByLabelText("Rubrik"), "Faktura saknas (okt)");
-    await user.click(within(side).getByRole("button", { name: "Spara ändringar" }));
-
-    const detail = await screen.findByRole("complementary", { name: "Ärendedetaljer" });
-    expect(
-      await within(detail).findByRole("heading", { name: "Faktura saknas (okt)" }),
-    ).toBeInTheDocument();
-    expect(await rowTitles()).toContain("Faktura saknas (okt)");
+    const side = await screen.findByRole("complementary", { name: "Ärendedetaljer" });
+    expect(await within(side).findByLabelText("Ändra status")).toBeEnabled();
+    expect(within(side).queryByRole("button", { name: /redigera/i })).not.toBeInTheDocument();
+    expect(within(side).queryByRole("textbox")).not.toBeInTheDocument();
   });
 
   it("A14: search + filter combine; A15: no hits message; A16: spaces show all", async () => {
@@ -143,23 +137,5 @@ describe("App", () => {
 
     await user.selectOptions(screen.getByLabelText("Filtrera status"), "Avslutat");
     expect(await rowTitles()).toEqual(["Fel på faktura", "Faktura saknas"]);
-  });
-
-  it("edit icon in a row opens the edit form in the panel", async () => {
-    render(<App />);
-    const user = userEvent.setup();
-    await rowTitles();
-    await user.click(screen.getByRole("button", { name: "Redigera Kan inte logga in" }));
-
-    const side = screen.getByRole("complementary", { name: "Redigera ärende" });
-    expect(within(side).getByLabelText("Rubrik")).toHaveValue("Kan inte logga in");
-  });
-
-  it("row icons do not trigger the row click", async () => {
-    render(<App />);
-    const user = userEvent.setup();
-    await rowTitles();
-    await user.click(screen.getByRole("button", { name: "Redigera Faktura saknas" }));
-    expect(screen.queryByRole("complementary", { name: "Ärendedetaljer" })).not.toBeInTheDocument();
   });
 });

@@ -1,7 +1,5 @@
 import type { Arende } from "../types/arende";
 import { formatDate } from "../utils/formatDate";
-import { EDIT_UNAVAILABLE, isEditEnabled } from "../constants/features";
-import { EditIcon } from "./icons";
 import { StatusBadge } from "./StatusBadge";
 
 interface Props {
@@ -9,12 +7,9 @@ interface Props {
   hasFilter: boolean;
   selectedId: number | null;
   onSelect: (id: number) => void;
-  onEdit: (arende: Arende) => void;
 }
 
-export function ArendeList({ arenden, hasFilter, selectedId, onSelect, onEdit }: Props) {
-  const editEnabled = isEditEnabled();
-
+export function ArendeList({ arenden, hasFilter, selectedId, onSelect }: Props) {
   if (arenden.length === 0) {
     return (
       <p className="empty" role="status">
@@ -31,9 +26,6 @@ export function ArendeList({ arenden, hasFilter, selectedId, onSelect, onEdit }:
           <th scope="col">Status</th>
           <th scope="col">Prioritet</th>
           <th scope="col">Skapad</th>
-          <th scope="col" className="table__actions">
-            Åtgärder
-          </th>
         </tr>
       </thead>
       <tbody>
@@ -65,21 +57,6 @@ export function ArendeList({ arenden, hasFilter, selectedId, onSelect, onEdit }:
               <td>{arende.prioritet}</td>
               <td>
                 <time dateTime={arende.skapad}>{formatDate(arende.skapad)}</time>
-              </td>
-              <td className="table__actions">
-                <button
-                  type="button"
-                  className="icon-button icon-button--small"
-                  aria-label={`Redigera ${arende.rubrik}`}
-                  title={editEnabled ? "Redigera" : EDIT_UNAVAILABLE}
-                  disabled={!editEnabled}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onEdit(arende);
-                  }}
-                >
-                  <EditIcon />
-                </button>
               </td>
             </tr>
           );

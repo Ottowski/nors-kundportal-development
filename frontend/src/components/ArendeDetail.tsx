@@ -3,7 +3,6 @@ import { ApiError, UNKNOWN_ERROR_MESSAGE } from "../api/apiError";
 import { getArende } from "../api/arendenApi";
 import type { Arende } from "../types/arende";
 import { formatDate } from "../utils/formatDate";
-import { EDIT_UNAVAILABLE_NOTE, isEditEnabled } from "../constants/features";
 import { StatusBadge } from "./StatusBadge";
 import { StatusSelect } from "./StatusSelect";
 
@@ -11,7 +10,6 @@ interface Props {
   id: number;
   onClose: () => void;
   onChanged: (arende: Arende) => void;
-  onEdit: (arende: Arende) => void;
 }
 
 type State =
@@ -21,8 +19,7 @@ function errorMessage(error: unknown): string {
   return error instanceof ApiError ? error.message : UNKNOWN_ERROR_MESSAGE;
 }
 
-export function ArendeDetail({ id, onClose, onChanged, onEdit }: Props) {
-  const editEnabled = isEditEnabled();
+export function ArendeDetail({ id, onClose, onChanged }: Props) {
   const [state, setState] = useState<State>({ kind: "loading" });
   const currentId = useRef(id);
   currentId.current = id;
@@ -88,19 +85,6 @@ export function ArendeDetail({ id, onClose, onChanged, onEdit }: Props) {
           </dl>
 
           <StatusSelect arende={state.arende} onChanged={handleChanged} />
-
-          <div className="actions">
-            <button
-              type="button"
-              className="button"
-              onClick={() => onEdit(state.arende)}
-              disabled={!editEnabled}
-            >
-              Redigera
-            </button>
-          </div>
-
-          {!editEnabled && <p className="hint">{EDIT_UNAVAILABLE_NOTE}</p>}
         </>
       )}
     </div>
