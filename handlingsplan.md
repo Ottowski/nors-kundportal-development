@@ -60,6 +60,8 @@ Gå igenom listan efter varje uppgift. Den kommer från [uppdrag.md](docs/uppdra
 
 **Varför:** Kursen kräver att status kan ändras (R8). Frontenden ändrar status mot en mock som backend inte har än. Om frontend och backend inte använder samma anrop fungerar A8 och A9 bara mot mocken och inte på riktigt.
 
+**Branch:** `api-statusandring`, för steg 3. Samtalet med Otto behöver ingen branch.
+
 **Gör så här:**
 
 1. Visa Otto hur mocken gör i dag, i `frontend/src/mocks/handlers.ts`:
@@ -84,6 +86,8 @@ Gå igenom listan efter varje uppgift. Den kommer från [uppdrag.md](docs/uppdra
 
 **Varför:** Då vet ni vad som fungerade från början. Går något sönder senare ser ni att det var er ändring som gjorde det.
 
+**Branch:** ingen. Ni ändrar inget, så ni står kvar på `frontend-v2`.
+
 **Gör så här:**
 
 1. Byt till branchen `frontend-v2` och hämta det senaste.
@@ -103,6 +107,8 @@ Gå igenom listan efter varje uppgift. Den kommer från [uppdrag.md](docs/uppdra
 **Vad:** Skapa filen `docs/agentuppdrag/2026-11-02-frontend-v2-mot-spec.md` från [mallen](docs/mallar/agentuppdrag.md). Fyll bara i delen **Före**.
 
 **Varför:** Kursen vill se hur ni styr AI och vilka beslut ni själva fattar. Agentuppdraget visar det. Uppdraget om dokumentationen finns redan, men ni har inget agentuppdrag för kod än.
+
+**Branch:** `agentuppdrag-frontend-v2`.
 
 **Gör så här:** fyll i varje rubrik i mallen.
 
@@ -131,6 +137,8 @@ Gå igenom listan efter varje uppgift. Den kommer från [uppdrag.md](docs/uppdra
 **Vad:** Ta bort all kod som låter handläggaren redigera rubrik, beskrivning, kategori eller prioritet.
 
 **Varför:** Specen säger att bara status får ändras ("Ingår inte" i kravspec.md). Teamet har bestämt att redigeringen tas bort (beslut.md, 2026-10-30). Backend har heller inget API för den.
+
+**Branch:** `ta-bort-redigering`.
 
 **Gör så här:**
 
@@ -161,6 +169,8 @@ Gå igenom listan efter varje uppgift. Den kommer från [uppdrag.md](docs/uppdra
 **Vad:** Gå igenom varje A# i kravspec.md som berör frontenden och se till att den har ett test som kontrollerar rätt sak.
 
 **Varför:** Kursen kräver automatiserade tester mot acceptanskriterierna, med både happy paths och error paths. Testerna på frontend-v2 skrevs före specen, så de kan kontrollera fel sak.
+
+**Branch:** `karnflode-mot-spec`.
 
 **Gör så här för varje A#.** Det här är de sex stegen ur [verifieringsplan.md](docs/verifieringsplan.md).
 
@@ -222,6 +232,8 @@ Tänk på detta:
 
 **Varför:** Kursen kräver en kompletterande funktion som är specificerad och testad. Ni har valt sökning och filtrering. Testerna heter i dag A11–A16, och de namnen krockar med kärnspecens A11 och A12.
 
+**Branch:** `sok-filter-mot-spec`.
+
 **Gör så här:**
 
 1. Byt namn på sökningens tester till SF-A#. Använd kolumnen Test i verifieringsplanens tabell för att se vilket test som hör till vilket id, till exempel `A11: finds cases by text` → `SF-A1: …`.
@@ -242,6 +254,8 @@ Tänk på detta:
 **Vad:** Skriv in resultaten, låt någon annan granska och lägg in koden i main.
 
 **Varför:** Kursen kräver att verifieringsplanen visar faktiska körresultat och att varje students bidrag syns. Teamet har bestämt att ingen kod kommer in i main utan granskning.
+
+**Branch:** `dokumentera-resultat` för steg 1–3, med PR till `frontend-v2` som vanligt. PR:en till main i steg 4 öppnar ni från `frontend-v2`.
 
 **Gör så här:**
 
