@@ -24,13 +24,13 @@ AI används bara som stöd i utvecklingen. Produkten har ingen AI-funktion.
 
 Vi arbetar spec-drivet enligt "Så arbetar vi i NORS" i [spec-driven-dev.md](specs/spec-driven-dev.md). AI används i varje steg, men vi fattar besluten:
 
-| Steg             | Vad AI gör                                                                      | Vad vi gör                                                                           |
-| ---------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| 1. Spec          | Ställer frågor med startprompten och granskar utkastet med granskningsprompten. | Beslutar vad som blir krav. Skriver kort varför vi tog eller avvisade AI:s förslag.  |
-| 2. Kod           | Skriver kod utifrån ett agentuppdrag i [agentuppdrag/](agentuppdrag/).          | Skriver uppdraget: mål (R#, A#), vad AI får och inte får ändra, och kontrollpunkter. |
-| 3. Test          | Föreslår och skriver tester för acceptanskriterierna.                           | Kör testerna själva och kontrollerar att de testar rätt sak.                         |
-| 4. Granskning    | Kan hjälpa till att förklara eller granska en ändring.                          | Granskar varandras PR:er innan något kommer in i `main`.                             |
-| 5. Dokumentation | Skriver utkast till docs-filer.                                                 | Läser, rättar och committar.                                                         |
+| Steg | Vad AI gör | Vad vi gör |
+| --- | --- | --- |
+| 1. Spec | Ställer frågor med startprompten och granskar utkastet med granskningsprompten. | Beslutar vad som blir krav (R#, A#). Skriver kort varför vi tog eller avvisade AI:s förslag. |
+| 2. Agentuppdrag och plan | Föreslår en plan i små steg utifrån ett agentuppdrag i [agentuppdrag/](agentuppdrag/). Skriver ingen kod. | Skriver uppdraget: mål (R#, A#), vad AI får och inte får ändra, och att AI stannar efter planen och före PR:en. Godkänner eller ändrar planen. |
+| 3. Kod och test | Skriver koden och minst ett test per A#. Visar att varje nytt test kan misslyckas. | Kör testerna själva och kontrollerar att de prövar det kriteriet kräver. Skriver resultatet i [verifieringsplan.md](verifieringsplan.md). |
+| 4. Granskning | Kan hjälpa till att förklara eller granska en ändring. | Granskar varandras PR:er innan något kommer in i `main`, och fyller i Granskning i agentuppdraget. |
+| 5. Dokumentation | Skriver utkast till docs-filer. | Läser, rättar och committar. Sammanfattar veckan i [veckostatus.md](veckostatus.md) med länkar. |
 
 Exempel på ett genomfört agentuppdrag: [2026-10-29-docs-struktur.md](agentuppdrag/2026-10-29-docs-struktur.md).
 
