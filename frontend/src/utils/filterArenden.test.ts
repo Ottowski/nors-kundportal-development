@@ -60,8 +60,21 @@ describe("filterArenden (R11)", () => {
   });
 });
 
-describe("sortNewestFirst (R6, Q6 proposal)", () => {
-  it("orders by skapad descending", () => {
-    expect(sortNewestFirst(arenden).map((a) => a.id)).toEqual([3, 2, 1]);
+describe("sortNewestFirst (R6)", () => {
+  it("A12: the most recently created case comes first and the oldest last", () => {
+    const [c1, c2, c3] = seedArenden();
+    // Neither the ids nor the input order follow the created time, so only skapad decides.
+    const unordered = [
+      { ...c1, skapad: "2026-10-21T09:30:00Z" },
+      { ...c2, skapad: "2026-10-22T14:15:00Z" },
+      { ...c3, skapad: "2026-10-20T08:00:00Z" },
+    ];
+    expect(sortNewestFirst(unordered).map((a) => a.id)).toEqual([2, 1, 3]);
+  });
+
+  it("R6: with the same created time, the highest id comes first", () => {
+    const [c1, c2] = seedArenden();
+    const sameTime = [c1, { ...c2, skapad: c1.skapad }];
+    expect(sortNewestFirst(sameTime).map((a) => a.id)).toEqual([2, 1]);
   });
 });

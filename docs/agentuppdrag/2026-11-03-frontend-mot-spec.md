@@ -141,5 +141,9 @@ Varje steg som ändrar ett test börjar med att testet ses misslyckas, vid behov
 | Steg 4a: A2, A3 och A4 med formulärets egen kontroll och visningen av backendens fältfel tillfälligt avstängda | Alla tre misslyckades: inget besked visades | 2026-11-03 |
 | Steg 4a: A1 med mocken tillfälligt ändrad till status Pågående, och sedan med listan utan skapad-tid | Misslyckades båda gångerna: fel status sparades, skapad-tiden syntes inte | 2026-11-03 |
 | Steg 4a: `npm run check` i `frontend/` | Format, lint, typer och bygge gick igenom. 49 tester i 5 filer passerade | 2026-11-03 |
+| Steg 4b: A6 med listan tillfälligt ändrad att visa kategori i kolumnen Prioritet | Misslyckades | 2026-11-03 |
+| Steg 4b: A12 med sorteringen tillfälligt ändrad till id i stället för skapad-tid | Misslyckades: [3, 2, 1] i stället för [2, 1, 3]. Det gamla testet hade gått igenom, eftersom id och skapad-tid hade samma ordning i dess data | 2026-11-03 |
+| Steg 4b: det nya testet för R6 (samma skapad-tid) med ordningen på id tillfälligt borttagen | Misslyckades: [1, 2] i stället för [2, 1] | 2026-11-03 |
+| Steg 4b: `npm run check` i `frontend/` | Format, lint, typer och bygge gick igenom. 50 tester i 5 filer passerade | 2026-11-03 |
 
 ### Avvikelser och öppna frågor

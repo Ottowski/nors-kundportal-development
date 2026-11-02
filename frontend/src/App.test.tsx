@@ -27,11 +27,32 @@ describe("App", () => {
     expect(panel()).not.toBeInTheDocument();
   });
 
-  it("A6: list columns are title, status, priority and created", async () => {
+  it("A6: all three cases show with title, status, priority and created time", async () => {
+    // The mock starts with three cases, C1–C3.
     render(<App />);
-    await rowTitles();
-    const headers = screen.getAllByRole("columnheader").map((h) => h.textContent);
+    const table = await screen.findByRole("table");
+    const headers = within(table)
+      .getAllByRole("columnheader")
+      .map((h) => h.textContent);
     expect(headers).toEqual(["Rubrik", "Status", "Prioritet", "Skapad"]);
+
+    const rows = within(table)
+      .getAllByRole("row")
+      .slice(1)
+      .map((row) =>
+        within(row)
+          .getAllByRole("cell")
+          .map((cell) => cell.textContent),
+      );
+    expect(rows).toHaveLength(3);
+    for (const arende of db.arenden) {
+      expect(rows).toContainEqual([
+        arende.rubrik,
+        arende.status,
+        arende.prioritet,
+        formatDate(arende.skapad),
+      ]);
+    }
   });
 
   it("shows empty state when no cases exist", async () => {
