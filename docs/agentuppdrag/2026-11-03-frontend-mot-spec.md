@@ -152,5 +152,10 @@ Varje steg som ändrar ett test börjar med att testet ses misslyckas, vid behov
 | Steg 4c: `npm run check` i `frontend/` | Format, lint, typer och bygge gick igenom. 50 tester i 5 filer passerade | 2026-11-03 |
 | Steg 5a: `filterArenden.test.ts` med sex tillfälliga fel i `filterArenden.ts`, ett i taget: skiftläget spelar roll, bara rubriken genomsöks, bara hela ord hittas, träffarna sorteras på id, filtren ignoreras, mellanslag tas inte bort | Varje fel gav misslyckade tester, och varje SF-test i steget misslyckades minst en gång | 2026-11-03 |
 | Steg 5a: `npm run check` i `frontend/` | Format, lint, typer och bygge gick igenom. 51 tester i 5 filer passerade | 2026-11-03 |
+| Steg 5b: SF-A10 och SF-A12 med beskedet "Inga ärenden matchar" tillfälligt borttaget | Båda misslyckades | 2026-11-03 |
+| Steg 5b: SF-A10 med en tom sökning som tillfälligt behöll den förra söktexten | Misslyckades: alla tre visades inte igen | 2026-11-03 |
+| Steg 5b: SF-A13 med söktexten tillfälligt ändrad att gälla medan man skriver | Misslyckades: listan ändrades före Enter | 2026-11-03 |
+| Steg 5b: SF-A14 med maxlängden på sökfältet tillfälligt borttagen | Misslyckades: fältet tog emot 101 tecken | 2026-11-03 |
+| Steg 5b: `npm run check` i `frontend/` | Format, lint, typer och bygge gick igenom. 54 tester i 5 filer passerade | 2026-11-03 |
 
 ### Avvikelser och öppna frågor

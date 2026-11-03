@@ -12,7 +12,7 @@ const SELECTS = [
   { key: "prioritet", label: "Filtrera prioritet", options: PRIORITETER },
 ] as const;
 
-// Text search applies on Enter/button (Q11 proposal); select filters apply at once.
+// Text search applies on Enter or the Sök button; select filters apply at once (SF-R9).
 export function SearchFilterBar({ onChange }: Props) {
   const [text, setText] = useState("");
   const [filter, setFilter] = useState<ArendeFilter>({});

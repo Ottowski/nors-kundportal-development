@@ -8,12 +8,21 @@ import { db } from "./mocks/handlers";
 import { server } from "./mocks/node";
 import { formatDate } from "./utils/formatDate";
 
-async function rowTitles() {
+// The text in each cell of each row in the list, without the header row.
+async function rowCells() {
   const table = await screen.findByRole("table");
   return within(table)
     .getAllByRole("row")
     .slice(1)
-    .map((row) => within(row).getAllByRole("cell")[0].textContent);
+    .map((row) =>
+      within(row)
+        .getAllByRole("cell")
+        .map((cell) => cell.textContent),
+    );
+}
+
+async function rowTitles() {
+  return (await rowCells()).map((cells) => cells[0]);
 }
 
 const panel = () => screen.queryByRole("complementary", { name: /ärende/i });
@@ -30,20 +39,9 @@ describe("App", () => {
   it("A6: all three cases show with title, status, priority and created time", async () => {
     // The mock starts with three cases, C1–C3.
     render(<App />);
-    const table = await screen.findByRole("table");
-    const headers = within(table)
-      .getAllByRole("columnheader")
-      .map((h) => h.textContent);
+    const rows = await rowCells();
+    const headers = screen.getAllByRole("columnheader").map((h) => h.textContent);
     expect(headers).toEqual(["Rubrik", "Status", "Prioritet", "Skapad"]);
-
-    const rows = within(table)
-      .getAllByRole("row")
-      .slice(1)
-      .map((row) =>
-        within(row)
-          .getAllByRole("cell")
-          .map((cell) => cell.textContent),
-      );
     expect(rows).toHaveLength(3);
     for (const arende of db.arenden) {
       expect(rows).toContainEqual([
@@ -132,7 +130,7 @@ describe("App", () => {
     expect(within(side).queryByRole("textbox")).not.toBeInTheDocument();
   });
 
-  it("A14: search + filter combine; A15: no hits message; A16: spaces show all", async () => {
+  it("search, filters and the no-hits message work together in the list", async () => {
     render(<App />);
     const user = userEvent.setup();
     await rowTitles();
@@ -154,14 +152,6 @@ describe("App", () => {
     expect(await rowTitles()).toHaveLength(3);
   });
 
-  it("renders <script> search text as plain text, no crash", async () => {
-    render(<App />);
-    const user = userEvent.setup();
-    await rowTitles();
-    await user.type(screen.getByLabelText("Sök"), "<script>alert(1)</script>{Enter}");
-    expect(await screen.findByText("Inga ärenden matchar")).toBeInTheDocument();
-  });
-
   it("a status change in the panel is reflected by the list filter", async () => {
     render(<App />);
     const user = userEvent.setup();
@@ -172,5 +162,60 @@ describe("App", () => {
 
     await user.selectOptions(screen.getByLabelText("Filtrera status"), "Avslutat");
     expect(await rowTitles()).toEqual(["Fel på faktura", "Faktura saknas"]);
+  });
+});
+
+// C1–C3 from docs/specs/sok-filter.md are the mock's three cases.
+describe("App – search and filters (sok-filter.md)", () => {
+  it("SF-A10: 'xyz' gives 'Inga ärenden matchar'; clearing and searching again shows all three unchanged", async () => {
+    const before = structuredClone(db.arenden);
+    render(<App />);
+    const user = userEvent.setup();
+    const shownBefore = await rowCells();
+
+    await user.type(screen.getByLabelText("Sök"), "xyz{Enter}");
+    expect(await screen.findByText("Inga ärenden matchar")).toBeInTheDocument();
+    expect(screen.queryByRole("table")).not.toBeInTheDocument();
+
+    await user.clear(screen.getByLabelText("Sök"));
+    await user.click(screen.getByRole("button", { name: "Sök" }));
+    expect(await rowCells()).toEqual(shownBefore);
+    expect(shownBefore).toHaveLength(3);
+    expect(db.arenden).toEqual(before);
+  });
+
+  it("SF-A12: '<script>' is plain text: 'Inga ärenden matchar', and the app keeps working", async () => {
+    render(<App />);
+    const user = userEvent.setup();
+    await rowTitles();
+
+    await user.type(screen.getByLabelText("Sök"), "<script>{Enter}");
+    expect(await screen.findByText("Inga ärenden matchar")).toBeInTheDocument();
+    expect(screen.getByLabelText("Sök")).toHaveValue("<script>");
+
+    await user.clear(screen.getByLabelText("Sök"));
+    await user.type(screen.getByLabelText("Sök"), "faktura{Enter}");
+    expect(await rowTitles()).toEqual(["Fel på faktura", "Faktura saknas"]);
+  });
+
+  it("SF-A13: the list is unchanged while typing and is searched when Enter is pressed", async () => {
+    render(<App />);
+    const user = userEvent.setup();
+    const all = await rowTitles();
+
+    await user.type(screen.getByLabelText("Sök"), "faktura");
+    expect(await rowTitles()).toEqual(all);
+
+    await user.keyboard("{Enter}");
+    expect(await rowTitles()).toEqual(["Fel på faktura", "Faktura saknas"]);
+  });
+
+  it("SF-A14: the search field holds at most 100 characters", async () => {
+    render(<App />);
+    const user = userEvent.setup();
+    await rowTitles();
+
+    await user.type(screen.getByLabelText("Sök"), "a".repeat(101));
+    expect(screen.getByLabelText("Sök")).toHaveValue("a".repeat(100));
   });
 });
