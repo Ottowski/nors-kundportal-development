@@ -89,8 +89,8 @@ Vi testar inte genom hela gränssnittet. Kursen kräver det inte och det tar lå
 | ---------- | ---------------------------- | ---------------------------------- | -------- |
 | 2026-10-30 | Ej committad, branch `specs` | `python -m pytest` från `backend/` | 1 passed |
 | 2026-11-02 | `b5260e5`, branch `backend-steg-1` | `python -m pytest` från `backend/` | 3 passed |
-| 2026-11-03 | `60843cc`, branch `frontend-v2` | `npm run check` från `frontend/` | Format, lint, typer och bygge gick igenom. 54 passed |
-| 2026-11-03 | `60843cc`, branch `frontend-v2` | `python -m pytest` från `backend/` | 3 passed |
+| 2026-11-03 | `60843cc`, branch `front-end-rebuild` (bygger på `frontend-v2`) | `npm run check` från `frontend/` | Format, lint, typer och bygge gick igenom. 54 passed |
+| 2026-11-03 | `60843cc`, branch `front-end-rebuild` (bygger på `frontend-v2`) | `python -m pytest` från `backend/` | 3 passed |
 
 ## Begränsningar
 

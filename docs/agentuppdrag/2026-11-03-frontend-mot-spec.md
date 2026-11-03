@@ -159,7 +159,7 @@ Varje steg som ändrar ett test börjar med att testet ses misslyckas, vid behov
 | Steg 5b: `npm run check` i `frontend/` | Format, lint, typer och bygge gick igenom. 54 tester i 5 filer passerade | 2026-11-03 |
 | Steg 6: `npm run check` i `frontend/` och `python -m pytest` i `backend/` | 54 passed i frontend, 3 passed i backend | 2026-11-03 |
 | Steg 6: skript som jämför testnamnen i `docs/verifieringsplan.md` med testerna i koden | Alla namn i de 27 raderna finns i koden | 2026-11-03 |
-| Steg 6, Ruben i vanlig terminal på `frontend-v2` (`60843cc`): `npm run check` från `frontend/` och `python -m pytest` från `backend/` | 54 passed och bygget lyckades, 3 passed | 2026-11-03 |
+| Steg 6, Ruben i vanlig terminal på `front-end-rebuild` (`60843cc`, bygger på `frontend-v2`): `npm run check` från `frontend/` och `python -m pytest` från `backend/` | 54 passed och bygget lyckades, 3 passed | 2026-11-03 |
 
 ### Avvikelser och öppna frågor
 
