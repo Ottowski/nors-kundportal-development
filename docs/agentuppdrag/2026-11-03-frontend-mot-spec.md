@@ -3,7 +3,7 @@
 - **Ansvarig:** Ruben
 - **Datum:** 2026-11-03
 - **Agent och verktyg:** Claude Code (Claude Opus 5.5) i VS Code, med skillen `verifiera-mot-spec`
-- **PR:** ?
+- **PR:** [#7](https://github.com/Ottowski/nors-kundportal-development/pull/7)
 
 ## Före
 
