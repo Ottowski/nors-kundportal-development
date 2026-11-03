@@ -27,7 +27,7 @@ Frontenden på `frontend-v2` ska följa specen innan den läggs in i `main`, enl
 
 ### Avgränsning
 
-- **Får ändras:** `frontend/` (kod, tester och mockar), i `docs/verifieringsplan.md` frontendens rader, Resultat och Begränsningar, frontendavsnitten i `CLAUDE.md`, och skillen och agentdefinitionen i `.claude/`.
+- **Får ändras:** `frontend/` (kod, tester och mockar), i `docs/verifieringsplan.md` frontendens rader, texten ovanför spårbarhetstabellen, avsnitten Hur testerna körs, Resultat och Begränsningar, frontendavsnitten i `CLAUDE.md`, och skillen och agentdefinitionen i `.claude/`.
 - **Får inte ändras:** `backend/`, `docs/specs/`, övriga delar av `docs/` (även `docs/api/`), kontraktet för statusändringen, `backend/.env` och `frontend/.env.local`. Inga nya funktioner.
 - **Ingår inte:** A5 och A11, som bara prövas i backend, och K1, som teamet kontrollerar manuellt.
 - Om specen är oklar eller verkar fel ändras den inte. Agenten listar det som en fråga, och teamet beslutar.

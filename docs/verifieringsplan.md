@@ -29,14 +29,14 @@ Om specen visar sig vara fel eller ofullständig ändrar vi inte specen i smyg f
 
 ## Hur testerna körs
 
-- **Backend:** `python -m pytest` från `backend/`.
-- **Frontend:** `npm run test:run` från `frontend/`, när koden från `frontend-v2` är inlagd i `main`.
+- **Backend:** `python -m pytest` från `backend/`. Testerna finns i [backend/tests/](../backend/tests/).
+- **Frontend:** `npm run check` från `frontend/`. Kommandot kontrollerar format, lint och typer, kör testerna och bygger appen. Bara testerna körs med `npm run test:run`. CI kör `npm run check` på varje PR som ändrar `frontend/`. Testerna finns i [App.test.tsx](../frontend/src/App.test.tsx), [ArendeForm.test.tsx](../frontend/src/components/ArendeForm.test.tsx), [ArendeDetail.test.tsx](../frontend/src/components/ArendeDetail.test.tsx), [filterArenden.test.ts](../frontend/src/utils/filterArenden.test.ts) och [arendenApi.test.ts](../frontend/src/api/arendenApi.test.ts).
 
 ## Spårbarhet
 
 Testnamn börjar med id:t, till exempel `test_a2_saknad_rubrik_avvisas` (pytest) eller `it("A2: avvisar ärende utan rubrik")` (Vitest). Specen säger vilket R ett A kontrollerar; den här tabellen säger vilket test som kontrollerar ett A.
 
-Testerna vars namn börjar med `test_` är API-tester och körs på `main`. Övriga test med namn finns på `frontend-v2` och går mot mockar. De har inte körts eller jämförts med kriterierna ännu. Det görs enligt [Kod som byggdes före specen](#kod-som-byggdes-före-specen-frontend-v2), och då får de namn efter id:t. Deras A11–A16 gäller sökning och blir `SF-A#`. `–` i kolumnen Test betyder att inget test finns än, och `?` att teamet inte har bestämt ännu. Nivån är ett förslag tills avsnittet om testnivå är ifyllt.
+Testerna vars namn börjar med `test_` är API-tester i `backend/tests/`. Övriga är frontendtester i `frontend/src/` som går mot mockar. Sökningens id har prefixet `SF-`. `–` i kolumnen Test betyder att inget test finns än, och `?` att teamet inte har bestämt ännu.
 
 | A#/K#  | R#           | Typ        | Nivå           | Test                                                                                                              | Status    | Senaste resultat     | Ansvarig |
 | ------ | ------------ | ---------- | -------------- | ----------------------------------------------------------------------------------------------------------------- | --------- | -------------------- | -------- |
