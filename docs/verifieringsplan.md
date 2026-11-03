@@ -51,9 +51,9 @@ Testerna vars namn börjar med `test_` är API-tester i `backend/tests/`. Övrig
 | A8     | R5, R8       | Happy path | API, komponent | `A8: the status changes to Pågående and the other fields are unchanged` | Planerad  | Komponent: passerade 2026-11-03 | Ruben (komponent), Otto (API) |
 | A9     | R9, R12      | Error path | API, komponent | `A9: an invalid status is rejected with a clear message and the status is still Nytt` | Planerad  | Komponent: passerade 2026-11-03 | Ruben (komponent), Otto (API) |
 | A10    | R10, R12     | Error path | API, komponent | `test_a10_okant_arende_ger_svenskt_besked`, `A10: shows a clear message when the case does not exist` | Genomförd | API: passerade 2026-11-02, komponent: passerade 2026-11-03 | Ruben |
-| A11    | R3, R4, R12  | Error path | API            | –                                                                                                                 | Planerad  | –                    | ?        |
+| A11    | R3, R4, R12  | Error path | API            | –                                                                                                                 | Planerad  | –                    | Otto     |
 | A12    | R6           | Happy path | Enhet          | `A12: the most recently created case comes first and the oldest last` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
-| K1     | –            | –          | Manuell        | [K1 – bara tangentbord](#k1--bara-tangentbord) | Planerad  | –                    | ?        |
+| K1     | –            | –          | Manuell        | [K1 – bara tangentbord](#k1--bara-tangentbord) | Planerad  | –                    | Nathalie och Ruben |
 | SF-A1  | SF-R1, SF-R7 | Happy path | Enhet          | `SF-A1: 'faktura' finds C3 and C1, with C3 first` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
 | SF-A2  | SF-R1        | Happy path | Enhet          | `SF-A2: 'FAKTURA' gives the same result as 'faktura'` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
 | SF-A3  | SF-R1        | Gränsfall  | Enhet          | `SF-A3: 'FÖR' finds only C1` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
@@ -130,6 +130,7 @@ Kan göras redan nu, mot mockarna med `npm run dev:mock`, eftersom K1 gäller gr
 | 2026-11-02 | `b5260e5`, branch `backend-steg-1` | `python -m pytest` från `backend/` | 3 passed |
 | 2026-11-03 | `60843cc`, branch `front-end-rebuild` (bygger på `frontend-v2`) | `npm run check` från `frontend/` | Format, lint, typer och bygge gick igenom. 54 passed |
 | 2026-11-03 | `60843cc`, branch `front-end-rebuild` (bygger på `frontend-v2`) | `python -m pytest` från `backend/` | 3 passed |
+| 2026-11-03 | `71c237b`, branch `front-end-rebuild`, granskning (Nathalie) | `npm run check` från `frontend/` och `python -m pytest` från `backend/` | Lint, typer, 54 passed och bygget gick igenom. format:check gick bara igenom med `--end-of-line auto` (CRLF i Windows). 3 passed |
 
 ## Begränsningar
 
