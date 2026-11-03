@@ -31,6 +31,7 @@ Om specen visar sig vara fel eller ofullständig ändrar vi inte specen i smyg f
 
 - **Backend:** `python -m pytest` från `backend/`. Testerna finns i [backend/tests/](../backend/tests/).
 - **Frontend:** `npm run check` från `frontend/`. Kommandot kontrollerar format, lint och typer, kör testerna och bygger appen. Bara testerna körs med `npm run test:run`. CI kör `npm run check` på varje PR som ändrar `frontend/`. Testerna finns i [App.test.tsx](../frontend/src/App.test.tsx), [ArendeForm.test.tsx](../frontend/src/components/ArendeForm.test.tsx), [ArendeDetail.test.tsx](../frontend/src/components/ArendeDetail.test.tsx), [filterArenden.test.ts](../frontend/src/utils/filterArenden.test.ts) och [arendenApi.test.ts](../frontend/src/api/arendenApi.test.ts).
+- **Manuellt:** stegen står under [Manuella kontroller](#manuella-kontroller).
 
 ## Spårbarhet
 
@@ -52,7 +53,7 @@ Testerna vars namn börjar med `test_` är API-tester i `backend/tests/`. Övrig
 | A10    | R10, R12     | Error path | API, komponent | `test_a10_okant_arende_ger_svenskt_besked`, `A10: shows a clear message when the case does not exist` | Genomförd | API: passerade 2026-11-02, komponent: passerade 2026-11-03 | Ruben |
 | A11    | R3, R4, R12  | Error path | API            | –                                                                                                                 | Planerad  | –                    | ?        |
 | A12    | R6           | Happy path | Enhet          | `A12: the most recently created case comes first and the oldest last` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
-| K1     | –            | –          | Manuell        | Manuell genomgång                                                                                                 | Planerad  | –                    | ?        |
+| K1     | –            | –          | Manuell        | [K1 – bara tangentbord](#k1--bara-tangentbord) | Planerad  | –                    | ?        |
 | SF-A1  | SF-R1, SF-R7 | Happy path | Enhet          | `SF-A1: 'faktura' finds C3 and C1, with C3 first` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
 | SF-A2  | SF-R1        | Happy path | Enhet          | `SF-A2: 'FAKTURA' gives the same result as 'faktura'` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
 | SF-A3  | SF-R1        | Gränsfall  | Enhet          | `SF-A3: 'FÖR' finds only C1` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
@@ -83,6 +84,44 @@ Nivån för varje kriterium står i kolumnen Nivå i tabellen ovan.
 
 Vi testar inte genom hela gränssnittet. Kursen kräver det inte och det tar lång tid att bygga.
 
+## Manuella kontroller
+
+De manuella kontrollerna prövar det som de automatiska testerna inte visar: att frontend och backend fungerar ihop, att beskeden är begripliga för handläggaren (R12) och att allt går att göra med tangentbord (K1). Använd bara påhittade uppgifter. Skriv in varje genomgång i kontrollens tabell, även när något avviker, och gör en ny rad om kontrollen görs om.
+
+### Hela kedjan mot riktig backend
+
+Kan göras när statusändringen finns i backend (steg 4 i [backenduppdraget](agentuppdrag/2026-11-02-backend-status-och-varden.md)). Starta backend och frontend enligt [README](../README.md), med `npm run dev` och inte mot mockar.
+
+| Steg | Handling | Förväntat | Kontrollerar |
+| ---- | -------- | --------- | ------------ |
+| 1 | Skapa ett ärende med giltiga uppgifter | Ärendet visas först i listan med status Nytt och en skapad-tid | R1, R6 |
+| 2 | Försök skapa ett ärende utan rubrik, och sedan ett med bara mellanslag i rubriken | Ärendet avvisas med ett besked på svenska utan teknisk text. Inget nytt ärende i listan | R2, R3, R12 |
+| 3 | Öppna ärendet från steg 1 | Alla fält visas | R7 |
+| 4 | Ändra status till Pågående | Status är Pågående i detaljvyn och i listan. Övriga fält är oförändrade | R8 |
+| 5 | Stoppa backend med Ctrl+C och ladda om sidan | Ett besked på svenska om att servern inte går att nå, och knappen Försök igen | R12 |
+| 6 | Starta backend igen och klicka på Försök igen | Ärendet finns kvar med status Pågående | R5 |
+| 7 | Sök på en del av rubriken, filtrera på status Pågående och sök sedan på en text som inte finns | Ärendet visas, och sedan "Inga ärenden matchar" | SF-R1, SF-R2, SF-R4 |
+
+| Datum | Vem | Commit | Utfall |
+| ----- | --- | ------ | ------ |
+| – | – | – | Planerad |
+
+### K1 – bara tangentbord
+
+Kan göras redan nu, mot mockarna med `npm run dev:mock`, eftersom K1 gäller gränssnittet. Använd bara tangentbordet.
+
+| Steg | Handling | Förväntat |
+| ---- | -------- | --------- |
+| 1 | Gå till Nytt ärende, fyll i alla fält och skapa ärendet | Varje fält och knapp går att nå och använda |
+| 2 | Gå till ett ärende i listan och öppna det | Detaljerna öppnas |
+| 3 | Välj en ny status i Ändra status | Statusen ändras |
+| 4 | Stäng panelen | Panelen stängs |
+| 5 | Skriv en söktext och tryck Enter, och välj sedan ett värde i ett filter | Listan visar träffarna |
+
+| Datum | Vem | Commit | Utfall |
+| ----- | --- | ------ | ------ |
+| – | – | – | Planerad |
+
 ## Resultat
 
 | Datum      | Commit                       | Kommando                           | Utfall   |
@@ -94,7 +133,7 @@ Vi testar inte genom hela gränssnittet. Kursen kräver det inte och det tar lå
 
 ## Begränsningar
 
-- Frontendtesterna går mot mockar. Inget automatiskt test visar att frontend och backend fungerar ihop.
+- Frontendtesterna går mot mockar. Inget automatiskt test visar att frontend och backend fungerar ihop. Det kontrolleras manuellt, se [Hela kedjan mot riktig backend](#hela-kedjan-mot-riktig-backend).
 - Mockarna följer besluten i [backenduppdraget](agentuppdrag/2026-11-02-backend-status-och-varden.md). Tills steg 2–4 där är klara svarar den riktiga backend annorlunda: statusändringen finns inte (appen visar "Not Found"), kategori och prioritet kontrolleras inte, och felmeddelandena kommer från Pydantic.
 - Frontendens tester skrevs efter koden. Varje test i tabellen har jämförts med specen och setts misslyckas med en tillfällig felaktig ändring, se [frontenduppdraget](agentuppdrag/2026-11-03-frontend-mot-spec.md).
 - A2–A4, A8, A9 och A11 väntar på API-tester i backend. K1 är en planerad manuell kontroll.
