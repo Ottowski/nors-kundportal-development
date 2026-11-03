@@ -123,10 +123,19 @@ Varje steg som ändrar ett test börjar med att testet ses misslyckas, vid behov
 
 ### Granskning
 
-- **Granskad av:**
-- **Vad vi hittade:**
-- **Arbete utanför uppdraget som togs bort:**
-- **Accepterat, ändrat eller avvisat, och varför:**
+- **Granskad av:** Nathalie, 2026-11-03, på `71c237b`.
+- **Vad vi hittade:** Punkt 1–6 under Klart när stämmer.
+  - Jag körde `npm run check` och `python -m pytest` själv: 54 passed och 3 passed.
+  - Jag jämförde A2, A9 och A12 med kravspec.md som stickprov: de stämmer.
+  - A9-testet blev rött när beskedet i `StatusSelect.tsx` stängdes av, och grönt igen när det kom tillbaka.
+  - I appen (`npm run dev:mock`) finns ingen redigering, och statusändringen fungerar.
+  - Mockens felmeddelanden är desamma som backendbesluten.
+  - `git log` visar att agentens commits inte ändrade filer utanför avgränsningen.
+  - Två svagheter i A9-testet: det kontrollerar inte att ärendet börjar med status Nytt, och kontrollen av datan går alltid igenom, eftersom den låtsade backenden inte ändrar något.
+- **Arbete utanför uppdraget som togs bort:** `fil.md` och `handlingsplan.md`, arbetsanteckningar från före agenten.
+- **Accepterat, ändrat eller avvisat, och varför:** Accepterat. Kontrollerna visar att frontenden följer specen inom uppdragets gränser. A9-svagheterna är förslag, inte krav. Två saker utanför PR:en tas upp separat:
+  - `npm run check` misslyckas på Windows, eftersom filerna får CRLF-radslut. Förslaget om `.gitattributes` ligger som kommentar i PR:en.
+  - `npm audit` visar 15 sårbarheter i beroendena.
 
 ### Verifiering
 
@@ -160,6 +169,8 @@ Varje steg som ändrar ett test börjar med att testet ses misslyckas, vid behov
 | Steg 6: `npm run check` i `frontend/` och `python -m pytest` i `backend/` | 54 passed i frontend, 3 passed i backend | 2026-11-03 |
 | Steg 6: skript som jämför testnamnen i `docs/verifieringsplan.md` med testerna i koden | Alla namn i de 27 raderna finns i koden | 2026-11-03 |
 | Steg 6, Ruben i vanlig terminal på `front-end-rebuild` (`60843cc`, bygger på `frontend-v2`): `npm run check` från `frontend/` och `python -m pytest` från `backend/` | 54 passed och bygget lyckades, 3 passed | 2026-11-03 |
+| Granskning, Nathalie på `front-end-rebuild` (`71c237b`): `npm run check` från `frontend/` | Stoppade i format:check på grund av CRLF-radslut i Windows. `npx prettier --check . --end-of-line auto` gick igenom. Lint, typer, 54 passed och bygget gick igenom. `python -m pytest`: 3 passed | 2026-11-03 |
+| Granskning, Nathalie: A9 med `setError` i `StatusSelect.tsx` tillfälligt avstängd | Misslyckades: inget besked visades. Grönt igen efter återställning, och `git status` var ren | 2026-11-03 |
 
 ### Avvikelser och öppna frågor
 
