@@ -96,6 +96,23 @@ Fler kommandon från `frontend`:
 | `npm run check` | Hela kontrollen: Prettier, ESLint, TypeScript, testerna och bygget. Körs också i GitHub Actions. |
 | `npm run format` | Formaterar koden med Prettier. |
 
+### Radslut på Windows
+
+Prettier väntar sig LF-radslut. Därför checkar `.gitattributes` ut alla textfiler
+med LF, även på Windows. Klonade du repot innan filen fanns kvar har filerna
+CRLF, och då fallerar `npm run check` på Prettier. Kör en gång från `frontend`:
+
+```powershell
+npm run format
+```
+
+Filerna får då LF. Git ser ingen ändring, eftersom innehållet är detsamma som i
+repot.
+
+`.editorconfig` gör att editorn skapar nya filer med LF. JetBrains-IDE:er och
+Visual Studio läser den direkt, VS Code behöver tillägget *EditorConfig for VS
+Code*. Skapar din editor ändå en fil med CRLF hjälper `npm run format`.
+
 ## API-tester (Postman)
 
 Importera `docs/api/kundportal.postman_collection.json` och
