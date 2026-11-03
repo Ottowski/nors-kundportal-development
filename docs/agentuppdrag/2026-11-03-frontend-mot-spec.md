@@ -157,5 +157,12 @@ Varje steg som ändrar ett test börjar med att testet ses misslyckas, vid behov
 | Steg 5b: SF-A13 med söktexten tillfälligt ändrad att gälla medan man skriver | Misslyckades: listan ändrades före Enter | 2026-11-03 |
 | Steg 5b: SF-A14 med maxlängden på sökfältet tillfälligt borttagen | Misslyckades: fältet tog emot 101 tecken | 2026-11-03 |
 | Steg 5b: `npm run check` i `frontend/` | Format, lint, typer och bygge gick igenom. 54 tester i 5 filer passerade | 2026-11-03 |
+| Steg 6: `npm run check` i `frontend/` och `python -m pytest` i `backend/` | 54 passed i frontend, 3 passed i backend | 2026-11-03 |
+| Steg 6: skript som jämför testnamnen i `docs/verifieringsplan.md` med testerna i koden | Alla namn i de 27 raderna finns i koden | 2026-11-03 |
 
 ### Avvikelser och öppna frågor
+
+- **Mot den riktiga backend:** statusändringen fungerar först när steg 4 i backenduppdraget är klart. Tills dess visar appen "Not Found". Kategori, prioritet och felmeddelanden följer besluten först efter steg 2 och 3 där. Det står också under Begränsningar i verifieringsplanen.
+- **Sex nya tester utan A#:** ett regressionstest för att inget går att redigera (steg 2), fyra tester för att mockarna följer backendbesluten (steg 3) och ett test för R6, samma skapad-tid (steg 4b). De prövar regler och beslut som inget acceptanskriterium täcker.
+- **Ansvarig i verifieringsplanen** fylldes i av agenten: Ruben för frontenddelarna och Otto för API-delarna som återstår. Teamet bekräftar.
+- **Utanför uppdraget:** `docs/api/README.md` hänvisar till `kundportal-sdd` och till en `README.sv.md` som inte finns.
