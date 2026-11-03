@@ -29,44 +29,45 @@ Om specen visar sig vara fel eller ofullständig ändrar vi inte specen i smyg f
 
 ## Hur testerna körs
 
-- **Backend:** `python -m pytest` från `backend/`.
-- **Frontend:** `npm run test:run` från `frontend/`, när koden från `frontend-v2` är inlagd i `main`.
+- **Backend:** `python -m pytest` från `backend/`. Testerna finns i [backend/tests/](../backend/tests/).
+- **Frontend:** `npm run check` från `frontend/`. Kommandot kontrollerar format, lint och typer, kör testerna och bygger appen. Bara testerna körs med `npm run test:run`. CI kör `npm run check` på varje PR som ändrar `frontend/`. Testerna finns i [App.test.tsx](../frontend/src/App.test.tsx), [ArendeForm.test.tsx](../frontend/src/components/ArendeForm.test.tsx), [ArendeDetail.test.tsx](../frontend/src/components/ArendeDetail.test.tsx), [filterArenden.test.ts](../frontend/src/utils/filterArenden.test.ts) och [arendenApi.test.ts](../frontend/src/api/arendenApi.test.ts).
+- **Manuellt:** stegen står under [Manuella kontroller](#manuella-kontroller).
 
 ## Spårbarhet
 
 Testnamn börjar med id:t, till exempel `test_a2_saknad_rubrik_avvisas` (pytest) eller `it("A2: avvisar ärende utan rubrik")` (Vitest). Specen säger vilket R ett A kontrollerar; den här tabellen säger vilket test som kontrollerar ett A.
 
-Testerna vars namn börjar med `test_` är API-tester och körs på `main`. Övriga test med namn finns på `frontend-v2` och går mot mockar. De har inte körts eller jämförts med kriterierna ännu. Det görs enligt [Kod som byggdes före specen](#kod-som-byggdes-före-specen-frontend-v2), och då får de namn efter id:t. Deras A11–A16 gäller sökning och blir `SF-A#`. `–` i kolumnen Test betyder att inget test finns än, och `?` att teamet inte har bestämt ännu. Nivån är ett förslag tills avsnittet om testnivå är ifyllt.
+Testerna vars namn börjar med `test_` är API-tester i `backend/tests/`. Övriga är frontendtester i `frontend/src/` som går mot mockar. Sökningens id har prefixet `SF-`. `–` i kolumnen Test betyder att inget test finns än, och `?` att teamet inte har bestämt ännu.
 
 | A#/K#  | R#           | Typ        | Nivå           | Test                                                                                                              | Status    | Senaste resultat     | Ansvarig |
 | ------ | ------------ | ---------- | -------------- | ----------------------------------------------------------------------------------------------------------------- | --------- | -------------------- | -------- |
-| A1     | R1           | Happy path | API, komponent | `test_a1_nytt_arende_far_status_nytt_och_syns_i_listan`, `A1: creates a case with status Nytt`, `A1: Nytt ärende opens the form in the panel; new case is first and shown` | Planerad  | API: passerade 2026-11-02 | ?        |
-| A2     | R2, R3, R12  | Error path | API, komponent | `A2: rejects missing title, nothing saved`                                                                        | Planerad  | –                    | ?        |
-| A3     | R2, R3, R12  | Gränsfall  | API, komponent | `A3: title with only spaces counts as empty`                                                                      | Planerad  | –                    | ?        |
-| A4     | R3, R4, R12  | Error path | API, komponent | `A4: shows backend field error and keeps input`                                                                   | Planerad  | –                    | ?        |
+| A1     | R1           | Happy path | API, komponent | `test_a1_nytt_arende_far_status_nytt_och_syns_i_listan`, `A1: a valid case is saved with status Nytt and a created time, and shows in the list` | Genomförd | API: passerade 2026-11-02, komponent: passerade 2026-11-03 | Ruben |
+| A2     | R2, R3, R12  | Error path | API, komponent | `A2: a case without a title is rejected with a clear message; still two cases` | Planerad  | Komponent: passerade 2026-11-03 | Ruben (komponent), Otto (API) |
+| A3     | R2, R3, R12  | Gränsfall  | API, komponent | `A3: a title with only spaces counts as empty; still two cases` | Planerad  | Komponent: passerade 2026-11-03 | Ruben (komponent), Otto (API) |
+| A4     | R3, R4, R12  | Error path | API, komponent | `A4: a category that is not allowed is rejected with a clear message; nothing saved` | Planerad  | Komponent: passerade 2026-11-03 | Ruben (komponent), Otto (API) |
 | A5     | R5           | Happy path | API            | `test_a5_arende_finns_kvar_efter_omstart`                                                                         | Genomförd | API: passerade 2026-11-02 | Nathalie |
-| A6     | R6           | Happy path | Komponent      | `A6: list columns are title, status, priority and created`                                                        | Planerad  | –                    | ?        |
-| A7     | R7           | Happy path | Komponent      | `A7: shows all fields of the case`, `A7: clicking a row opens details in the side panel, list stays visible`      | Planerad  | –                    | ?        |
-| A8     | R5, R8       | Happy path | API, komponent | `A8: changes status, other fields unchanged`, `A8: status change in the panel is reflected by the list filter`    | Planerad  | –                    | ?        |
-| A9     | R9, R12      | Error path | API, komponent | `A9: rejected status keeps the old status and shows a message`                                                    | Planerad  | –                    | ?        |
-| A10    | R10, R12     | Error path | API, komponent | `test_a10_okant_arende_ger_svenskt_besked`, `A10: shows a clear message when the case does not exist`             | Planerad  | API: passerade 2026-11-02 | ?        |
-| A11    | R3, R4, R12  | Error path | API            | –                                                                                                                 | Planerad  | –                    | ?        |
-| A12    | R6           | Happy path | Enhet          | `orders by skapad descending`                                                                                     | Planerad  | –                    | ?        |
-| K1     | –            | –          | Manuell        | Manuell genomgång                                                                                                 | Planerad  | –                    | ?        |
-| SF-A1  | SF-R1, SF-R7 | Happy path | Enhet          | `A11: finds cases by text`                                                                                        | Planerad  | –                    | ?        |
-| SF-A2  | SF-R1        | Happy path | Enhet          | `A12: ignores upper/lower case`                                                                                   | Planerad  | –                    | ?        |
-| SF-A3  | SF-R1        | Gränsfall  | Enhet          | `matches Swedish characters case-insensitively`                                                                   | Planerad  | –                    | ?        |
-| SF-A4  | SF-R1        | Happy path | Enhet          | `searches description too (Q7 proposal)`                                                                          | Planerad  | –                    | ?        |
-| SF-A5  | SF-R1        | Happy path | Enhet          | –                                                                                                                 | Planerad  | –                    | ?        |
-| SF-A6  | SF-R2        | Happy path | Enhet          | `A13: filters by status`                                                                                          | Planerad  | –                    | ?        |
-| SF-A7  | SF-R2        | Happy path | Enhet          | `filters by kategori`                                                                                             | Planerad  | –                    | ?        |
-| SF-A8  | SF-R2        | Happy path | Enhet          | –                                                                                                                 | Planerad  | –                    | ?        |
-| SF-A9  | SF-R3        | Happy path | Enhet          | `A14: combines search and filter with AND`                                                                        | Planerad  | –                    | ?        |
-| SF-A10 | SF-R4, SF-R8 | Gränsfall  | Komponent      | `A15: returns empty list when nothing matches`, `R11.8: does not change the input`                                | Planerad  | –                    | ?        |
-| SF-A11 | SF-R5        | Gränsfall  | Enhet          | `A16: spaces-only search shows all`, `trims search text`                                                          | Planerad  | –                    | ?        |
-| SF-A12 | SF-R6        | Gränsfall  | Komponent      | `treats special characters as plain text`, `renders <script> search text as plain text, no crash`                 | Planerad  | –                    | ?        |
-| SF-A13 | SF-R9        | Happy path | Komponent      | –                                                                                                                 | Planerad  | –                    | ?        |
-| SF-A14 | SF-R10       | Gränsfall  | Komponent      | –                                                                                                                 | Planerad  | –                    | ?        |
+| A6     | R6           | Happy path | Komponent      | `A6: all three cases show with title, status, priority and created time` | Genomförd | Komponent: passerade 2026-11-03 | Ruben |
+| A7     | R7           | Happy path | Komponent      | `A7: all fields of the chosen case are shown` | Genomförd | Komponent: passerade 2026-11-03 | Ruben |
+| A8     | R5, R8       | Happy path | API, komponent | `A8: the status changes to Pågående and the other fields are unchanged` | Planerad  | Komponent: passerade 2026-11-03 | Ruben (komponent), Otto (API) |
+| A9     | R9, R12      | Error path | API, komponent | `A9: an invalid status is rejected with a clear message and the status is still Nytt` | Planerad  | Komponent: passerade 2026-11-03 | Ruben (komponent), Otto (API) |
+| A10    | R10, R12     | Error path | API, komponent | `test_a10_okant_arende_ger_svenskt_besked`, `A10: shows a clear message when the case does not exist` | Genomförd | API: passerade 2026-11-02, komponent: passerade 2026-11-03 | Ruben |
+| A11    | R3, R4, R12  | Error path | API            | –                                                                                                                 | Planerad  | –                    | Otto     |
+| A12    | R6           | Happy path | Enhet          | `A12: the most recently created case comes first and the oldest last` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
+| K1     | –            | –          | Manuell        | [K1 – bara tangentbord](#k1--bara-tangentbord) | Planerad  | –                    | Nathalie och Ruben |
+| SF-A1  | SF-R1, SF-R7 | Happy path | Enhet          | `SF-A1: 'faktura' finds C3 and C1, with C3 first` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
+| SF-A2  | SF-R1        | Happy path | Enhet          | `SF-A2: 'FAKTURA' gives the same result as 'faktura'` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
+| SF-A3  | SF-R1        | Gränsfall  | Enhet          | `SF-A3: 'FÖR' finds only C1` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
+| SF-A4  | SF-R1        | Happy path | Enhet          | `SF-A4: 'inloggningen', only in the description, finds only C2` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
+| SF-A5  | SF-R1        | Happy path | Enhet          | `SF-A5: part of a word, 'faktur', finds C3 and C1` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
+| SF-A6  | SF-R2        | Happy path | Enhet          | `SF-A6: status Nytt shows only C1, and Alla shows all three again` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
+| SF-A7  | SF-R2        | Happy path | Enhet          | `SF-A7: kategori Teknik shows only C2` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
+| SF-A8  | SF-R2        | Happy path | Enhet          | `SF-A8: prioritet Låg shows only C3` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
+| SF-A9  | SF-R3        | Happy path | Enhet          | `SF-A9: 'faktura' and status Nytt together show only C1` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
+| SF-A10 | SF-R4, SF-R8 | Gränsfall  | Komponent      | `SF-A10: 'xyz' gives 'Inga ärenden matchar'; clearing and searching again shows all three unchanged` | Genomförd | Komponent: passerade 2026-11-03 | Ruben |
+| SF-A11 | SF-R5        | Gränsfall  | Enhet          | `SF-A11: only spaces shows all three, and '  faktura  ' is the same as 'faktura'` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
+| SF-A12 | SF-R6        | Gränsfall  | Komponent      | `SF-A12: '<script>' is plain text: 'Inga ärenden matchar', and the app keeps working` | Genomförd | Komponent: passerade 2026-11-03 | Ruben |
+| SF-A13 | SF-R9        | Happy path | Komponent      | `SF-A13: the list is unchanged while typing and is searched when Enter is pressed` | Genomförd | Komponent: passerade 2026-11-03 | Ruben |
+| SF-A14 | SF-R10       | Gränsfall  | Komponent      | `SF-A14: the search field holds at most 100 characters` | Genomförd | Komponent: passerade 2026-11-03 | Ruben |
 
 - **Typ:** happy path, error path eller gränsfall.
 - **Nivå:** enhet, API, komponent eller manuell.
@@ -83,15 +84,57 @@ Nivån för varje kriterium står i kolumnen Nivå i tabellen ovan.
 
 Vi testar inte genom hela gränssnittet. Kursen kräver det inte och det tar lång tid att bygga.
 
+## Manuella kontroller
+
+De manuella kontrollerna prövar det som de automatiska testerna inte visar: att frontend och backend fungerar ihop, att beskeden är begripliga för handläggaren (R12) och att allt går att göra med tangentbord (K1). Använd bara påhittade uppgifter. Skriv in varje genomgång i kontrollens tabell, även när något avviker, och gör en ny rad om kontrollen görs om.
+
+### Hela kedjan mot riktig backend
+
+Kan göras när statusändringen finns i backend (steg 4 i [backenduppdraget](agentuppdrag/2026-11-02-backend-status-och-varden.md)). Starta backend och frontend enligt [README](../README.md), med `npm run dev` och inte mot mockar.
+
+| Steg | Handling | Förväntat | Kontrollerar |
+| ---- | -------- | --------- | ------------ |
+| 1 | Skapa ett ärende med giltiga uppgifter | Ärendet visas först i listan med status Nytt och en skapad-tid | R1, R6 |
+| 2 | Försök skapa ett ärende utan rubrik, och sedan ett med bara mellanslag i rubriken | Ärendet avvisas med ett besked på svenska utan teknisk text. Inget nytt ärende i listan | R2, R3, R12 |
+| 3 | Öppna ärendet från steg 1 | Alla fält visas | R7 |
+| 4 | Ändra status till Pågående | Status är Pågående i detaljvyn och i listan. Övriga fält är oförändrade | R8 |
+| 5 | Stoppa backend med Ctrl+C och ladda om sidan | Ett besked på svenska om att servern inte går att nå, och knappen Försök igen | R12 |
+| 6 | Starta backend igen och klicka på Försök igen | Ärendet finns kvar med status Pågående | R5 |
+| 7 | Sök på en del av rubriken, filtrera på status Pågående och sök sedan på en text som inte finns | Ärendet visas, och sedan "Inga ärenden matchar" | SF-R1, SF-R2, SF-R4 |
+
+| Datum | Vem | Commit | Utfall |
+| ----- | --- | ------ | ------ |
+| – | – | – | Planerad |
+
+### K1 – bara tangentbord
+
+Kan göras redan nu, mot mockarna med `npm run dev:mock`, eftersom K1 gäller gränssnittet. Använd bara tangentbordet.
+
+| Steg | Handling | Förväntat |
+| ---- | -------- | --------- |
+| 1 | Gå till Nytt ärende, fyll i alla fält och skapa ärendet | Varje fält och knapp går att nå och använda |
+| 2 | Gå till ett ärende i listan och öppna det | Detaljerna öppnas |
+| 3 | Välj en ny status i Ändra status | Statusen ändras |
+| 4 | Stäng panelen | Panelen stängs |
+| 5 | Skriv en söktext och tryck Enter, och välj sedan ett värde i ett filter | Listan visar träffarna |
+
+| Datum | Vem | Commit | Utfall |
+| ----- | --- | ------ | ------ |
+| – | – | – | Planerad |
+
 ## Resultat
 
 | Datum      | Commit                       | Kommando                           | Utfall   |
 | ---------- | ---------------------------- | ---------------------------------- | -------- |
 | 2026-10-30 | Ej committad, branch `specs` | `python -m pytest` från `backend/` | 1 passed |
 | 2026-11-02 | `b5260e5`, branch `backend-steg-1` | `python -m pytest` från `backend/` | 3 passed |
+| 2026-11-03 | `60843cc`, branch `front-end-rebuild` (bygger på `frontend-v2`) | `npm run check` från `frontend/` | Format, lint, typer och bygge gick igenom. 54 passed |
+| 2026-11-03 | `60843cc`, branch `front-end-rebuild` (bygger på `frontend-v2`) | `python -m pytest` från `backend/` | 3 passed |
+| 2026-11-03 | `71c237b`, branch `front-end-rebuild`, granskning (Nathalie) | `npm run check` från `frontend/` och `python -m pytest` från `backend/` | Lint, typer, 54 passed och bygget gick igenom. format:check gick bara igenom med `--end-of-line auto` (CRLF i Windows). 3 passed |
 
 ## Begränsningar
 
-- Frontendtesterna går mot mockar. Inget automatiskt test visar att frontend och backend fungerar ihop.
-- Testerna från `frontend-v2` skrevs efter koden och har inte jämförts med specen ännu.
-- Bara A1, A5 och A10 är körda än, och för A1 och A10 bara API-delen. Övriga rader är planerade.
+- Frontendtesterna går mot mockar. Inget automatiskt test visar att frontend och backend fungerar ihop. Det kontrolleras manuellt, se [Hela kedjan mot riktig backend](#hela-kedjan-mot-riktig-backend).
+- Mockarna följer besluten i [backenduppdraget](agentuppdrag/2026-11-02-backend-status-och-varden.md). Tills steg 2–4 där är klara svarar den riktiga backend annorlunda: statusändringen finns inte (appen visar "Not Found"), kategori och prioritet kontrolleras inte, och felmeddelandena kommer från Pydantic.
+- Frontendens tester skrevs efter koden. Varje test i tabellen har jämförts med specen och setts misslyckas med en tillfällig felaktig ändring, se [frontenduppdraget](agentuppdrag/2026-11-03-frontend-mot-spec.md).
+- A2–A4, A8, A9 och A11 väntar på API-tester i backend. K1 är en planerad manuell kontroll.

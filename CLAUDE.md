@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Kundserviceportalen NORS: a blank team-project starter (course/examination context, Swedish-language UI and docs) with a FastAPI backend and a React (JavaScript, no TypeScript) + Vite frontend. The two halves are independent apps run in separate terminals; there is no root-level build or workspace setup (the root `package-lock.json` is empty and unused — dependencies live in `frontend/`).
+Kundserviceportalen NORS: a blank team-project starter (course/examination context, Swedish-language UI and docs) with a FastAPI backend and a React + TypeScript + Vite frontend. The two halves are independent apps run in separate terminals; there is no root-level build or workspace setup (the root `package-lock.json` is empty and unused — dependencies live in `frontend/`).
 
 ## Rules for Claude
 
@@ -37,14 +37,15 @@ If the premises hold, say so in one line. Don't invent objections.
 
 ## Commands
 
-Setup, run and test commands live in `README.md` (backend: `uvicorn app.main:app --reload` from `backend/`; frontend: `npm run dev` from `frontend/`; tests: `python -m pytest` from `backend/`). Don't restate them here. The README shows PowerShell activation; on macOS/Linux use `source .venv/bin/activate`. API tests run against a real uvicorn server, not TestClient (httpx is not installed). Use `kor_server` and `anrop` from `tests/server.py`; each test gets its own DB in `tmp_path` via `NORS_DB_PATH`, so `app/data/nors.db` is never touched. No frontend tests and no linter are configured yet.
+Setup, run and test commands live in `README.md` (backend: `uvicorn app.main:app --reload` from `backend/`; frontend: `npm run dev` from `frontend/`, or `npm run dev:mock` to run on MSW mocks without a backend; tests: `python -m pytest` from `backend/` and `npm run test:run` from `frontend/`). Don't restate them here. The README shows PowerShell activation; on macOS/Linux use `source .venv/bin/activate`. API tests run against a real uvicorn server, not TestClient (httpx is not installed). Use `kor_server` and `anrop` from `tests/server.py`; each test gets its own DB in `tmp_path` via `NORS_DB_PATH`, so `app/data/nors.db` is never touched. `npm run check` in `frontend/` runs Prettier, ESLint, TypeScript, the tests and the build; CI (`.github/workflows/frontend.yml`) runs it.
 
 ## Architecture
 
 - `backend/app/main.py` — single FastAPI `app` (`app.main:app`) with `/` and `/health`, mounts the routers. CORS is restricted to the Vite dev origins (`http://localhost:5173`, `http://127.0.0.1:5173`); if the frontend runs on another port/host, update `allow_origins` there.
-- `frontend/src/` — `main.jsx` mounts `App.jsx`; currently only a welcome page. No API client or Vite dev proxy exists, so the frontend must call the backend by its full URL (`http://127.0.0.1:8000`), which is why CORS is configured.
+- `frontend/src/` — `main.tsx` mounts `App.tsx` and starts the MSW worker in `--mode mock`. `api/arendenApi.ts` is the only place that calls `fetch`; it turns FastAPI errors (`detail` string or 422 list) into `ApiError` with per-field messages. The base URL is `VITE_API_URL` or `http://127.0.0.1:8000` (no Vite proxy, hence CORS).
+- `frontend/src/mocks/handlers.ts` follows the rules, error texts and `POST /arenden/{id}/status` decided for the backend in `docs/agentuppdrag/2026-11-02-backend-status-och-varden.md`; the real backend does not have all of them yet. Tests use it via `msw/node` (`src/test/setup.ts`); `db.reset()` runs after each test.
+- Search and filtering run in the frontend on the loaded list (`utils/filterArenden.ts`), per `docs/specs/sok-filter.md`. The category and priority values in `constants/arende.ts` must match `docs/specs/kravspec.md`.
 - Dependencies are unpinned in `backend/requirements.txt`; add new ones there or in `frontend/package.json`.
-- Decided but not yet on main: a TypeScript frontend (being rebuilt on `frontend-v2`). See `docs/beslut.md`.
 
 ### Adding new backend code
 
@@ -59,7 +60,7 @@ Layers under `backend/app/`, one file per resource (`arende` is the reference ex
 
 ### Adding new frontend code
 
-The structure is decided when `frontend-v2` is built (TypeScript, per `docs/beslut.md`). Until then, keep new UI code in `frontend/src/` and don't add API-client or folder conventions ahead of that decision; record them in this section once agreed.
+Follow the structure in `frontend/src/`: shared types in `types/`, allowed values in `constants/` (matching the spec), all API calls in `api/arendenApi.ts`, components in `components/`, pure functions in `utils/`, and MSW handlers that mirror the backend in `mocks/`. Put each test next to the file it tests (Vitest and Testing Library), named after its A# or SF-A# id. Run `npm run check` before a PR.
 
 ## Documentation
 

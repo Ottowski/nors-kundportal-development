@@ -1,7 +1,7 @@
 # Kundserviceportalen NORS
 
 Ett startprojekt för teamet NORS, med backend i Python/FastAPI och frontend i
-React/JavaScript.
+React/TypeScript.
 
 All projektdokumentation finns i [docs/](docs/README.md).
 
@@ -79,6 +79,45 @@ python -m pytest
 Testerna startar en egen API-server mot en temporär databas, så servern behöver
 inte vara igång och `nors.db` ändras inte. Vilka tester som finns och vad de
 kontrollerar står i [docs/verifieringsplan.md](docs/verifieringsplan.md).
+
+Frontendtesterna går mot påhittad data (MSW-mockar), så backend behöver inte
+vara igång. Från `frontend`:
+
+```powershell
+npm run test:run
+```
+
+Fler kommandon från `frontend`:
+
+| Kommando | Vad det gör |
+| --- | --- |
+| `npm run dev:mock` | Kör gränssnittet mot påhittad data (MSW-mockar). Ingen backend behövs. |
+| `npm test` | Kör testerna och kör om dem när koden ändras (Vitest och Testing Library). |
+| `npm run check` | Hela kontrollen: Prettier, ESLint, TypeScript, testerna och bygget. Körs också i GitHub Actions. |
+| `npm run format` | Formaterar koden med Prettier. |
+
+### Radslut på Windows
+
+Prettier väntar sig LF-radslut. Därför checkar `.gitattributes` ut alla textfiler
+med LF, även på Windows. Klonade du repot innan filen fanns kvar har filerna
+CRLF, och då fallerar `npm run check` på Prettier. Kör en gång från `frontend`:
+
+```powershell
+npm run format
+```
+
+Filerna får då LF. Git ser ingen ändring, eftersom innehållet är detsamma som i
+repot.
+
+`.editorconfig` gör att editorn skapar nya filer med LF. JetBrains-IDE:er och
+Visual Studio läser den direkt, VS Code behöver tillägget *EditorConfig for VS
+Code*. Skapar din editor ändå en fil med CRLF hjälper `npm run format`.
+
+## API-tester (Postman)
+
+Importera `docs/api/kundportal.postman_collection.json` och
+`docs/api/kundportal.postman_environment.json` i Postman, eller kör dem från
+terminalen. Se [docs/api/README.md](docs/api/README.md).
 
 ## Utveckling i teamet
 
