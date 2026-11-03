@@ -27,7 +27,7 @@ Frontenden på `frontend-v2` ska följa specen innan den läggs in i `main`, enl
 
 ### Avgränsning
 
-- **Får ändras:** `frontend/` (kod, tester och mockar), i `docs/verifieringsplan.md` frontendens rader, texten ovanför spårbarhetstabellen, avsnitten Hur testerna körs, Resultat och Begränsningar, frontendavsnitten i `CLAUDE.md`, och skillen och agentdefinitionen i `.claude/`.
+- **Får ändras:** `frontend/` (kod, tester och mockar), i `docs/verifieringsplan.md` frontendens rader, texten ovanför spårbarhetstabellen, avsnitten Hur testerna körs, Manuella kontroller, Resultat och Begränsningar, frontendavsnitten i `CLAUDE.md`, och skillen och agentdefinitionen i `.claude/`.
 - **Får inte ändras:** `backend/`, `docs/specs/`, övriga delar av `docs/` (även `docs/api/`), kontraktet för statusändringen, `backend/.env` och `frontend/.env.local`. Inga nya funktioner.
 - **Ingår inte:** A5 och A11, som bara prövas i backend, och K1, som teamet kontrollerar manuellt.
 - Om specen är oklar eller verkar fel ändras den inte. Agenten listar det som en fråga, och teamet beslutar.
@@ -165,5 +165,6 @@ Varje steg som ändrar ett test börjar med att testet ses misslyckas, vid behov
 
 - **Mot den riktiga backend:** statusändringen fungerar först när steg 4 i backenduppdraget är klart. Tills dess visar appen "Not Found". Kategori, prioritet och felmeddelanden följer besluten först efter steg 2 och 3 där. Det står också under Begränsningar i verifieringsplanen.
 - **Sex nya tester utan A#:** ett regressionstest för att inget går att redigera (steg 2), fyra tester för att mockarna följer backendbesluten (steg 3) och ett test för R6, samma skapad-tid (steg 4b). De prövar regler och beslut som inget acceptanskriterium täcker.
+- **Manuella kontroller:** efter steg 6 lade agenten på teamets begäran till ett avsnitt i verifieringsplanen med stegen för två manuella kontroller: hela kedjan mot riktig backend och K1. Kursen kräver att manuella kontroller skiljs från automatiska och går att upprepa. Båda är planerade, och teamet gör dem.
 - **Ansvarig i verifieringsplanen** fylldes i av agenten: Ruben för frontenddelarna och Otto för API-delarna som återstår. Teamet bekräftar.
 - **Utanför uppdraget:** `docs/api/README.md` hänvisar till `kundportal-sdd` och till en `README.sv.md` som inte finns.
