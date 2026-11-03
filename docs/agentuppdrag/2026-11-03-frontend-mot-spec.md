@@ -150,5 +150,7 @@ Varje steg som ändrar ett test börjar med att testet ses misslyckas, vid behov
 | Steg 4c: A9 med beskedet tillfälligt borttaget när statusen avvisas | Misslyckades: inget besked visades | 2026-11-03 |
 | Steg 4c: A10 med backendens besked tillfälligt ersatt av ett allmänt fel | Misslyckades: "Ärendet hittades inte" visades inte | 2026-11-03 |
 | Steg 4c: `npm run check` i `frontend/` | Format, lint, typer och bygge gick igenom. 50 tester i 5 filer passerade | 2026-11-03 |
+| Steg 5a: `filterArenden.test.ts` med sex tillfälliga fel i `filterArenden.ts`, ett i taget: skiftläget spelar roll, bara rubriken genomsöks, bara hela ord hittas, träffarna sorteras på id, filtren ignoreras, mellanslag tas inte bort | Varje fel gav misslyckade tester, och varje SF-test i steget misslyckades minst en gång | 2026-11-03 |
+| Steg 5a: `npm run check` i `frontend/` | Format, lint, typer och bygge gick igenom. 51 tester i 5 filer passerade | 2026-11-03 |
 
 ### Avvikelser och öppna frågor

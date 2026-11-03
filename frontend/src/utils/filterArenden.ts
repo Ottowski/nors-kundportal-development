@@ -1,6 +1,6 @@
 import type { Arende, ArendeFilter } from "../types/arende";
 
-// Search runs on the loaded list because the backend has no search endpoint yet (Q9 open).
+// Search runs on the loaded list (SF-Q6 in docs/specs/sok-filter.md). Keeps the list's order (SF-R7).
 export function filterArenden(arenden: readonly Arende[], filter: ArendeFilter): Arende[] {
   const query = filter.q?.trim().toLocaleLowerCase("sv-SE") ?? "";
 
@@ -17,7 +17,7 @@ export function filterArenden(arenden: readonly Arende[], filter: ArendeFilter):
     if (!query) {
       return true;
     }
-    // Title + description, per Q7 proposal.
+    // Title and description, also part of a word, regardless of case (SF-R1).
     return `${arende.rubrik}\n${arende.beskrivning}`.toLocaleLowerCase("sv-SE").includes(query);
   });
 }
