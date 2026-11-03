@@ -1,6 +1,6 @@
 # Agentuppdrag: Dokumentationsstruktur
 
-- **Ansvarig:** Ruben
+- **Ansvarig:** Nathalie & Ruben
 - **Datum:** 2026-10-29
 - **Agent och verktyg:** Claude Code (Claude Opus 5.5)
 - **PR:** ?
