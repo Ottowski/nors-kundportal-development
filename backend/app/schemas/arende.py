@@ -50,6 +50,10 @@ class ArendeCreate(BaseModel):
         return value
 
 
+class ArendeStatusUpdate(BaseModel):
+    status: ArendeStatus
+
+
 class Arende(BaseModel):
     """Ett sparat ärende. Oföränderligt, så 'skapad' kan aldrig ändras."""
 

@@ -4,7 +4,7 @@ from app.repositories.arende_repository import (
     ArendeRepository,
     get_arende_repository,
 )
-from app.schemas.arende import Arende, ArendeCreate
+from app.schemas.arende import Arende, ArendeCreate, ArendeStatusUpdate
 
 router = APIRouter(prefix="/arenden", tags=["Ärenden"])
 
@@ -30,6 +30,18 @@ def hamta_arende(
     repo: ArendeRepository = Depends(get_arende_repository),
 ) -> Arende:
     arende = repo.get_by_id(arende_id)
+    if arende is None:
+        raise HTTPException(status_code=404, detail="Ärendet hittades inte")
+    return arende
+
+
+@router.put("/{arende_id}/status", response_model=Arende)
+def andra_status(
+    arende_id: int,
+    data: ArendeStatusUpdate,
+    repo: ArendeRepository = Depends(get_arende_repository),
+) -> Arende:
+    arende = repo.update_status(arende_id, data.status)
     if arende is None:
         raise HTTPException(status_code=404, detail="Ärendet hittades inte")
     return arende

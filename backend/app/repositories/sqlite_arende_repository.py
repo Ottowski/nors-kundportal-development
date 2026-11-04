@@ -58,6 +58,22 @@ class SqliteArendeRepository(ArendeRepository):
             conn.close()
         return self._to_arende(row) if row else None
 
+    def update_status(
+        self, arende_id: int, new_status: ArendeStatus
+    ) -> Arende | None:
+        conn = get_connection(self._db_path)
+        try:
+            cursor = conn.execute(
+                "UPDATE arenden SET status = ? WHERE id = ?",
+                (new_status.value, arende_id),
+            )
+            conn.commit()
+            if cursor.rowcount == 0:
+                return None
+        finally:
+            conn.close()
+        return self.get_by_id(arende_id)
+
     @staticmethod
     def _to_arende(row: sqlite3.Row) -> Arende:
         return Arende(
