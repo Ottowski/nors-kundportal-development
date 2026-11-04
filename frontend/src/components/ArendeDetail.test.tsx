@@ -46,7 +46,19 @@ describe("ArendeDetail", () => {
     await userEvent.setup().selectOptions(await screen.findByLabelText("Ändra status"), "Pågående");
 
     expect(await screen.findByText("Pågående", { selector: ".badge" })).toBeInTheDocument();
-    expect(db.arenden[0]).toEqual({ ...before, status: "Pågående" });
+    expect(screen.getByRole("heading", { name: before.rubrik })).toBeInTheDocument();
+    const terms = screen.getAllByRole("term").map((term) => term.textContent);
+    const values = screen.getAllByRole("definition").map((value) => value.textContent);
+    expect(Object.fromEntries(terms.map((term, i) => [term, values[i]]))).toEqual({
+      Id: String(before.id),
+      Status: "Pågående",
+      Kategori: before.kategori,
+      Prioritet: before.prioritet,
+      Skapad: formatDate(before.skapad),
+      Beskrivning: before.beskrivning,
+    });
+    // The mock copies the other fields itself, so only the status in db depends on the component.
+    expect(db.arenden[0].status).toBe("Pågående");
     expect(onChanged).toHaveBeenCalledWith({ ...before, status: "Pågående" });
   });
 
