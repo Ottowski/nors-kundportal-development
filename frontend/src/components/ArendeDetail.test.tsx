@@ -67,10 +67,15 @@ describe("ArendeDetail", () => {
     expect(before.status).toBe("Nytt");
     // The list only offers allowed statuses, so the backend's rejection is simulated.
     // The override never writes to db, so the stored status is checked in the backend's API test.
+    // Today's backend prefixes the message with "Value error, ", which must not be shown (R12).
     server.use(
       http.post(`${API_BASE_URL}/arenden/:id/status`, () =>
         HttpResponse.json(
-          { detail: [{ type: "value_error", loc: ["body", "status"], msg: "Ogiltig status" }] },
+          {
+            detail: [
+              { type: "value_error", loc: ["body", "status"], msg: "Value error, Ogiltig status" },
+            ],
+          },
           { status: 422 },
         ),
       ),
@@ -78,7 +83,7 @@ describe("ArendeDetail", () => {
     const { onChanged } = renderDetail(before.id);
     await userEvent.setup().selectOptions(await screen.findByLabelText("Ändra status"), "Avslutat");
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("Ogiltig status");
+    expect(await screen.findByRole("alert")).toHaveTextContent(/^Ogiltig status$/);
     expect(screen.getByLabelText("Ändra status")).toHaveValue("Nytt");
     expect(screen.getByText("Nytt", { selector: ".badge" })).toBeInTheDocument();
     expect(onChanged).not.toHaveBeenCalled();
