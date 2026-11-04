@@ -51,7 +51,10 @@ describe("ArendeDetail", () => {
   });
 
   it("A9: an invalid status is rejected with a clear message and the status is still Nytt", async () => {
+    const before = db.arenden[0];
+    expect(before.status).toBe("Nytt");
     // The list only offers allowed statuses, so the backend's rejection is simulated.
+    // The override never writes to db, so the stored status is checked in the backend's API test.
     server.use(
       http.post(`${API_BASE_URL}/arenden/:id/status`, () =>
         HttpResponse.json(
@@ -60,14 +63,13 @@ describe("ArendeDetail", () => {
         ),
       ),
     );
-    const { onChanged } = renderDetail();
+    const { onChanged } = renderDetail(before.id);
     await userEvent.setup().selectOptions(await screen.findByLabelText("Ändra status"), "Avslutat");
 
     expect(await screen.findByRole("alert")).toHaveTextContent("Ogiltig status");
     expect(screen.getByLabelText("Ändra status")).toHaveValue("Nytt");
     expect(screen.getByText("Nytt", { selector: ".badge" })).toBeInTheDocument();
     expect(onChanged).not.toHaveBeenCalled();
-    expect(db.arenden[0].status).toBe("Nytt");
   });
 
   it("ignores a status response for a case that is no longer shown", async () => {
