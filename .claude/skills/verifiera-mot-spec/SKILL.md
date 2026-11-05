@@ -25,6 +25,18 @@ Frontenden på `frontend-v2` byggdes före specen. Därför arbetar vi baklänge
 
 För en agent betyder regel 1 och 4: ändra inte specen, utan rapportera avvikelsen så att teamet kan skriva en Q#. Rapportera kommandot du körde och den faktiska utskriften, inte en egen bedömning.
 
+## Checklista för varje test
+
+Gå igenom alla punkter för varje test och svara på var och en med ja, nej eller inte relevant, och radnummer. Hoppa inte över en punkt för att testet ser bra ut.
+
+1. **Görs handlingen i specen?** Testet ska göra det som står under Handling, till exempel skicka en otillåten kategori. Det räcker inte att visa hur gränssnittet reagerar på ett fel som testet själv har hittat på.
+2. **Kontrolleras utgångsläget före handlingen?** Om specen säger "två ärenden finns" ska testet kontrollera det innan handlingen, inte bara efteråt.
+3. **Kan varje `expect` misslyckas?** Ta en kontroll i taget och fråga: vilket fel i koden skulle göra just den här raden röd? Finns inget sådant fel prövar raden ingenting.
+4. **Ersätter en låtsad backend det som ska prövas?** När testet byter ut mocken med `server.use(...)` prövas inte längre mockens egna regler, och data i `db` ändras bara om den nya handlern gör det. En kontroll av `db` efter en sådan handler kan därför bli tom.
+5. **Prövar testet det som inte ska ändras?** Till exempel att inget nytt ärende sparas, eller att övriga fält är oförändrade.
+6. **Är beskedet begripligt enligt R12?** Kontrollera att testet visar beskedet på svenska och utan teknisk text, eller ange var det prövas i stället.
+7. **Är texter kopierade?** Om en felrubrik eller ett meddelande står både i testet och i koden eller mocken kan de börja skilja sig åt. Ange var.
+
 ## Vad testet ska visa
 
 Sammanfattning av kravspec.md. Vid skillnad gäller kravspec.md. A5 och A11 prövas bara i backend.
