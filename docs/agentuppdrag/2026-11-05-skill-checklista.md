@@ -3,7 +3,7 @@
 - **Ansvarig:** Nathalie
 - **Datum:** 2026-11-05
 - **Agent och verktyg:** Claude Code (Opus 5.5) i VS Code, Plan mode, med skillen `verifiera-mot-spec`
-- **PR:** [länk]
+- **PR:** [#9](https://github.com/Ottowski/nors-kundportal-development/pull/9)
 
 ## Före
 
