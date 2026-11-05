@@ -58,6 +58,7 @@ class SqliteArendeRepository(ArendeRepository):
             conn.close()
         return self._to_arende(row) if row else None
 
+# Uppdaterar status för ett ärende. Returnerar det uppdaterade ärendet eller None om det inte finns.
     def update_status(
         self, arende_id: int, new_status: ArendeStatus
     ) -> Arende | None:

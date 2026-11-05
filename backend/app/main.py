@@ -1,6 +1,8 @@
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.fel import hantera_valideringsfel
 from app.repositories.arende_repository import get_arende_repository
 from app.repositories.sqlite_arende_repository import SqliteArendeRepository
 from app.routers.arende_router import router as arende_router
@@ -20,6 +22,7 @@ app.add_middleware(
 )
 
 app.include_router(arende_router)
+app.add_exception_handler(RequestValidationError, hantera_valideringsfel)
 
 # Lokal koppling mot SQLite. Ta bort de här raderna för att gå tillbaka till minneslagring.
 _sqlite_repository = SqliteArendeRepository()

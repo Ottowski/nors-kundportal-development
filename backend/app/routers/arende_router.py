@@ -35,7 +35,7 @@ def hamta_arende(
     return arende
 
 
-@router.put("/{arende_id}/status", response_model=Arende)
+@router.post("/{arende_id}/status", response_model=Arende)
 def andra_status(
     arende_id: int,
     data: ArendeStatusUpdate,

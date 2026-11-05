@@ -50,7 +50,7 @@ I en vanlig terminal på samma dator tog A5 4,1 s för två starter. Varför sta
 
 `CLAUDE.md` förbjuder git-kommandon och åtkomst till `backend/.env` och `frontend/.env.local`. Det är inte prövat om verktyget stoppar dem tekniskt, så den gränsen vilar på instruktionen. Att installera paket kräver nätverk och ändrar `.venv`; det är inte heller prövat. Under planeringen begränsade instruktionen agenten till att läsa och skriva det här utkastet.
 
-**Steg 2–5 (Otto):** fylls i innan Otto börjar.
+**Steg 2–5 (Otto):** Copilot SDK i VS Code på Windows (PowerShell). Agenten kan läsa och skriva filer i repot, köra skalkommandon och starta lokala servrar. Kontrollerat 2026-11-04 med `backend/.venv`: Python 3.11.0, FastAPI 0.162.0, Pydantic 2.14.2 och pytest 9.2.0; httpx är inte installerat. Förbudet mot git-kommandon och mot `backend/.env` och `frontend/.env.local` vilar på instruktionen i `CLAUDE.md`; det är inte prövat om verktyget stoppar dem tekniskt. Att installera paket är inte prövat.
 
 ### Kontrollpunkter
 
@@ -126,7 +126,7 @@ Agenten stannar och väntar på teamet:
 >
 > Stanna sedan och vänta tills vi har godkänt planen. Skriv ingen kod förrän vi har sagt ja.
 
-**Steg 2–5 (Otto):** instruktionen läggs in här innan Otto börjar.
+**Steg 2–5 (Otto):** Följ planen och besluten under "Efter", steg 2–5, i den ordningen. Stanna vid kontrollpunkterna ovan och ändra ingen kod förrän teamet har sagt ja till planen. Börja varje steg med ett test som misslyckas, eller med en tillfällig ändring när koden redan fungerar. Följ frontendens kontrakt `POST /arenden/{id}/status` och lägg inga nya funktioner till. Kör inga git-kommandon.
 
 ## Efter
 
