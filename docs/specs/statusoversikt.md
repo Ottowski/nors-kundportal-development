@@ -94,6 +94,20 @@ Utgångsläget är S1–S4 utan söktext och utan valda filter, om inget annat a
 - **Förväntat resultat:** Ett felbesked visas. Ingen översikt visas, alltså inga nollor
 - **Kontrollerar:** SO-R5
 
+### SO-A7
+
+- **Utgångsläge:** Listan håller på att hämtas
+- **Handling:** Handläggaren öppnar sidan
+- **Förväntat resultat:** "Laddar ärenden…" visas. Ingen översikt visas, alltså inga nollor
+- **Kontrollerar:** SO-R5
+
+### SO-A8
+
+- **Utgångsläge:** Tre ärenden finns, alla med status *Avslutat*
+- **Handling:** Handläggaren öppnar listan
+- **Förväntat resultat:** Översikten visar Nytt 0, Pågående 0, Väntar på kund 0 och Avslutat 3, i den ordningen
+- **Kontrollerar:** SO-R1
+
 ## Kvalitetskrav
 
 - **SO-K1 – Skärmläsare:** Översikten har namnet "Antal ärenden per status", och varje siffra står ihop med sin status, så att en skärmläsare läser upp till exempel "Nytt 2". *Förslag (Nathalie).* **Kontrolleras genom:** ett automatiskt test som hittar översikten på dess namn och läser texten för varje status.
