@@ -14,7 +14,7 @@ const S1_S4 = withStatuses("Nytt", "Nytt", "Pågående", "Avslutat");
 const overview = () => screen.getByRole("list", { name: "Antal ärenden per status" });
 const items = () =>
   within(overview())
-    .getAllByRole("listitem")
+    .queryAllByRole("listitem")
     .map((item) => item.textContent);
 
 describe("StatusOverview (statusoversikt.md)", () => {
