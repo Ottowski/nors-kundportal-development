@@ -37,7 +37,7 @@ Om specen visar sig vara fel eller ofullständig ändrar vi inte specen i smyg f
 
 Testnamn börjar med id:t, till exempel `test_a2_saknad_rubrik_avvisas` (pytest) eller `it("A2: avvisar ärende utan rubrik")` (Vitest). Specen säger vilket R ett A kontrollerar; den här tabellen säger vilket test som kontrollerar ett A.
 
-Testerna vars namn börjar med `test_` är API-tester i `backend/tests/`. Övriga är frontendtester i `frontend/src/` som går mot mockar. Sökningens id har prefixet `SF-`. `–` i kolumnen Test betyder att inget test finns än, och `?` att teamet inte har bestämt ännu.
+Testerna vars namn börjar med `test_` är API-tester i `backend/tests/`. Övriga är frontendtester i `frontend/src/` som går mot mockar. Sökningens id har prefixet `SF-` och statusöversiktens `SO-`. `–` i kolumnen Test betyder att inget test finns än, och `?` att teamet inte har bestämt ännu.
 
 | A#/K#  | R#           | Typ        | Nivå           | Test                                                                                                              | Status    | Senaste resultat     | Ansvarig |
 | ------ | ------------ | ---------- | -------------- | ----------------------------------------------------------------------------------------------------------------- | --------- | -------------------- | -------- |
@@ -68,6 +68,15 @@ Testerna vars namn börjar med `test_` är API-tester i `backend/tests/`. Övrig
 | SF-A12 | SF-R6        | Gränsfall  | Komponent      | `SF-A12: '<script>' is plain text: 'Inga ärenden matchar', and the app keeps working` | Genomförd | Komponent: passerade 2026-11-03 | Ruben |
 | SF-A13 | SF-R9        | Happy path | Komponent      | `SF-A13: the list is unchanged while typing and is searched when Enter is pressed` | Genomförd | Komponent: passerade 2026-11-03 | Ruben |
 | SF-A14 | SF-R10       | Gränsfall  | Komponent      | `SF-A14: the search field holds at most 100 characters` | Genomförd | Komponent: passerade 2026-11-03 | Ruben |
+| SO-A1  | SO-R1, SO-R4 | Happy path | Enhet, komponent | `SO-A1: S1–S4 give Nytt 2, Pågående 1, Väntar på kund 0, Avslutat 1, in that order`, `SO-A1: shows the four statuses in order, with no buttons or links`, `SO-A1: opening the list shows Nytt 2, Pågående 1, Väntar på kund 0, Avslutat 1 and all four cases` | Genomförd | Enhet och komponent: passerade 2026-11-06 | Nathalie |
+| SO-A2  | SO-R1        | Gränsfall  | Enhet, komponent | `SO-A2: no cases give 0 for all four statuses`, `SO-A2: with no cases all four statuses show 0`, `SO-A2: with no cases the overview shows 0 for all four and the list 'Inga ärenden ännu'` | Genomförd | Enhet och komponent: passerade 2026-11-06 | Nathalie |
+| SO-A3  | SO-R3        | Happy path | Komponent      | `SO-A3: changing S1 from Nytt to Pågående updates the overview, the other counts are unchanged` | Genomförd | Komponent: passerade 2026-11-06 | Nathalie |
+| SO-A4  | SO-R3        | Happy path | Komponent      | `SO-A4: creating a valid case updates the overview to Nytt 3, the other counts are unchanged` | Genomförd | Komponent: passerade 2026-11-06 | Nathalie |
+| SO-A5  | SO-R2, SO-R4 | Gränsfall  | Komponent      | `SO-A5: searching 'xyz' and filtering Avslutat gives 'Inga ärenden matchar', the overview is unchanged` | Genomförd | Komponent: passerade 2026-11-06 | Nathalie |
+| SO-A6  | SO-R5        | Error path | Komponent      | `SO-A6: when the list cannot be fetched an error is shown and no overview` | Genomförd | Komponent: passerade 2026-11-06 | Nathalie |
+| SO-A7  | SO-R5        | Gränsfall  | Komponent      | `SO-A7: while the list is loading 'Laddar ärenden…' is shown and no overview` | Genomförd | Komponent: passerade 2026-11-06 | Nathalie |
+| SO-A8  | SO-R1        | Gränsfall  | Enhet, komponent | `SO-A8: three cases, all Avslutat, give Nytt 0, Pågående 0, Väntar på kund 0, Avslutat 3, in that order`, `SO-A8: opening the list with three Avslutat cases shows Nytt 0, Pågående 0, Väntar på kund 0, Avslutat 3` | Genomförd | Enhet och komponent: passerade 2026-11-06 | Nathalie |
+| SO-K1  | –            | –          | Komponent      | `SO-K1: the overview is named 'Antal ärenden per status' and each status reads together with its number`. App-testerna hittar också översikten på namnet | Genomförd | Komponent: passerade 2026-11-06 | Nathalie |
 
 - **Typ:** happy path, error path eller gränsfall.
 - **Nivå:** enhet, API, komponent eller manuell.
@@ -122,6 +131,21 @@ Kan göras redan nu, mot mockarna med `npm run dev:mock`, eftersom K1 gäller gr
 | ----- | --- | ------ | ------ |
 | – | – | – | Planerad |
 
+### Statusöversikten i appen
+
+Mot mockarna med `npm run dev:mock`. Prövar det som komponenttesterna inte visar: placeringen och att siffrorna ändras utan att sidan laddas om (SO-R3).
+
+| Steg | Handling | Förväntat | Kontrollerar |
+| ---- | -------- | --------- | ------------ |
+| 1 | Öppna sidan | Översikten står direkt under "Alla ärenden" och stämmer med listan: Nytt 1, Pågående 1, Väntar på kund 0, Avslutat 1 | SO-R1 |
+| 2 | Ändra status på "Faktura saknas" från Nytt till Pågående | Siffrorna ändras direkt, utan omladdning | SO-R3 |
+| 3 | Skapa ett nytt ärende | Nytt ökar med 1 | SO-R3 |
+| 4 | Sök på en text som inte finns | "Inga ärenden matchar", och siffrorna är oförändrade | SO-R2 |
+
+| Datum | Vem | Commit | Utfall |
+| ----- | --- | ------ | ------ |
+| 2026-11-06 | Nathalie | `8d9e688`, branch `statusoversikt` | Alla steg som förväntat. Märkena i översikten liknar knappar men går inte att klicka på (SO-R4). Att filtrera genom att klicka står under "Ingår inte" i specen |
+
 ## Resultat
 
 | Datum      | Commit                       | Kommando                           | Utfall   |
@@ -132,10 +156,12 @@ Kan göras redan nu, mot mockarna med `npm run dev:mock`, eftersom K1 gäller gr
 | 2026-11-03 | `60843cc`, branch `front-end-rebuild` (bygger på `frontend-v2`) | `python -m pytest` från `backend/` | 3 passed |
 | 2026-11-03 | `71c237b`, branch `front-end-rebuild`, granskning (Nathalie) | `npm run check` från `frontend/` och `python -m pytest` från `backend/` | Lint, typer, 54 passed och bygget gick igenom. format:check gick bara igenom med `--end-of-line auto` (CRLF i Windows). 3 passed |
 | 2026-11-04 | `b2e6fca`, branch `a9-test` ([agentuppdraget](agentuppdrag/2026-11-04-a9-test.md)) | `npm run check` från `frontend/` | 54 passed och bygget lyckades. Varje kontroll i A8 och A9 har setts misslyckas med ett tillfälligt fel |
+| 2026-11-06 | `8d9e688`, branch `statusoversikt` ([agentuppdraget](agentuppdrag/2026-11-05-statusoversikt.md)) | `npm run check` från `frontend/` | Format, lint, typer och bygge gick igenom. 68 passed (54 tidigare och 14 nya för statusöversikten). Varje kontroll i SO-testerna har setts misslyckas med ett tillfälligt fel |
 
 ## Begränsningar
 
 - Frontendtesterna går mot mockar. Inget automatiskt test visar att frontend och backend fungerar ihop. Det kontrolleras manuellt, se [Hela kedjan mot riktig backend](#hela-kedjan-mot-riktig-backend).
 - Mockarna följer besluten i [backenduppdraget](agentuppdrag/2026-11-02-backend-status-och-varden.md). Tills steg 2–4 där är klara svarar den riktiga backend annorlunda: statusändringen finns inte (appen visar "Not Found"), kategori och prioritet kontrolleras inte, och felmeddelandena kommer från Pydantic.
+- Statusöversiktens tester skrevs efter specen och före koden, och varje kontroll har setts misslyckas med ett tillfälligt fel, se [statusöversiktens agentuppdrag](agentuppdrag/2026-11-05-statusoversikt.md). De visar inte hur en riktig skärmläsare läser översikten (SO-K1), och inte heller att sidan inte laddas om (SO-R3). Det senare kontrolleras manuellt i [Statusöversikten i appen](#statusöversikten-i-appen).
 - Frontendens tester skrevs efter koden. Varje test i tabellen har jämförts med specen och setts misslyckas med en tillfällig felaktig ändring, se [frontenduppdraget](agentuppdrag/2026-11-03-frontend-mot-spec.md).
 - A2–A4, A8, A9 och A11 väntar på API-tester i backend. K1 är en planerad manuell kontroll.
