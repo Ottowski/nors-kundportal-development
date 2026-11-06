@@ -104,23 +104,60 @@ Agenten stannar och väntar på mig:
 
 ### Plan och mitt beslut
 
-[Agentens plan, och om den godkändes, ändrades eller stoppades.]
+Agenten planerade i Plan mode i en egen chatt, med mina egna filer stängda. Planen gav två sätt att bygga räknefunktionen (ett objekt eller en lista i specens ordning) och komponenten (`<ul>` eller `<dl>`). Agenten föreslog listan i båda fallen. Med `<ul>` kan testet hitta översikten på dess namn (SO-K1), vilket inte går med `<dl>`. För varje test angav den vilket tillfälligt fel som ska göra testet rött och vilket felmeddelande som väntas.
+
+**Mina beslut**
+
+- **Placering:** direkt under rubriken "Alla ärenden", som specen säger.
+- **StatusBadge:** översikten använder samma märken som tabellen. Ett märke är bara text, så skärmläsaren läser "Nytt 2".
+- **Två nya acceptanskriterier i specen före koden:** två planerade tester hette `SO-R1: …` och `SO-R5: …`. Testnamn ska börja med ett A-id, annars går de inte att spåra här. De prövade gränsfall som specen saknade exempel för, så jag lade till SO-A7 (listan laddas) och SO-A8 (alla ärenden har samma status).
+- **SO-A8 också i App:** agenten ville bara pröva SO-A8 på räknefunktionen "som du bad om", vilket jag inte hade gjort. Specens handling är "öppnar listan" (punkt 1 i skillens checklista), så SO-A8 fick ett App-test också.
+- **Fler tester i `App.test.tsx` än under "Får ändras":** SO-A1, SO-A2, SO-A7 och SO-A8, inte bara SO-A3–SO-A6. Bara App-testet kan visa listan.
+- **Ändring under arbetet:** i steg 3 fick agenten göra felen i produktionskoden, utom P2, som jag gjorde själv eftersom det prövar mitt beslut i SO-Q1. Agenten visade varje ändring och utskrift, och jag kontrollerade med `git status` att allt var återställt.
+
+**Plan**
+
+| Steg | Innehåll | Commit |
+| ---- | -------- | ------ |
+| 1 | Räknefunktionen och dess test (SO-A1, SO-A2, SO-A8) | "Räkna ärenden per status" |
+| 2 | Komponenten och dess test (SO-K1, SO-A1, SO-A2), regeln `.overview` | "Komponent för statusöversikt", "Test: tom statusöversikt ger tydlig diff" |
+| 3 | En rad i `App.tsx`, tester SO-A1–SO-A8 i `App.test.tsx` | `8d9e688` "Visa statusöversikten i appen" |
+| 4 | Slutrapport | – |
 
 ### Granskning
 
-- **Granskad av:** [namn]
+- **Granskad av:** Nathalie, 2026-11-06. Granskas också av någon i teamet i PR:en.
 - **Vad jag hittade:**
-- **Arbete utanför uppdraget som togs bort:**
+  - Två gånger blev testerna röda av fel anledning. Vid fel 2 låg fel 1 kvar, eftersom jag inte hade kontrollerat med `git status`. Vid fel 3 blev ett mellanslag `{" "}` när filen sparades. Agenten läste felmeddelandena och såg det. Båda kördes om.
+  - Vid fel 4 kraschade SO-A2 i en hjälpfunktion i stället för att bli rött på sin kontroll. Agenten sa att planen hade fel och bytte `getAllByRole` mot `queryAllByRole`.
+  - Agenten upptäckte själv att kontrollen av länkar saknade ett tillfälligt fel, och lade till fel 5.
+  - Agentens chatt stod en tid i läget "Edit automatically". Jag bytte till "Ask before edits" och kontrollerade med `git status` och `git diff` att bara det väntade hade ändrats.
+  - P2 visade att SO-A5 är det enda testet som märker om översikten bara räknar de ärenden som syns (SO-R2).
+- **Arbete utanför uppdraget som togs bort:** Inget. Agenten erbjöd sig att göra namnet "Antal ärenden per status" till en konstant i `App.test.tsx`. Jag sa nej, eftersom testerna redan var prövade.
 - **Accepterat, ändrat eller avvisat, och varför:**
+  - **Accepterat:** listan i specens ordning och `<ul>` med namn (kan testas på namnet), `queryAllByRole` (rätt kontroll blir röd), fel 5 och en liten marginal ovanför översikten (ser bra ut i appen).
+  - **Ändrat:** testnamnen `SO-R1`/`SO-R5` blev SO-A7 och SO-A8 i specen, och SO-A8 fick ett App-test.
+  - **Avvisat:** att ändra "Får ändras" i delen Före, som agentens slutrapport föreslog. Delen Före ska visa uppdraget som det var. Ändringarna står här.
 
 ### Verifiering
 
-[Kommandon som kördes och vad de faktiskt visade. Agentens egen bedömning räcker inte.]
+Felen i steg 1 och 2, och P2, gjorde jag själv. Efter varje fel återställde jag och kontrollerade med `git status`.
 
 | Kommando | Resultat | Datum |
 | -------- | -------- | ----- |
-|          |          |       |
+| `npx vitest run src/utils/countByStatus.test.ts`, fel a–c i `countByStatus.ts` (jag) | a: alla tre röda, Avslutat saknas. b: SO-A1 och SO-A8 röda, SO-A2 grönt som väntat. c: alla tre röda, statusarna med 0 saknas | 2026-11-05 |
+| `npx vitest run src/components/StatusOverview.test.tsx`, fel 1–5 i `StatusOverview.tsx` (jag) | 1: alla tre röda, listan saknar namn. 2: alla tre röda, 8 poster i stället för 4. 3: bara SO-A1 rött (knappar). 4: alla tre röda, nollorna saknas. 5: bara SO-A1 rött (länkar) | 2026-11-06 |
+| Fel i testet, `db.reset()` och utan `server.use` (agenten) | Varje App-test rött på sin rad för utgångsläget | 2026-11-06 |
+| `npx vitest run`, P1 och P3–P6 (agenten) | P1: 7 röda, SO-A6 grönt. P3: SO-A6 och SO-A7 röda. P4: SO-A3 och SO-A4 röda, listan uppdaterades men inte översikten. P5 och P6: 10 röda | 2026-11-06 |
+| `npx vitest run`, P2 `arenden={visible}` i `App.tsx` (jag) | Bara SO-A5 rött, rad 330: Nytt 0, Pågående 0, Avslutat 0 efter sökningen | 2026-11-06 |
+| `git status` efter sista felet | `working tree clean` | 2026-11-06 |
+| Jag: `npm run check` i `frontend/` på `8d9e688` | 68 passed och bygget lyckades | 2026-11-06 |
+| Jag: `npm run dev:mock` | Översikten under rubriken. Siffrorna ändras direkt vid statusändring och nytt ärende, och inte vid sökning. Se [verifieringsplanen](../verifieringsplan.md#statusöversikten-i-appen) | 2026-11-06 |
 
 ### Avvikelser och öppna frågor
 
-[Vad som återstår eller behöver undersökas.]
+- **Vad testerna inte visar:** att sidan inte laddas om (SO-R3, kontrollerat i appen i stället), hur en riktig skärmläsare läser översikten, att en siffra med `aria-hidden` skulle döljas, laddningen efter "Försök igen", och att frontend och backend fungerar ihop.
+- **Förklarade men inte prövade kontroller:** i `App.test.tsx` raderna för "Inga ärenden ännu", "Inga ärenden matchar", att mocken sparar status, att formuläret sparar och att inget ärende ändras. Felet skulle ligga i kod vi inte fick ändra, och beteendet har egna tester.
+- **Testerna jämför texten exakt.** Ett mellanslag sist i en post gör dem röda, fast en skärmläsare läser likadant. Jag valde att inte ändra det.
+- **Märkena i översikten liknar knappar** men går inte att klicka på (SO-R4). Att filtrera genom att klicka står under "Ingår inte" i specen och är ett förslag på fortsatt utveckling.
+- **Skillen `verifiera-mot-spec`** nämner bara A# och SF-A#. Checklistan fungerade ändå för SO-A#, eftersom instruktionen sa det.
