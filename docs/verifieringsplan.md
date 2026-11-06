@@ -53,7 +53,7 @@ Testerna vars namn börjar med `test_` är API-tester i `backend/tests/`. Övrig
 | A10    | R10, R12     | Error path | API, komponent | `test_a10_okant_arende_ger_svenskt_besked`, `A10: shows a clear message when the case does not exist` | Genomförd | API: passerade 2026-11-02, komponent: passerade 2026-11-03 | Ruben |
 | A11    | R3, R4, R12  | Error path | API            | –                                                                                                                 | Planerad  | –                    | Otto     |
 | A12    | R6           | Happy path | Enhet          | `A12: the most recently created case comes first and the oldest last` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
-| K1     | –            | –          | Manuell        | [K1 – bara tangentbord](#k1--bara-tangentbord) | Planerad  | –                    | Nathalie och Ruben |
+| K1     | –            | –          | Manuell        | [K1 – bara tangentbord](#k1--bara-tangentbord) | Genomförd | Manuell: godkänd 2026-11-06 | Nathalie och Ruben |
 | SF-A1  | SF-R1, SF-R7 | Happy path | Enhet          | `SF-A1: 'faktura' finds C3 and C1, with C3 first` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
 | SF-A2  | SF-R1        | Happy path | Enhet          | `SF-A2: 'FAKTURA' gives the same result as 'faktura'` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
 | SF-A3  | SF-R1        | Gränsfall  | Enhet          | `SF-A3: 'FÖR' finds only C1` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
@@ -120,7 +120,7 @@ Kan göras redan nu, mot mockarna med `npm run dev:mock`, eftersom K1 gäller gr
 
 | Datum | Vem | Commit | Utfall |
 | ----- | --- | ------ | ------ |
-| – | – | – | Planerad |
+| 2026-11-06 | Ruben (vid tangentbordet), Nathalie (observerade och antecknade) | `main` på `70a31e2` | Godkänd. Alla fem steg gick med bara tangentbord, och fokus syntes hela tiden. Esc stänger också panelen. Förbättringsförslag: när Nytt ärende öppnas stannar fokus på knappen, så man måste tabba genom sökfältet, filtren och listan innan man kommer till Rubrik. Teamet beslutar om fokus ska flyttas till formuläret |
 
 ## Resultat
 
@@ -138,4 +138,5 @@ Kan göras redan nu, mot mockarna med `npm run dev:mock`, eftersom K1 gäller gr
 - Frontendtesterna går mot mockar. Inget automatiskt test visar att frontend och backend fungerar ihop. Det kontrolleras manuellt, se [Hela kedjan mot riktig backend](#hela-kedjan-mot-riktig-backend).
 - Mockarna följer besluten i [backenduppdraget](agentuppdrag/2026-11-02-backend-status-och-varden.md). Tills steg 2–4 där är klara svarar den riktiga backend annorlunda: statusändringen finns inte (appen visar "Not Found"), kategori och prioritet kontrolleras inte, och felmeddelandena kommer från Pydantic.
 - Frontendens tester skrevs efter koden. Varje test i tabellen har jämförts med specen och setts misslyckas med en tillfällig felaktig ändring, se [frontenduppdraget](agentuppdrag/2026-11-03-frontend-mot-spec.md).
-- A2–A4, A8, A9 och A11 väntar på API-tester i backend. K1 är en planerad manuell kontroll.
+- A2–A4, A8, A9 och A11 väntar på API-tester i backend.
+- K1 är kontrollerad mot mockarna, inte mot riktig backend. Kontrollen gäller gränssnittet, så resultatet bör vara detsamma, men det är inte prövat.
