@@ -135,6 +135,6 @@ Kan göras redan nu, mot mockarna med `npm run dev:mock`, eftersom K1 gäller gr
 ## Begränsningar
 
 - Frontendtesterna går mot mockar. Inget automatiskt test visar att frontend och backend fungerar ihop. Det kontrolleras manuellt, se [Hela kedjan mot riktig backend](#hela-kedjan-mot-riktig-backend).
-- Mockarna följer besluten i [backenduppdraget](agentuppdrag/2026-11-02-backend-status-och-varden.md). Tills steg 2–4 där är klara svarar den riktiga backend annorlunda: statusändringen finns inte (appen visar "Not Found"), kategori och prioritet kontrolleras inte, och felmeddelandena kommer från Pydantic.
+- Mockarna och den riktiga backend följer samma beslut i [backenduppdraget](agentuppdrag/2026-11-02-backend-status-och-varden.md): statusändringen, kontrollen av kategori och prioritet och de svenska felmeddelandena. API-testerna visar att backend följer besluten, men inte att den svarar exakt som mockarna.
 - Frontendens tester skrevs efter koden. Varje test i tabellen har jämförts med specen och setts misslyckas med en tillfällig felaktig ändring, se [frontenduppdraget](agentuppdrag/2026-11-03-frontend-mot-spec.md).
-- A2–A4, A8, A9 och A11 väntar på API-tester i backend. K1 är en planerad manuell kontroll.
+- K1 är en planerad manuell kontroll.
