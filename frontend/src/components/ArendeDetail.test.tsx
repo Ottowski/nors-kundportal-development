@@ -46,28 +46,47 @@ describe("ArendeDetail", () => {
     await userEvent.setup().selectOptions(await screen.findByLabelText("Ändra status"), "Pågående");
 
     expect(await screen.findByText("Pågående", { selector: ".badge" })).toBeInTheDocument();
-    expect(db.arenden[0]).toEqual({ ...before, status: "Pågående" });
+    expect(screen.getByRole("heading", { name: before.rubrik })).toBeInTheDocument();
+    const terms = screen.getAllByRole("term").map((term) => term.textContent);
+    const values = screen.getAllByRole("definition").map((value) => value.textContent);
+    expect(Object.fromEntries(terms.map((term, i) => [term, values[i]]))).toEqual({
+      Id: String(before.id),
+      Status: "Pågående",
+      Kategori: before.kategori,
+      Prioritet: before.prioritet,
+      Skapad: formatDate(before.skapad),
+      Beskrivning: before.beskrivning,
+    });
+    // The mock copies the other fields itself, so only the status in db depends on the component.
+    expect(db.arenden[0].status).toBe("Pågående");
     expect(onChanged).toHaveBeenCalledWith({ ...before, status: "Pågående" });
   });
 
   it("A9: an invalid status is rejected with a clear message and the status is still Nytt", async () => {
+    const before = db.arenden[0];
+    expect(before.status).toBe("Nytt");
     // The list only offers allowed statuses, so the backend's rejection is simulated.
+    // The override never writes to db, so the stored status is checked in the backend's API test.
+    // Today's backend prefixes the message with "Value error, ", which must not be shown (R12).
     server.use(
       http.post(`${API_BASE_URL}/arenden/:id/status`, () =>
         HttpResponse.json(
-          { detail: [{ type: "value_error", loc: ["body", "status"], msg: "Ogiltig status" }] },
+          {
+            detail: [
+              { type: "value_error", loc: ["body", "status"], msg: "Value error, Ogiltig status" },
+            ],
+          },
           { status: 422 },
         ),
       ),
     );
-    const { onChanged } = renderDetail();
+    const { onChanged } = renderDetail(before.id);
     await userEvent.setup().selectOptions(await screen.findByLabelText("Ändra status"), "Avslutat");
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("Ogiltig status");
+    expect(await screen.findByRole("alert")).toHaveTextContent(/^Ogiltig status$/);
     expect(screen.getByLabelText("Ändra status")).toHaveValue("Nytt");
     expect(screen.getByText("Nytt", { selector: ".badge" })).toBeInTheDocument();
     expect(onChanged).not.toHaveBeenCalled();
-    expect(db.arenden[0].status).toBe("Nytt");
   });
 
   it("ignores a status response for a case that is no longer shown", async () => {

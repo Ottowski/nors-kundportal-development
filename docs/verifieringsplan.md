@@ -131,6 +131,7 @@ Kan göras redan nu, mot mockarna med `npm run dev:mock`, eftersom K1 gäller gr
 | 2026-11-03 | `60843cc`, branch `front-end-rebuild` (bygger på `frontend-v2`) | `npm run check` från `frontend/` | Format, lint, typer och bygge gick igenom. 54 passed |
 | 2026-11-03 | `60843cc`, branch `front-end-rebuild` (bygger på `frontend-v2`) | `python -m pytest` från `backend/` | 3 passed |
 | 2026-11-03 | `71c237b`, branch `front-end-rebuild`, granskning (Nathalie) | `npm run check` från `frontend/` och `python -m pytest` från `backend/` | Lint, typer, 54 passed och bygget gick igenom. format:check gick bara igenom med `--end-of-line auto` (CRLF i Windows). 3 passed |
+| 2026-11-04 | `b2e6fca`, branch `a9-test` ([agentuppdraget](agentuppdrag/2026-11-04-a9-test.md)) | `npm run check` från `frontend/` | 54 passed och bygget lyckades. Varje kontroll i A8 och A9 har setts misslyckas med ett tillfälligt fel |
 
 ## Begränsningar
 
