@@ -58,6 +58,26 @@ class SqliteArendeRepository(ArendeRepository):
             conn.close()
         return self._to_arende(row) if row else None
 
+# Uppdaterar status för ett ärende. Returnerar det uppdaterade ärendet eller None om det inte finns.
+    def update_status(
+        self, arende_id: int, new_status: ArendeStatus
+    ) -> Arende | None:
+        conn = get_connection(self._db_path)
+        try:
+            cursor = conn.execute(
+                "UPDATE arenden SET status = ? WHERE id = ?",
+                (new_status.value, arende_id),
+            )
+            row = None
+            if cursor.rowcount:
+                row = conn.execute(
+                    "SELECT * FROM arenden WHERE id = ?", (arende_id,)
+                ).fetchone()
+            conn.commit()
+        finally:
+            conn.close()
+        return self._to_arende(row) if row else None
+
     @staticmethod
     def _to_arende(row: sqlite3.Row) -> Arende:
         return Arende(
