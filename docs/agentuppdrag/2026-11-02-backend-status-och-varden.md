@@ -208,6 +208,7 @@ Tabellen visar agentens egna körningar i sandlådan. Teamets körningar i en va
 | Steg 1: A1 och A10 mot en ändrad kopia av backend (status Pågående i stället för Nytt, tom lista, engelskt besked vid 404) | Varje ändring gav ett misslyckat test | 2026-11-02 |
 | Steg 1, Ruben i vanlig terminal på `backend-steg-1` (utgår från `main`): `python -m pytest -v` från `backend/` | 3 passed (A1, A5, A10) | 2026-11-02 |
 | Steg 2–5, lokal körning med projektets venv: `.venv\Scripts\python.exe -m pytest -v` från `backend/` | 10 passed (A1–A5, A8–A11) på 40,17 s | 2026-11-05 |
+| PR-rättningar, lokal körning med projektets venv: `.venv\Scripts\python.exe -m pytest -v` från `backend/` | 12 passed, inklusive tester för stora id och samtidiga statusändringar, på 42,84 s | 2026-11-06 |
 
 ### Avvikelser och öppna frågor
 

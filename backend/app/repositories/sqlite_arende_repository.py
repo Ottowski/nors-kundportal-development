@@ -68,12 +68,15 @@ class SqliteArendeRepository(ArendeRepository):
                 "UPDATE arenden SET status = ? WHERE id = ?",
                 (new_status.value, arende_id),
             )
+            row = None
+            if cursor.rowcount:
+                row = conn.execute(
+                    "SELECT * FROM arenden WHERE id = ?", (arende_id,)
+                ).fetchone()
             conn.commit()
-            if cursor.rowcount == 0:
-                return None
         finally:
             conn.close()
-        return self.get_by_id(arende_id)
+        return self._to_arende(row) if row else None
 
     @staticmethod
     def _to_arende(row: sqlite3.Row) -> Arende:

@@ -563,7 +563,7 @@
         {
           "name": "Edit case",
           "request": {
-            "method": "PUT",
+            "method": "POST",
             "header": [
               {
                 "key": "Content-Type",

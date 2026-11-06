@@ -141,3 +141,17 @@ def test_a10_okant_arende_ger_svenskt_besked(tmp_path):
 
     assert status == 404
     assert svar == {"detail": "Ärendet hittades inte"}
+
+# Testfall för att kontrollera att stora id ger 404 vid hämtning och statusändring.
+def test_a10_stora_id_ger_404_for_hamtning_och_statusandring(tmp_path):
+    with kor_server(tmp_path / "nors.db") as url:
+        for arende_id in (2**63 - 1, 2**63, 99999999999999999999, -(2**63) - 1):
+            adress = f"{url}/arenden/{arende_id}"
+            assert anrop(adress) == (404, {"detail": "Ärendet hittades inte"})
+            assert anrop(f"{adress}/status", {"status": "Pågående"}) == (
+                404, {"detail": "Ärendet hittades inte"}
+            )
+
+        status, svar = anrop(f"{url}/arenden/{2**63}/status", {"status": "fel"})
+        assert status == 422
+        assert _besked(svar, "status") == ["Ogiltig status"]
