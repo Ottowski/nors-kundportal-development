@@ -135,4 +135,4 @@ K1 i [kravspec.md](kravspec.md) gäller också, men översikten har inget att kl
 - [x] Exemplen säger vad som inte ska försvinna eller ändras.
 - [x] Det som saknar svar står som öppen fråga.
 - [x] Egna förslag är märkta.
-- [ ] En annan person kan bygga och kontrollera utifrån specen utan att fråga oss. *(Kontrolleras när någon i teamet granskar PR:en.)*
+- [x] En annan person kan bygga och kontrollera utifrån specen utan att fråga oss. *(Kontrollerat av Ruben i granskningen av [PR #12](https://github.com/Ottowski/nors-kundportal-development/pull/12), 2026-11-08.)*
