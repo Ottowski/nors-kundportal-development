@@ -2,7 +2,7 @@ from app.repositories.arende_repository import InMemoryArendeRepository
 from app.schemas.arende import ArendeCreate, ArendeStatus
 
 # Testfall för att kontrollera att uppdatering av status fungerar korrekt.
-def test_update_status_changes_only_status_and_missing_returns_none():
+def test_a8_minneslagring_andrar_bara_status_och_okant_id_ger_none():
     repo = InMemoryArendeRepository()
     skapat = repo.create(
         ArendeCreate(
