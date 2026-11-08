@@ -2,7 +2,8 @@
 
 Specen beskriver vad lösningen ska göra i kärnflödet. Kursens uppgiftsbeskrivning
 finns ordagrant i [uppdrag.md](../uppdrag.md). Tillägget sökning och filtrering
-specificeras i [sok-filter.md](sok-filter.md). Arbetssättet beskrivs i
+specificeras i [sok-filter.md](sok-filter.md) och tillägget statusöversikt i
+[statusoversikt.md](statusoversikt.md). Arbetssättet beskrivs i
 [spec-driven-dev.md](spec-driven-dev.md) och strukturen följer
 [specmallen](../mallar/spec.md).
 
@@ -16,7 +17,7 @@ specificeras i [sok-filter.md](sok-filter.md). Arbetssättet beskrivs i
 | Ändra status | R8, A8 | – |
 | Minst ett felfall med begripligt besked | R3, R9, R10, R12, A2–A4, A9–A11 | – |
 | Ärendets fält (rubrik, beskrivning, kategori, prioritet, status, skapad) | "Ett ärende ska innehålla", R1 | – |
-| Kompletterande funktion, specificerad före implementation | R11, [sok-filter.md](sok-filter.md) | Prototypen fanns före specen, se [beslut.md](../beslut.md) |
+| Kompletterande funktion, specificerad före implementation | R11, [sok-filter.md](sok-filter.md), R13, [statusoversikt.md](statusoversikt.md) | Sökningens prototyp fanns före specen, se [beslut.md](../beslut.md). Statusöversikten specificerades före koden |
 | Automatiserade tester med happy och error paths | [verifieringsplan.md](../verifieringsplan.md) (inget R) | – |
 | Kan köras och demonstreras av någon annan | [README](../../README.md) (inget R) | Kan bli ett kvalitetskrav |
 | Bara påhittade kunduppgifter; lokal lösning; ingen drift, inget moln, inga integrationer; ingen AI-funktion | Avgränsning, "Ingår inte" | – |
@@ -49,6 +50,7 @@ verifieras med automatiserade tester.
 - Ändra status
 - Begripliga felmeddelanden vid felaktig användning
 - Tillägg: sökning och filtrering
+- Tillägg: statusöversikt
 - Automatiserade tester (happy paths, error paths, gränsfall)
 - Körinstruktioner så att någon annan kan köra lösningen
 
@@ -109,6 +111,7 @@ noll eller flera ärenden.
 - **R10 – Ärende saknas:** Om ett ärende som inte finns efterfrågas får användaren ett begripligt besked.
 - **R11 – Sökning och filtrering:** Specificeras i [sok-filter.md](sok-filter.md).
 - **R12 – Begripligt besked:** Ett begripligt besked är på svenska och innehåller inget tekniskt felmeddelande.
+- **R13 – Statusöversikt:** Specificeras i [statusoversikt.md](statusoversikt.md).
 
 ## Acceptanskriterier
 

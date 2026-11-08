@@ -1,11 +1,13 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { describe, expect, it } from "vitest";
 import App from "./App";
 import { API_BASE_URL } from "./api/arendenApi";
+import { seedArenden } from "./mocks/data";
 import { db } from "./mocks/handlers";
 import { server } from "./mocks/node";
+import type { Arende } from "./types/arende";
 import { formatDate } from "./utils/formatDate";
 
 // The text in each cell of each row in the list, without the header row.
@@ -217,5 +219,145 @@ describe("App – search and filters (sok-filter.md)", () => {
 
     await user.type(screen.getByLabelText("Sök"), "a".repeat(101));
     expect(screen.getByLabelText("Sök")).toHaveValue("a".repeat(100));
+  });
+});
+
+// S1–S4 from docs/specs/statusoversikt.md: S1, S2 and S4 are C1–C3 with S2 set to Nytt.
+// A new copy each time, since creating a case adds to the array.
+function statusCases(): Arende[] {
+  const [c1, c2, c3] = seedArenden();
+  return [
+    c1,
+    { ...c2, status: "Nytt" },
+    {
+      id: 4,
+      rubrik: "Paketet har inte kommit",
+      beskrivning: "Kunden väntar fortfarande på sitt paket.",
+      kategori: "Leverans",
+      prioritet: "Medel",
+      status: "Pågående",
+      skapad: "2026-10-23T10:00:00Z",
+    },
+    c3,
+  ];
+}
+
+const S1_S4_COUNTS = ["Nytt 2", "Pågående 1", "Väntar på kund 0", "Avslutat 1"];
+
+// Found by its name, as a screen reader user would (SO-K1).
+const overview = () => screen.queryByRole("list", { name: "Antal ärenden per status" });
+// queryAll, so that an empty overview gives a diff instead of failing in the helper.
+const overviewItems = () =>
+  within(screen.getByRole("list", { name: "Antal ärenden per status" }))
+    .queryAllByRole("listitem")
+    .map((item) => item.textContent);
+
+describe("App – status overview (statusoversikt.md)", () => {
+  it("SO-A1: opening the list shows Nytt 2, Pågående 1, Väntar på kund 0, Avslutat 1 and all four cases", async () => {
+    db.reset(statusCases());
+    expect(db.arenden).toHaveLength(4);
+    render(<App />);
+
+    expect(await rowTitles()).toEqual([
+      "Paketet har inte kommit",
+      "Fel på faktura",
+      "Kan inte logga in",
+      "Faktura saknas",
+    ]);
+    expect(overviewItems()).toEqual(S1_S4_COUNTS);
+  });
+
+  it("SO-A2: with no cases the overview shows 0 for all four and the list 'Inga ärenden ännu'", async () => {
+    db.reset([]);
+    expect(db.arenden).toEqual([]);
+    render(<App />);
+
+    expect(await screen.findByText("Inga ärenden ännu")).toBeInTheDocument();
+    expect(overviewItems()).toEqual(["Nytt 0", "Pågående 0", "Väntar på kund 0", "Avslutat 0"]);
+  });
+
+  it("SO-A3: changing S1 from Nytt to Pågående updates the overview, the other counts are unchanged", async () => {
+    db.reset(statusCases());
+    render(<App />);
+    const user = userEvent.setup();
+    await rowTitles();
+    expect(overviewItems()).toEqual(S1_S4_COUNTS);
+
+    await user.click(screen.getByText("Faktura saknas"));
+    await user.selectOptions(await screen.findByLabelText("Ändra status"), "Pågående");
+    await screen.findByText("Pågående", { selector: "aside .badge" });
+
+    await waitFor(() =>
+      expect(overviewItems()).toEqual(["Nytt 1", "Pågående 2", "Väntar på kund 0", "Avslutat 1"]),
+    );
+    expect(db.arenden.find((a) => a.rubrik === "Faktura saknas")?.status).toBe("Pågående");
+  });
+
+  it("SO-A4: creating a valid case updates the overview to Nytt 3, the other counts are unchanged", async () => {
+    db.reset(statusCases());
+    render(<App />);
+    const user = userEvent.setup();
+    await rowTitles();
+    expect(overviewItems()).toEqual(S1_S4_COUNTS);
+
+    await user.click(screen.getByRole("button", { name: "Nytt ärende" }));
+    const side = screen.getByRole("complementary", { name: "Nytt ärende" });
+    await user.type(within(side).getByLabelText("Rubrik"), "Leverans försenad");
+    await user.type(within(side).getByLabelText("Beskrivning"), "Paketet har inte kommit.");
+    await user.selectOptions(within(side).getByLabelText("Kategori"), "Leverans");
+    await user.selectOptions(within(side).getByLabelText("Prioritet"), "Hög");
+    await user.click(within(side).getByRole("button", { name: "Skapa ärende" }));
+
+    await waitFor(() =>
+      expect(overviewItems()).toEqual(["Nytt 3", "Pågående 1", "Väntar på kund 0", "Avslutat 1"]),
+    );
+    expect(await rowTitles()).toHaveLength(5);
+    expect(db.arenden).toHaveLength(5);
+  });
+
+  it("SO-A5: searching 'xyz' and filtering Avslutat gives 'Inga ärenden matchar', the overview is unchanged", async () => {
+    db.reset(statusCases());
+    const before = structuredClone(db.arenden);
+    render(<App />);
+    const user = userEvent.setup();
+    await rowTitles();
+    expect(overviewItems()).toEqual(S1_S4_COUNTS);
+
+    await user.type(screen.getByLabelText("Sök"), "xyz{Enter}");
+    await user.selectOptions(screen.getByLabelText("Filtrera status"), "Avslutat");
+
+    expect(await screen.findByText("Inga ärenden matchar")).toBeInTheDocument();
+    expect(overviewItems()).toEqual(S1_S4_COUNTS);
+    expect(db.arenden).toEqual(before);
+  });
+
+  it("SO-A6: when the list cannot be fetched an error is shown and no overview", async () => {
+    server.use(http.get(`${API_BASE_URL}/arenden`, () => HttpResponse.error()));
+    render(<App />);
+
+    // Wait for the error first, otherwise the overview is only missing because the list is loading.
+    expect(await screen.findByRole("alert")).toHaveTextContent("Kunde inte nå servern");
+    expect(overview()).not.toBeInTheDocument();
+  });
+
+  it("SO-A7: while the list is loading 'Laddar ärenden…' is shown and no overview", async () => {
+    db.reset(statusCases());
+    render(<App />);
+
+    expect(screen.getByRole("status")).toHaveTextContent("Laddar ärenden…");
+    expect(overview()).not.toBeInTheDocument();
+
+    // Once loaded the overview appears, so it was missing because the list was loading.
+    await rowTitles();
+    expect(overviewItems()).toEqual(S1_S4_COUNTS);
+  });
+
+  it("SO-A8: opening the list with three Avslutat cases shows Nytt 0, Pågående 0, Väntar på kund 0, Avslutat 3", async () => {
+    db.reset(seedArenden().map((a) => ({ ...a, status: "Avslutat" as const })));
+    expect(db.arenden.map((a) => a.status)).toEqual(["Avslutat", "Avslutat", "Avslutat"]);
+    render(<App />);
+
+    expect(await rowTitles()).toHaveLength(3);
+    expect(overviewItems()).toEqual(["Nytt 0", "Pågående 0", "Väntar på kund 0", "Avslutat 3"]);
   });
 });
