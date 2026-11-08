@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Kundserviceportalen NORS API",
-    "description": "Ärenden API (FastAPI backend). Requirement ids (R#, A#) refer to kundportal-sdd/specs/arenden.md and sok-filter.md.",
+    "description": "Ärenden API (FastAPI backend). Requirement ids (R#, A#) refer to docs/specs/kravspec.md and docs/specs/sok-filter.md.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -393,46 +393,6 @@
           ]
         },
         {
-          "name": "A10 Get missing case → 404",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/arenden/999999",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "arenden",
-                "999999"
-              ]
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status 404\", () => pm.response.to.have.status(404));",
-                  "pm.test(\"Clear message\", () => pm.expect(pm.response.json().detail).to.eql(\"Ärendet hittades inte\"));"
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Proposed (not in backend yet)",
-      "description": "Shape used by the frontend mocks (frontend/src/mocks/handlers.ts). Expected to fail until the backend adds them.",
-      "item": [
-        {
           "name": "A8 Change status",
           "request": {
             "method": "POST",
@@ -462,7 +422,7 @@
                 }
               }
             },
-            "description": "R8. Proposed endpoint."
+            "description": "R8. Change case status."
           },
           "event": [
             {
@@ -507,7 +467,7 @@
                 }
               }
             },
-            "description": "R9. Proposed endpoint."
+            "description": "R9. Reject an invalid status."
           },
           "event": [
             {
@@ -521,6 +481,46 @@
             }
           ]
         },
+        {
+          "name": "A10 Get missing case → 404",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/arenden/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "arenden",
+                "999999"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Clear message\", () => pm.expect(pm.response.json().detail).to.eql(\"Ärendet hittades inte\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Not implemented in backend",
+      "description": "Search/filter requests are proposed; editing and deletion are outside the current specification.",
+      "item": [
         {
           "name": "A17 Unknown status filter → 422",
           "request": {
@@ -563,7 +563,7 @@
         {
           "name": "Edit case",
           "request": {
-            "method": "POST",
+            "method": "PUT",
             "header": [
               {
                 "key": "Content-Type",

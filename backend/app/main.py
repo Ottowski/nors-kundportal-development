@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 from app.fel import hantera_valideringsfel
 from app.repositories.arende_repository import get_arende_repository
@@ -23,6 +26,24 @@ app.add_middleware(
 
 app.include_router(arende_router)
 app.add_exception_handler(RequestValidationError, hantera_valideringsfel)
+
+
+async def hantera_http_fel(
+    _: Request, exc: StarletteHTTPException
+) -> JSONResponse:
+    detail = exc.detail
+    if detail == "Not Found":
+        detail = "Sidan hittades inte"
+    elif detail == "Method Not Allowed":
+        detail = "Metoden är inte tillåten"
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": detail},
+        headers=exc.headers,
+    )
+
+
+app.add_exception_handler(StarletteHTTPException, hantera_http_fel)
 
 # Lokal koppling mot SQLite. Ta bort de här raderna för att gå tillbaka till minneslagring.
 _sqlite_repository = SqliteArendeRepository()

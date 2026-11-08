@@ -2,8 +2,10 @@ from fastapi import Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-PREFIX = "Value error, "
 # Prefix som används för tekniska felmeddelanden från FastAPI.
+PREFIX = "Value error, "
+
+
 def _svensk_text(fel: dict) -> str:
     if fel["type"] == "missing":
         return "Måste fyllas i"

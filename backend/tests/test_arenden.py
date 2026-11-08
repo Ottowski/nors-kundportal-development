@@ -43,15 +43,16 @@ def _besked(svar: dict, falt: str) -> list[str]:
 
 # Hjälpfunktion för att kontrollera att ett ärende avvisas och inget sparas.
 def _avvisas_och_inget_sparas(url: str, utan: dict, falt: str, forvantat: str) -> None:
-    """Skapar två ärenden, försöker skapa ett tredje och kontrollerar A2/A3."""
+    """Skapa två ärenden och kontrollera att ett ogiltigt tredje inte sparas."""
     for _ in range(2):
         assert anrop(f"{url}/arenden", GILTIGT)[0] == 201
+    _, fore = anrop(f"{url}/arenden")
     status, svar = anrop(f"{url}/arenden", utan)
-    _, alla = anrop(f"{url}/arenden")
+    _, efter = anrop(f"{url}/arenden")
 
     assert status == 422
     assert _besked(svar, falt) == [forvantat]
-    assert len(alla) == 2
+    assert efter == fore
 
 # Testfall för att kontrollera att rubrikfältet valideras korrekt.
 def test_a2_saknad_eller_tom_rubrik_avvisas_och_inget_sparas(tmp_path):
@@ -155,3 +156,25 @@ def test_a10_stora_id_ger_404_for_hamtning_och_statusandring(tmp_path):
         status, svar = anrop(f"{url}/arenden/{2**63}/status", {"status": "fel"})
         assert status == 422
         assert _besked(svar, "status") == ["Ogiltig status"]
+
+# Testfall för att kontrollera att HTTP-fel för metod och sökväg är på svenska.
+def test_r12_http_fel_for_metod_och_sokvag_ar_pa_svenska(tmp_path):
+    with kor_server(tmp_path / "nors.db") as url:
+        put_status, put_svar = anrop(f"{url}/arenden/1", method="PUT")
+        delete_status, delete_svar = anrop(f"{url}/arenden/1", method="DELETE")
+        path_status, path_svar = anrop(f"{url}/fel-sokvag")
+
+    assert put_status == 405
+    assert put_svar == {"detail": "Metoden är inte tillåten"}
+    assert delete_status == 405
+    assert delete_svar == {"detail": "Metoden är inte tillåten"}
+    assert path_status == 404
+    assert path_svar == {"detail": "Sidan hittades inte"}
+
+
+def test_r12_text_med_ensam_unicode_surrogat_avvisas_pa_svenska(tmp_path):
+    with kor_server(tmp_path / "nors.db") as url:
+        status, svar = anrop(f"{url}/arenden", {**GILTIGT, "rubrik": "\ud800"})
+
+    assert status == 422
+    assert _besked(svar, "rubrik") == ["Texten innehåller ogiltiga Unicode-tecken"]

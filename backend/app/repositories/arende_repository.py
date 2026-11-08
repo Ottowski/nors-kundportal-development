@@ -6,7 +6,7 @@ from app.schemas.arende import Arende, ArendeCreate, ArendeStatus
 
 
 class ArendeRepository(ABC):
-    """Kontrakt för lagring av ärenden. Implementera mot databasen senare."""
+    """Kontrakt för lagring av ärenden."""
 
     @abstractmethod
     def create(self, data: ArendeCreate) -> Arende: ...
@@ -24,7 +24,7 @@ class ArendeRepository(ABC):
 
 
 class InMemoryArendeRepository(ArendeRepository):
-    """Tillfällig lagring i minnet tills databaskopplingen finns."""
+    """Lagring i minnet för tester och användning utan SQLite-override."""
 
     def __init__(self) -> None:
         self._arenden: dict[int, Arende] = {}
