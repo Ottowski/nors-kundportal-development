@@ -55,7 +55,7 @@ Testerna vars namn börjar med `test_` är API-tester i `backend/tests/`. Övrig
 | A12    | R6           | Happy path | Enhet          | `A12: the most recently created case comes first and the oldest last` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
 | –      | R12          | Error path | API            | `test_r12_http_fel_for_metod_och_sokvag_ar_pa_svenska` | Genomförd | API: passerade 2026-11-09 | Otto |
 | –      | R12          | Gränsfall  | API            | `test_r12_text_med_ensam_unicode_surrogat_avvisas_pa_svenska` | Genomförd | API: passerade 2026-11-09 | Otto |
-| –      | ?            | Gränsfall  | Enhet          | `test_legacy_varden_returneras_oforandrade` | Genomförd | Enhet: passerade 2026-11-09. Att gamla värden returneras oförändrade är inte beslutat, se [PR #10](https://github.com/Ottowski/nors-kundportal-development/pull/10) | Otto |
+| –      | –            | Gränsfall  | Enhet          | `test_legacy_varden_returneras_oforandrade` | Genomförd | Enhet: passerade 2026-11-09. Följer beslutet i [backenduppdraget](agentuppdrag/2026-11-02-backend-status-och-varden.md#plan-och-vårt-beslut): ingen CHECK för kategori och prioritet, så värdena kontrolleras när de sparas, inte när de läses | Otto |
 | K1     | –            | –          | Manuell        | [K1 – bara tangentbord](#k1--bara-tangentbord) | Genomförd | Manuell: godkänd 2026-11-06 | Nathalie och Ruben |
 | SF-A1  | SF-R1, SF-R7 | Happy path | Enhet          | `SF-A1: 'faktura' finds C3 and C1, with C3 first` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
 | SF-A2  | SF-R1        | Happy path | Enhet          | `SF-A2: 'FAKTURA' gives the same result as 'faktura'` | Genomförd | Enhet: passerade 2026-11-03 | Ruben |
