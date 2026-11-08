@@ -44,6 +44,16 @@
   justify-content: space-between;
 }
 
+/* Status overview under the heading (docs/specs/statusoversikt.md). */
+.overview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin: var(--space-sm) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
 .layout {
   display: grid;
   gap: var(--space-lg);
