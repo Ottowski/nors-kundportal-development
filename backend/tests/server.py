@@ -26,11 +26,16 @@ def _ledig_port() -> int:
         return s.getsockname()[1]
 
 
-def anrop(url: str, data: dict | None = None) -> tuple[int, object]:
-    """GET, eller POST om data anges. Returnerar statuskod och JSON, även vid 4xx."""
+def anrop(
+    url: str, data: dict | None = None, method: str | None = None
+) -> tuple[int, object]:
+    """Anropa API:t och returnera statuskod och JSON, även vid 4xx."""
     body = json.dumps(data).encode() if data is not None else None
     request = urllib.request.Request(
-        url, data=body, headers={"Content-Type": "application/json"}
+        url,
+        data=body,
+        headers={"Content-Type": "application/json"},
+        method=method,
     )
     try:
         with urllib.request.urlopen(request, timeout=5) as response:

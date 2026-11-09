@@ -6,6 +6,7 @@ import { ArendeDetail } from "./components/ArendeDetail";
 import { ArendeForm } from "./components/ArendeForm";
 import { ArendeList } from "./components/ArendeList";
 import { SearchFilterBar } from "./components/SearchFilterBar";
+import { StatusOverview } from "./components/StatusOverview";
 import type { Arende, ArendeFilter } from "./types/arende";
 import { filterArenden, sortNewestFirst } from "./utils/filterArenden";
 
@@ -73,6 +74,7 @@ function App() {
         <div>
           <p className="eyebrow">NORS · Kundserviceportalen</p>
           <h1>Alla ärenden</h1>
+          {list.kind === "loaded" && <StatusOverview arenden={list.arenden} />}
         </div>
         <button type="button" className="button" onClick={() => open({ kind: "create" })}>
           <span aria-hidden="true">+</span> Nytt ärende

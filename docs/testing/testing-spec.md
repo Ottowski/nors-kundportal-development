@@ -29,7 +29,7 @@
 ┌──────┬──────┬───────────────────────────┬────────────────┬────────────────────────────────────┐
 │ Part │ Task │ Test activity             │ Status         │ Result                             │
 ├──────┼──────┼───────────────────────────┼────────────────┼────────────────────────────────────┤
-│ A    │ QA-1 │ Frontend tests (Vitest,   │ Done           │ 54 of 54 pass on 2026-11-09        │
+│ A    │ QA-1 │ Frontend tests (Vitest,   │ Done           │ 68 of 68 pass on 2026-11-09        │
 │      │      │ Testing Library, MSW)     │                │                                    │
 ├──────┼──────┼───────────────────────────┼────────────────┼────────────────────────────────────┤
 │ A    │ QA-2 │ API tests on existing     │ Done           │ 20 of 20 assertions pass on        │
@@ -105,17 +105,18 @@ A fast suite that shows which criteria are covered (see
 ┌────────────┬───────┬──────────┬───────────────────┬────────────────────────────────┐
 │ Test files │ Tests │ Result   │ Environment       │ Setup                          │
 ├────────────┼───────┼──────────┼───────────────────┼────────────────────────────────┤
-│ 5          │ 54    │ All pass │ jsdom, mocked API │ frontend/src/test/setup.ts,    │
+│ 7          │ 68    │ All pass │ jsdom, mocked API │ frontend/src/test/setup.ts,    │
 │            │       │          │                   │ frontend/src/mocks/handlers.ts │
 └────────────┴───────┴──────────┴───────────────────┴────────────────────────────────┘
 ```
 
-Evidence: [2026-11-09 run](evidence/2026-11-09-baseline-npm-run-check.txt).
+Evidence: [2026-11-09 run after merging main](evidence/2026-11-09-baseline-after-merge-npm-run-check.txt).
+Before the merge, 54 of 54 passed in 5 files ([2026-11-09 run](evidence/2026-11-09-baseline-npm-run-check.txt)).
 
 **Limit:** these tests run in jsdom against mocks. They do not prove the app works in a real browser
-or against the real backend. The status change passes here but fails against the real backend until
-`POST /arenden/{id}/status` exists (step 4 of the
-[backend agent assignment](../agentuppdrag/2026-11-02-backend-status-och-varden.md)). A component
+or against the real backend. `POST /arenden/{id}/status` was added to the backend on 2026-11-09
+(step 4 of the [backend agent assignment](../agentuppdrag/2026-11-02-backend-status-och-varden.md)),
+but QA has not yet checked the status change against it (open item 5). A component
 that catches errors could also hide a rejected request, so a test still has to check the result on
 screen.
 
@@ -200,14 +201,10 @@ npx newman run docs/api/kundportal.postman_collection.json \
 └───────────────────┴──────────┴────────────┴────────────────────────────────────────────┘
 ```
 
-```text
-┌───────────────────────────┬────────────────────┬────────────────────────────────────┐
-│ Missing endpoint          │ Direct call result │ Needed for                         │
-├───────────────────────────┼────────────────────┼────────────────────────────────────┤
-│ POST /arenden/{id}/status │ 404                │ A8, A9 (step 4 of the backend      │
-│                           │                    │ agent assignment)                  │
-└───────────────────────────┴────────────────────┴────────────────────────────────────┘
-```
+`POST /arenden/{id}/status`, needed for A8 and A9, gave 404 on 2026-11-05. It was added to the
+backend on 2026-11-09 (step 4 of the
+[backend agent assignment](../agentuppdrag/2026-11-02-backend-status-och-varden.md)). The Postman
+requests for A8 and A9 have not been run against it yet.
 
 Editing and deleting a case are out of scope in [kravspec.md](../specs/kravspec.md), so `PUT` and
 `DELETE` are not missing endpoints. The collection's Proposed folder still has requests for them and
@@ -251,7 +248,7 @@ The result is the same locally and in CI.
 
 ```text
 ┌──────────────┬──────────────────────────────────────────────────────┐
-│ Step         │ Result on 2026-11-09, commit 9ea263b                 │
+│ Step         │ Result on 2026-11-09, after merging main (c8077a4)   │
 ├──────────────┼──────────────────────────────────────────────────────┤
 │ Format check │ Pass                                                 │
 ├──────────────┼──────────────────────────────────────────────────────┤
@@ -259,7 +256,7 @@ The result is the same locally and in CI.
 ├──────────────┼──────────────────────────────────────────────────────┤
 │ Type check   │ Pass                                                 │
 ├──────────────┼──────────────────────────────────────────────────────┤
-│ Tests        │ Pass: 54 of 54                                       │
+│ Tests        │ Pass: 68 of 68                                       │
 ├──────────────┼──────────────────────────────────────────────────────┤
 │ Build        │ Pass                                                 │
 ├──────────────┼──────────────────────────────────────────────────────┤
@@ -268,7 +265,8 @@ The result is the same locally and in CI.
 └──────────────┴──────────────────────────────────────────────────────┘
 ```
 
-Evidence: [2026-11-09 run](evidence/2026-11-09-baseline-npm-run-check.txt), and the
+Evidence: [2026-11-09 run after merging main](evidence/2026-11-09-baseline-after-merge-npm-run-check.txt),
+the [2026-11-09 run before the merge](evidence/2026-11-09-baseline-npm-run-check.txt), and the
 [2026-11-08 baseline](evidence/2026-11-08-baseline-npm-run-check.txt) taken before any
 QA changes.
 
@@ -464,8 +462,8 @@ The steps themselves are only in the verification plan.
 │ K1 – bara tangentbord            │ Mock mode      │ Passed on 2026-11-06 (Ruben,   │
 │                                  │                │ Nathalie)                      │
 ├──────────────────────────────────┼────────────────┼────────────────────────────────┤
-│ Hela kedjan mot riktig backend   │ Real backend   │ Planned: waits for the status  │
-│                                  │                │ endpoint                       │
+│ Hela kedjan mot riktig backend   │ Real backend   │ Planned: the status endpoint   │
+│                                  │                │ exists since 2026-11-09        │
 └──────────────────────────────────┴────────────────┴────────────────────────────────┘
 ```
 
@@ -509,9 +507,9 @@ which the plan does not have.
 ├───────────┼──────────────────────────────────────────────────────┼────────────────────────┤
 │ A7        │ A7 Get case by id                                    │ Pass                   │
 ├───────────┼──────────────────────────────────────────────────────┼────────────────────────┤
-│ A8        │ A8 Change status (Proposed folder)                   │ Endpoint missing       │
+│ A8        │ A8 Change status (Proposed folder)                   │ Not run (endpoint new) │
 ├───────────┼──────────────────────────────────────────────────────┼────────────────────────┤
-│ A9        │ A9 Change to invalid status → 422 (Proposed folder)  │ Endpoint missing       │
+│ A9        │ A9 Change to invalid status → 422 (Proposed folder)  │ Not run (endpoint new) │
 ├───────────┼──────────────────────────────────────────────────────┼────────────────────────┤
 │ A10       │ A10 Get missing case → 404                           │ Pass                   │
 ├───────────┼──────────────────────────────────────────────────────┼────────────────────────┤
@@ -570,7 +568,7 @@ Frontend tests that are not named after an A# or SF-A#:
 │    │ where the form cannot send a category    │              │                            │                │
 │    │ that is not allowed                      │              │                            │                │
 ├────┼──────────────────────────────────────────┼──────────────┼────────────────────────────┼────────────────┤
-│ 5  │ Run Hela kedjan mot riktig backend       │ QA-5         │ The status endpoint        │ Sravani        │
+│ 5  │ Run Hela kedjan mot riktig backend       │ QA-5         │ Nothing                    │ Sravani        │
 ├────┼──────────────────────────────────────────┼──────────────┼────────────────────────────┼────────────────┤
 │ 6  │ Check the CI result on frontend PRs      │ QA-3         │ Nothing                    │ Sravani        │
 └────┴──────────────────────────────────────────┴──────────────┴────────────────────────────┴────────────────┘

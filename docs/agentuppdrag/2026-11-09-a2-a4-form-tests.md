@@ -9,7 +9,7 @@
 - **Date:** 2026-11-09
 - **Agent and tools:** Claude Code, the `frontend-developer` agent with the
   [verifiera-mot-spec](../../.claude/skills/verifiera-mot-spec/SKILL.md) skill
-- **PR:** [link]
+- **PR:** [#15](https://github.com/Ottowski/nors-kundportal-development/pull/15)
 
 ## Before
 
@@ -131,6 +131,7 @@ the form's `validate`, which is the rule A3 tests: a title of only spaces counts
 | `npm run check` in `frontend/` after the A2 change | Exit 0: format, lint, typecheck and build pass; 5 test files, 54 tests pass | 2026-11-09 |
 | `npx vitest run src/components/ArendeForm.test.tsx -t "A3"`, once per temporary change | A3: every check failed at least once, 4 runs; every change undone and checked byte for byte; see [A3 proof](../testing/evidence/2026-11-09-A3-can-fail.txt) | 2026-11-09 |
 | `npm run check` in `frontend/` after the A3 change | Exit 0: format, lint, typecheck and build pass; 5 test files, 54 tests pass | 2026-11-09 |
+| `npm run check` in `frontend/` after merging `main` (`c8077a4`) into the branch | Exit 0: format, lint, typecheck and build pass; 7 test files, 68 tests pass, A2 and A3 included; see [log](../testing/evidence/2026-11-09-baseline-after-merge-npm-run-check.txt) | 2026-11-09 |
 | `npx vitest run src/components/ArendeForm.test.tsx -t "A2\|A3"` after the recorder was changed to spy on `fetch` (code review findings 1 and 4) | The no-POST check failed in A2 and A3 with a request fired in the background, and nothing else failed; change undone and checked byte for byte; see [no-POST proof](../testing/evidence/2026-11-09-A2-A3-no-post-can-fail.txt) | 2026-11-09 |
 | `npm run check` in `frontend/` after the recorder change | Exit 0: format, lint, typecheck and build pass; 5 test files, 54 tests pass | 2026-11-09 |
 
@@ -145,3 +146,8 @@ the form's `validate`, which is the rule A3 tests: a title of only spaces counts
   check was seen to fail on its own in run 5. Recorded in the A2 proof.
 - **Verification plan:** Sravani changed the A2–A4 component owner from Ruben to Sravani. Status
   stays Planned until Otto's API tests exist.
+- **After merging `main` on 2026-11-09:** Otto's API tests for A2–A4 exist, and `main` marks A2–A4
+  Genomförd. The merge conflict in the verification plan was resolved by keeping the team's API
+  tests, status and results, and adding Sravani as component owner and the 2026-11-09 component
+  results for A2 and A3. A4 is Genomförd on `main` although its component test still has the
+  weaknesses listed under Goal; the team should confirm this together with checkpoint 2.
