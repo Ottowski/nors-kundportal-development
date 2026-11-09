@@ -42,9 +42,9 @@ Testerna vars namn börjar med `test_` är API-tester i `backend/tests/`. Övrig
 | A#/K#  | R#           | Typ        | Nivå           | Test                                                                                                              | Status    | Senaste resultat     | Ansvarig |
 | ------ | ------------ | ---------- | -------------- | ----------------------------------------------------------------------------------------------------------------- | --------- | -------------------- | -------- |
 | A1     | R1           | Happy path | API, komponent | `test_a1_nytt_arende_far_status_nytt_och_syns_i_listan`, `A1: a valid case is saved with status Nytt and a created time, and shows in the list` | Genomförd | API: passerade 2026-11-02, komponent: passerade 2026-11-03 | Ruben |
-| A2     | R2, R3, R12  | Error path | API, komponent | `A2: a case without a title is rejected with a clear message; still two cases` | Planerad  | Komponent: passerade 2026-11-03 | Ruben (komponent), Otto (API) |
-| A3     | R2, R3, R12  | Gränsfall  | API, komponent | `A3: a title with only spaces counts as empty; still two cases` | Planerad  | Komponent: passerade 2026-11-03 | Ruben (komponent), Otto (API) |
-| A4     | R3, R4, R12  | Error path | API, komponent | `A4: a category that is not allowed is rejected with a clear message; nothing saved` | Planerad  | Komponent: passerade 2026-11-03 | Ruben (komponent), Otto (API) |
+| A2     | R2, R3, R12  | Error path | API, komponent | `A2: a case without a title is rejected with a clear message; still two cases` | Planerad  | Komponent: passerade 2026-11-09 | Sravani (komponent), Otto (API) |
+| A3     | R2, R3, R12  | Gränsfall  | API, komponent | `A3: a title with only spaces counts as empty; still two cases` | Planerad  | Komponent: passerade 2026-11-09 | Sravani (komponent), Otto (API) |
+| A4     | R3, R4, R12  | Error path | API, komponent | `A4: a category that is not allowed is rejected with a clear message; nothing saved` | Planerad  | Komponent: passerade 2026-11-03 | Sravani (komponent), Otto (API) |
 | A5     | R5           | Happy path | API            | `test_a5_arende_finns_kvar_efter_omstart`                                                                         | Genomförd | API: passerade 2026-11-02 | Nathalie |
 | A6     | R6           | Happy path | Komponent      | `A6: all three cases show with title, status, priority and created time` | Genomförd | Komponent: passerade 2026-11-03 | Ruben |
 | A7     | R7           | Happy path | Komponent      | `A7: all fields of the chosen case are shown` | Genomförd | Komponent: passerade 2026-11-03 | Ruben |
@@ -132,6 +132,7 @@ Kan göras redan nu, mot mockarna med `npm run dev:mock`, eftersom K1 gäller gr
 | 2026-11-03 | `60843cc`, branch `front-end-rebuild` (bygger på `frontend-v2`) | `python -m pytest` från `backend/` | 3 passed |
 | 2026-11-03 | `71c237b`, branch `front-end-rebuild`, granskning (Nathalie) | `npm run check` från `frontend/` och `python -m pytest` från `backend/` | Lint, typer, 54 passed och bygget gick igenom. format:check gick bara igenom med `--end-of-line auto` (CRLF i Windows). 3 passed |
 | 2026-11-04 | `b2e6fca`, branch `a9-test` ([agentuppdraget](agentuppdrag/2026-11-04-a9-test.md)) | `npm run check` från `frontend/` | 54 passed och bygget lyckades. Varje kontroll i A8 och A9 har setts misslyckas med ett tillfälligt fel |
+| 2026-11-09 | Ej committad, branch `qa-frontend-testing` (bygger på `9ea263b`) ([agentuppdraget](agentuppdrag/2026-11-09-a2-a4-form-tests.md)) | `npm run check` från `frontend/` | Format, lint, typer och bygge gick igenom. 54 passed. Varje kontroll i A2 och A3 har setts misslyckas med ett tillfälligt fel. A4 väntar på teamets beslut |
 
 ## Begränsningar
 
