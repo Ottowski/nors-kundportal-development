@@ -79,8 +79,8 @@ En uppgift som inte blir klar sin planerade vecka tas upp igen i nästa veckas t
 
 ## Vecka 8
 
-| #         | Planerat                                 | Genomfört                           | Verifierat                                  | Osäkert eller ofärdigt | Nästa steg                             |
-| --------- | ---------------------------------------- | ----------------------------------- | ------------------------------------------- | ---------------------- | -------------------------------------- |
-| _Exempel_ | _Kort beskrivning av vad som planerades_ | _✅/❌ + vad som gjordes, med länk_ | _Vilken kontroll kördes och vad den visade_ | _Vad som återstår_     | _Vad som är näst och vem som ansvarar_ |
-
-_Radera exempelraden ovan och lägg till riktiga rader här._
+| # | Planerat | Genomfört | Verifierat | Osäkert eller ofärdigt | Nästa steg |
+| --- | --- | --- | --- | --- | --- |
+| 21&nbsp;➡️ | Backend steg 2–5: statusändring, validering och API-tester (fortsätter från vecka 7) | 🔄 Ruben granskade PR:en och löste konflikten med `main`. Han rättade också verifieringsplanen, döpte om minneslagringens test till `test_a8_…` och skrev in beslutet om `nors.db` i `beslut.md` - se commits `1a56c78`, `46d5cb6` och `07c0f41` i [PR #10](https://github.com/Ottowski/nors-kundportal-development/pull/10) | `python -m pytest`: 16 passed efter merge av `main` | PR #10 är inte mergad. Teamet har inte granskat Rubens ändringar, och Otto har inte bekräftat beslutet om gamla värden | ➡️ Granska och merga PR #10 - ansvarig: Otto |
+| 26&nbsp;➡️ | Bestämma om filerna ska in i `docs/` (fortsätter från vecka 7) | ✅ Sravanis test- och frontendspec läggs in som historiskt underlag i [docs/historik/](historik/), med Sravani kvar som författare. Ruben flyttade filerna, lade till en förklaring överst och rättade länkarna. Förklaringen säger att filerna beskriver den ursprungliga frontenden och att R#/A# syftar på `kundportal-sdd`, inte på kravspecen - se [PR #13](https://github.com/Ottowski/nors-kundportal-development/pull/13) | Alla relativa länkar i filerna kontrollerade. Sravani granskar PR #13 | PR #13 är inte mergad än | - |
+| 27&nbsp;➡️ | Kontrollera hela kedjan mot riktig backend (fortsätter från vecka 7) | ❌ Inte gjord än. Väntar på att PR #10 mergas | - | Inget test visar att frontend och backend fungerar ihop | ➡️ Kontrollera [hela kedjan mot riktig backend](verifieringsplan.md#hela-kedjan-mot-riktig-backend) när PR #10 är mergad - ansvarig: Otto |
