@@ -18,6 +18,7 @@ Här samlar teamet all dokumentation för projektet. `docs/` är enda källan: s
 | [verifieringsplan.md](verifieringsplan.md)           | Tester: spårbarhet, hur de körs, resultat, begränsningar          | Alla                    |
 | [veckostatus.md](veckostatus.md)                     | Veckostatus vecka 4–8                                             | Alla                    |
 | [begransningar.md](begransningar.md)                 | Kända begränsningar, risker och fortsatt utveckling               | Alla                    |
+| [historik/](historik/)                               | Historiskt underlag som inte gäller längre: frontend- och testspec för den ursprungliga frontenden | Sravani |
 | [mallar/spec.md](mallar/spec.md)                     | Mall för en ny spec                                               | Alla                    |
 | [mallar/agentuppdrag.md](mallar/agentuppdrag.md)     | Mall för ett agentuppdrag                                         | Alla                    |
 

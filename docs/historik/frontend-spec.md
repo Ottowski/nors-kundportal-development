@@ -1,5 +1,7 @@
 # Frontend specification – Kundserviceportalen NORS
 
+> **Historiskt underlag.** Filen beskriver den ursprungliga frontenden från [PR #3](https://github.com/Ottowski/nors-kundportal-development/pull/3), som den såg ut på grenen `frontend` 2026-11-05. Frontenden i `main` är rättad mot specen, se [PR #7](https://github.com/Ottowski/nors-kundportal-development/pull/7). R#/A# här syftar på `kundportal-sdd`, inte på `kravspec.md`. Det som gäller står i [kravspec.md](../specs/kravspec.md) och [verifieringsplan.md](../verifieringsplan.md).
+
 ```text
 ┌───────────────┬─────────────────────────────────────┐
 │ Field         │ Value                               │
@@ -12,7 +14,7 @@
 └───────────────┴─────────────────────────────────────┘
 ```
 
-**Related:** [Testing specification](../testing/testing-spec.md), [architecture flow](../../architecture-flow.md)
+**Related:** [Testing specification](testing-spec.md), [architecture flow](../architecture-flow.md)
 
 > The R#/A# ids refer to the requirements in `kundportal-sdd/specs/`.
 
@@ -95,7 +97,7 @@ File paths in the task tables are relative to `frontend/src/`.
 
 R5 (data survives a restart) is a backend requirement. Acceptance criteria (A#) are named in the
 scenarios below and traced to their tests in the
-[testing specification](../testing/testing-spec.md#traceability).
+[testing specification](testing-spec.md#traceability).
 
 ---
 

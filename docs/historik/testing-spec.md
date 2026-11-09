@@ -1,5 +1,7 @@
 # Testing specification – Kundserviceportalen NORS
 
+> **Historiskt underlag.** Filen beskriver testningen av den ursprungliga frontenden från [PR #3](https://github.com/Ottowski/nors-kundportal-development/pull/3) och av API:t, med resultat från 2026-11-05. Siffrorna gäller inte frontenden i `main`, som är rättad mot specen, se [PR #7](https://github.com/Ottowski/nors-kundportal-development/pull/7). R#/A# här syftar på `kundportal-sdd`, inte på `kravspec.md`. Det som gäller står i [kravspec.md](../specs/kravspec.md) och [verifieringsplan.md](../verifieringsplan.md).
+
 ```text
 ┌───────────────┬──────────────────────────────────────────────────────┐
 │ Field         │ Value                                                │
@@ -12,7 +14,7 @@
 └───────────────┴──────────────────────────────────────────────────────┘
 ```
 
-**Related:** [Frontend specification](../frontend/frontend-spec.md), [Postman guide](../../api/README.md), [verification plan](../../verifieringsplan.md)
+**Related:** [Frontend specification](frontend-spec.md), [Postman guide](../api/README.md), [verification plan](../verifieringsplan.md)
 
 > Part A describes work that exists, with results from the date above. Part B is partly done or
 > planned.
