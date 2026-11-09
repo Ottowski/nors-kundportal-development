@@ -11,8 +11,20 @@ class ArendeStatus(str, Enum):
     AVSLUTAT = "Avslutat"
 
 
-TILLATNA_KATEGORIER: set[str] = set()
-TILLATNA_PRIORITETER: set[str] = set()
+TILLATNA_KATEGORIER = ("Fakturering", "Teknik", "Leverans", "Övrigt")
+TILLATNA_PRIORITETER = ("Låg", "Medel", "Hög")
+
+
+def _lista(varden: tuple[str, ...]) -> str:
+    return ", ".join(varden[:-1]) + " eller " + varden[-1]
+
+
+def _giltigt_varde(
+    value: object, falt: str, tillatna_varden: tuple[str, ...]
+) -> object:
+    if value not in tillatna_varden:
+        raise ValueError(f"Ogiltig {falt}. Välj {_lista(tillatna_varden)}.")
+    return value
 
 
 class ArendeCreate(BaseModel):
@@ -29,24 +41,33 @@ class ArendeCreate(BaseModel):
         value = value.strip()
         if not value:
             raise ValueError("Får inte vara tomt eller bara mellanslag")
+        try:
+            value.encode("utf-8")
+        except UnicodeEncodeError:
+            raise ValueError("Texten innehåller ogiltiga Unicode-tecken") from None
         return value
 
-    @field_validator("kategori")
+    # mode="before" så att även null och tal får den svenska texten.
+    @field_validator("kategori", mode="before")
     @classmethod
-    def giltig_kategori(cls, value: str) -> str:
-        if TILLATNA_KATEGORIER and value not in TILLATNA_KATEGORIER:
-            raise ValueError(
-                f"Ogiltig kategori. Tillåtna värden: {sorted(TILLATNA_KATEGORIER)}"
-            )
-        return value
+    def giltig_kategori(cls, value: object) -> object:
+        return _giltigt_varde(value, "kategori", TILLATNA_KATEGORIER)
 
-    @field_validator("prioritet")
+    @field_validator("prioritet", mode="before")
     @classmethod
-    def giltig_prioritet(cls, value: str) -> str:
-        if TILLATNA_PRIORITETER and value not in TILLATNA_PRIORITETER:
-            raise ValueError(
-                f"Ogiltig prioritet. Tillåtna värden: {sorted(TILLATNA_PRIORITETER)}"
-            )
+    def giltig_prioritet(cls, value: object) -> object:
+        return _giltigt_varde(value, "prioritet", TILLATNA_PRIORITETER)
+
+
+class ArendeStatusUpdate(BaseModel):
+    status: ArendeStatus
+
+    # mode="before" så att även null och tal får den svenska texten.
+    @field_validator("status", mode="before")
+    @classmethod
+    def giltig_status(cls, value: object) -> object:
+        if value not in [s.value for s in ArendeStatus]:
+            raise ValueError("Ogiltig status")
         return value
 
 

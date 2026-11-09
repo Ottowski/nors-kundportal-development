@@ -33,7 +33,7 @@ export function createArende(data: ArendeCreate): Promise<Arende> {
   return request<Arende>("/arenden", { method: "POST", body: JSON.stringify(data) });
 }
 
-// Agreed with the backend, which does not have it yet. Served by MSW in tests and `npm run dev:mock`.
+// The backend supports this endpoint; MSW handles it in tests and `npm run dev:mock`.
 export function updateStatus(id: number, status: ArendeStatus): Promise<Arende> {
   return request<Arende>(`/arenden/${id}/status`, {
     method: "POST",

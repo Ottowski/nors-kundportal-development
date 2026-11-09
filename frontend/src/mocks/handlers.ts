@@ -104,7 +104,7 @@ export const handlers = [
     return HttpResponse.json(arende, { status: 201 });
   }),
 
-  // Agreed with the backend, which does not have it yet (step 4 of the backend agentuppdrag).
+  // Mirrors POST /arenden/:id/status in the backend.
   // Like FastAPI, the body is checked before the id, so an invalid status gives 422, not 404.
   http.post(`${API_BASE_URL}/arenden/:id/status`, async ({ params, request }) => {
     const body = asObject(await request.json());

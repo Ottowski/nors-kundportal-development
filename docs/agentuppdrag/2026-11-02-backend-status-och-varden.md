@@ -50,7 +50,7 @@ I en vanlig terminal på samma dator tog A5 4,1 s för två starter. Varför sta
 
 `CLAUDE.md` förbjuder git-kommandon och åtkomst till `backend/.env` och `frontend/.env.local`. Det är inte prövat om verktyget stoppar dem tekniskt, så den gränsen vilar på instruktionen. Att installera paket kräver nätverk och ändrar `.venv`; det är inte heller prövat. Under planeringen begränsade instruktionen agenten till att läsa och skriva det här utkastet.
 
-**Steg 2–5 (Otto):** fylls i innan Otto börjar.
+**Steg 2–5 (Otto):** Copilot SDK i VS Code på Windows (PowerShell). Agenten kan läsa och skriva filer i repot, köra skalkommandon och starta lokala servrar. Kontrollerat 2026-11-04 med `backend/.venv`: Python 3.11.0, FastAPI 0.162.0, Pydantic 2.14.2 och pytest 9.2.0; httpx är inte installerat. Förbudet mot git-kommandon och mot `backend/.env` och `frontend/.env.local` vilar på instruktionen i `CLAUDE.md`; det är inte prövat om verktyget stoppar dem tekniskt. Att installera paket är inte prövat.
 
 ### Kontrollpunkter
 
@@ -126,7 +126,7 @@ Agenten stannar och väntar på teamet:
 >
 > Stanna sedan och vänta tills vi har godkänt planen. Skriv ingen kod förrän vi har sagt ja.
 
-**Steg 2–5 (Otto):** instruktionen läggs in här innan Otto börjar.
+**Steg 2–5 (Otto):** Följ planen och besluten under "Efter", steg 2–5, i den ordningen. Stanna vid kontrollpunkterna ovan och ändra ingen kod förrän teamet har sagt ja till planen. Börja varje steg med ett test som misslyckas, eller med en tillfällig ändring när koden redan fungerar. Följ frontendens kontrakt `POST /arenden/{id}/status` och lägg inga nya funktioner till. Kör inga git-kommandon.
 
 ## Efter
 
@@ -191,6 +191,13 @@ Arbetet på `frontend-v2` ändrar också raderna för A1–A4 och A8–A10 i `do
 - **Arbete utanför uppdraget som togs bort:**
 - **Accepterat, ändrat eller avvisat, och varför:**
 
+**Steg 2–5**
+
+- **Granskad av:**
+- **Vad vi hittade:**
+- **Arbete utanför uppdraget som togs bort:** 
+- **Accepterat, ändrat eller avvisat, och varför:**
+
 ### Verifiering
 
 Tabellen visar agentens egna körningar i sandlådan. Teamets körningar i en vanlig terminal läggs till vid varje kontrollpunkt.
@@ -200,6 +207,8 @@ Tabellen visar agentens egna körningar i sandlådan. Teamets körningar i en va
 | Steg 1: `python -m pytest -v` från `backend/` | 3 passed (A1, A5, A10) på 4,4 s | 2026-11-02 |
 | Steg 1: A1 och A10 mot en ändrad kopia av backend (status Pågående i stället för Nytt, tom lista, engelskt besked vid 404) | Varje ändring gav ett misslyckat test | 2026-11-02 |
 | Steg 1, Ruben i vanlig terminal på `backend-steg-1` (utgår från `main`): `python -m pytest -v` från `backend/` | 3 passed (A1, A5, A10) | 2026-11-02 |
+| Steg 2–5, lokal körning med projektets venv: `.venv\Scripts\python.exe -m pytest -v` från `backend/` | 10 passed (A1–A5, A8–A11) på 40,17 s | 2026-11-05 |
+| PR-rättningar, lokal körning med projektets venv: `.venv\Scripts\python.exe -m pytest -v` från `backend/` | 12 passed, inklusive tester för stora id och samtidiga statusändringar, på 42,84 s | 2026-11-06 |
 
 ### Avvikelser och öppna frågor
 
