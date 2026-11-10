@@ -222,8 +222,9 @@ Arbetet på `frontend-v2` ändrar också raderna för A1–A4 och A8–A10 i `do
 
     Kvar: verifieringsplanen sa fortfarande att A2–A4, A8, A9 och A11 väntade på API-tester. De fyra nya testerna stod inte i planen, och inget av dem började med ett A-id. Minneslagringens test prövar A8 och kunde heta `test_a8_…`. R12-testerna har inget A# i specen.
   - **Ruben, 2026-11-09:** `python -m pytest` gav 16 passed efter merge av `main`.
-- **Arbete utanför uppdraget som togs bort:** 
+- **Arbete utanför uppdraget som togs bort:** PUT för statusändringen, som byttes mot POST, se Ändrat. Inget annat togs bort.
 - **Accepterat, ändrat eller avvisat, och varför:**
+  - **Ändrat (Otto):** statusändringen byggdes först med PUT. Efter ett beslut i gruppen bytte Otto till POST, som i frontendens kontrakt (`POST /arenden/{id}/status`, se Kontext).
   - **Ändrat (Otto, `558ff8d`):** allt som skulle rättas före merge, och de punkter som Ruben bockade av 2026-11-08.
   - **Ändrat (Ruben, 2026-11-09):** konflikten med `main` löstes. Verifieringsplanen rättades och fick de nya testerna, och minneslagringens test döptes om till `test_a8_…`, så att namnet börjar med id:t. Beslutet om `nors.db` skrevs in i [beslut.md](../beslut.md). Se commits `1a56c78`, `46d5cb6` och `07c0f41`.
   - **Accepterat:** gamla rader med otillåtna värden returneras som de är. Det följer beslutet att inte ha någon CHECK för kategori och prioritet, se [Plan och vårt beslut](#plan-och-vårt-beslut). R12-testerna står i verifieringsplanen utan A#, eftersom specen inte har något A# för dem.
