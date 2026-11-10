@@ -42,13 +42,13 @@
 │ A    │ QA-7 │ AI-assisted test design   │ Done           │ Routine in docs/ai-arbetssatt.md,  │
 │      │      │ with human review         │                │ followed in the agent assignments  │
 ├──────┼──────┼───────────────────────────┼────────────────┼────────────────────────────────────┤
+│ A    │ QA-5 │ Manual testing            │ Done           │ K1 passed on 2026-11-06; full      │
+│      │      │                           │                │ chain against the real backend     │
+│      │      │                           │                │ passed on 2026-11-10               │
+├──────┼──────┼───────────────────────────┼────────────────┼────────────────────────────────────┤
 │ B    │ QA-4 │ Negative and boundary API │ Partly done    │ 4 candidate defects from           │
 │      │      │ tests                     │                │ 2026-11-05 need a rerun; no saved  │
 │      │      │                           │                │ tests                              │
-├──────┼──────┼───────────────────────────┼────────────────┼────────────────────────────────────┤
-│ B    │ QA-5 │ Manual testing            │ Partly done    │ K1 passed on 2026-11-06; full      │
-│      │      │                           │                │ chain against the real backend     │
-│      │      │                           │                │ planned                            │
 ├──────┼──────┼───────────────────────────┼────────────────┼────────────────────────────────────┤
 │ C    │ QA-6 │ Browser end-to-end tests  │ Out of scope   │ Team decision in the verification  │
 │      │      │                           │                │ plan                               │
@@ -116,7 +116,8 @@ Before the merge, 54 of 54 passed in 5 files ([2026-11-09 run](evidence/2026-11-
 **Limit:** these tests run in jsdom against mocks. They do not prove the app works in a real browser
 or against the real backend. `POST /arenden/{id}/status` was added to the backend on 2026-11-09
 (step 4 of the [backend agent assignment](../agentuppdrag/2026-11-02-backend-status-och-varden.md)),
-but QA has not yet checked the status change against it (open item 5). A component
+and the whole team checked it, with the rest of the chain, against the real backend on 2026-11-10
+(QA-5). A component
 that catches errors could also hide a rejected request, so a test still has to check the result on
 screen.
 
@@ -345,6 +346,51 @@ A reviewer can tell what was generated and how it was checked.
 
 ---
 
+## QA-5: Manual testing
+
+### Task
+
+Run the manual checks in
+[the verification plan](../verifieringsplan.md#manuella-kontroller) and record each run there.
+Attachments such as screenshots go in [docs/testing/manual/](manual/README.md).
+
+### Purpose
+
+Manual testing covers what the automated tests do not: that the frontend and backend work together,
+that messages make sense to a person (R12), and keyboard use (K1).
+
+### Acceptance criteria
+
+```gherkin
+Scenario: Each result is recorded
+  Given a manual check is finished
+  When the tester records it
+  Then the verification plan shows who ran it, when, on which commit, and the result
+
+Scenario: Deviations get an owner
+  Given a manual check does not give the expected result
+  When it is recorded
+  Then a defect is described in docs/testing/defects/ with an owner
+```
+
+The steps themselves are only in the verification plan.
+
+### Expected outcome
+
+```text
+┌──────────────────────────────────┬────────────────┬────────────────────────────────┐
+│ Check in the verification plan   │ Environment    │ State                          │
+├──────────────────────────────────┼────────────────┼────────────────────────────────┤
+│ K1 – bara tangentbord            │ Mock mode      │ Passed on 2026-11-06 (Ruben,   │
+│                                  │                │ Nathalie)                      │
+├──────────────────────────────────┼────────────────┼────────────────────────────────┤
+│ Hela kedjan mot riktig backend   │ Real backend   │ Passed on 2026-11-10 (whole    │
+│                                  │                │ team)                          │
+└──────────────────────────────────┴────────────────┴────────────────────────────────┘
+```
+
+---
+
 # Part B: Partly done
 
 ## QA-4: Negative and boundary API tests
@@ -423,51 +469,6 @@ outside the allowed lists (`frontend/src/mocks/handlers.ts`).
 A status filter in the backend (`?status=Fel`) is not tested: search and filtering run in the
 frontend (SF-Q6 in [sok-filter.md](../specs/sok-filter.md)), so the backend is right to ignore the
 parameter.
-
----
-
-## QA-5: Manual testing
-
-### Task
-
-Run the manual checks in
-[the verification plan](../verifieringsplan.md#manuella-kontroller) and record each run there.
-Attachments such as screenshots go in [docs/testing/manual/](manual/README.md).
-
-### Purpose
-
-Manual testing covers what the automated tests do not: that the frontend and backend work together,
-that messages make sense to a person (R12), and keyboard use (K1).
-
-### Acceptance criteria
-
-```gherkin
-Scenario: Each result is recorded
-  Given a manual check is finished
-  When the tester records it
-  Then the verification plan shows who ran it, when, on which commit, and the result
-
-Scenario: Deviations get an owner
-  Given a manual check does not give the expected result
-  When it is recorded
-  Then a defect is described in docs/testing/defects/ with an owner
-```
-
-The steps themselves are only in the verification plan.
-
-### Expected outcome
-
-```text
-┌──────────────────────────────────┬────────────────┬────────────────────────────────┐
-│ Check in the verification plan   │ Environment    │ State                          │
-├──────────────────────────────────┼────────────────┼────────────────────────────────┤
-│ K1 – bara tangentbord            │ Mock mode      │ Passed on 2026-11-06 (Ruben,   │
-│                                  │                │ Nathalie)                      │
-├──────────────────────────────────┼────────────────┼────────────────────────────────┤
-│ Hela kedjan mot riktig backend   │ Real backend   │ Planned: the status endpoint   │
-│                                  │                │ exists since 2026-11-09        │
-└──────────────────────────────────┴────────────────┴────────────────────────────────┘
-```
 
 ---
 
@@ -562,8 +563,6 @@ Frontend tests that are not named after an A# or SF-A#:
 │    │ collection, and point docs/api/README.md │              │                            │                │
 │    │ at docs/specs/                           │              │                            │                │
 ├────┼──────────────────────────────────────────┼──────────────┼────────────────────────────┼────────────────┤
-│ 5  │ Run Hela kedjan mot riktig backend       │ QA-5         │ Nothing                    │ Sravani        │
-├────┼──────────────────────────────────────────┼──────────────┼────────────────────────────┼────────────────┤
 │ 6  │ Check the CI result on frontend PRs      │ QA-3         │ Nothing                    │ Sravani        │
 └────┴──────────────────────────────────────────┴──────────────┴────────────────────────────┴────────────────┘
 ```
@@ -574,4 +573,6 @@ decision), and the AI review routine (filled in in ai-arbetssatt.md).
 
 Closed on 2026-11-10: items 3 and 4, the weaknesses in A2–A4 and how A4 is tested in the frontend
 (Q8 in kravspec.md, answered by the team; see the
-[agent assignment](../agentuppdrag/2026-11-09-a2-a4-form-tests.md)).
+[agent assignment](../agentuppdrag/2026-11-09-a2-a4-form-tests.md)). Item 5, the full chain against
+the real backend: the whole team ran all seven steps locally and every step gave the expected
+result (see the [verification plan](../verifieringsplan.md#hela-kedjan-mot-riktig-backend)).

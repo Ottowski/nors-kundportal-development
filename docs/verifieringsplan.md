@@ -116,7 +116,7 @@ Kan göras när statusändringen finns i backend (steg 4 i [backenduppdraget](ag
 
 | Datum | Vem | Commit | Utfall |
 | ----- | --- | ------ | ------ |
-| – | – | – | Planerad |
+| 2026-11-10 | Hela teamet | Appkoden som på `main` `a84f564` | Alla sju steg som förväntat. Backend och frontend kördes lokalt, inte mot mockar |
 
 ### K1 – bara tangentbord
 
@@ -164,7 +164,7 @@ Mot mockarna med `npm run dev:mock`. Prövar det som komponenttesterna inte visa
 | 2026-11-09 | Ej committad, branch `qa-frontend-testing` (bygger på `9ea263b`) ([agentuppdraget](agentuppdrag/2026-11-09-a2-a4-form-tests.md)) | `npm run check` från `frontend/` | Format, lint, typer och bygge gick igenom. 54 passed. Varje kontroll i A2 och A3 har setts misslyckas med ett tillfälligt fel. A4 väntar på teamets beslut |
 | 2026-11-09 | Ej committad, merge av `main` (`c8077a4`) i `qa-frontend-testing` | `npm run check` från `frontend/` | Format, lint, typer och bygge gick igenom. 68 passed (54 tidigare och 14 för statusöversikten), A2 och A3 ingår - se [logg](testing/evidence/2026-11-09-baseline-after-merge-npm-run-check.txt) |
 | 2026-11-10 | Ej committad, branch `qa-frontend-testing` på `bf49dac` ([agentuppdraget](agentuppdrag/2026-11-09-a2-a4-form-tests.md)) | `npm run check` från `frontend/` | Format, lint, typer och bygge gick igenom. 68 passed. Varje kontroll i A4 har setts misslyckas med ett tillfälligt fel - se [logg](testing/evidence/2026-11-10-A4-can-fail.txt) |
-| 2026-11-10 | Ej committad, branch `qa-frontend-testing` på `bf49dac`, efter kodgranskningen av A2–A4 ([agentuppdraget](agentuppdrag/2026-11-09-a2-a4-form-tests.md)) | `npm run check` från `frontend/` | Format, lint, typer och bygge gick igenom. 68 passed. A4 kontrollerar nu att formuläret skickade den valda kategorin, och varje kontroll i A4 har setts misslyckas på nytt - se [logg](testing/evidence/2026-11-10-baseline-after-review-npm-run-check.txt) och [A4-bevis](testing/evidence/2026-11-10-A4-can-fail.txt) |
+| 2026-11-10 | Ej committad, branch `qa-frontend-testing` på `bf49dac`, efter kodgranskningen av A2–A4. Samma kod committades sedan som `13a9137` ([agentuppdraget](agentuppdrag/2026-11-09-a2-a4-form-tests.md)) | `npm run check` från `frontend/` | Format, lint, typer och bygge gick igenom. 68 passed. A4 kontrollerar nu att formuläret skickade den valda kategorin, och varje kontroll i A4 har setts misslyckas på nytt - se [logg](testing/evidence/2026-11-10-baseline-after-review-npm-run-check.txt) och [A4-bevis](testing/evidence/2026-11-10-A4-can-fail.txt) |
 
 ## Begränsningar
 
