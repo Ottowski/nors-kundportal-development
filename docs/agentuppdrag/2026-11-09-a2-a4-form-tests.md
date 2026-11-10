@@ -116,12 +116,39 @@ if both the form and the mock were broken. The plan:
 same way with the same helper. The proof that the message check can fail removes `.trim()` from
 the form's `validate`, which is the rule A3 tests: a title of only spaces counts as empty.
 
+**Checkpoint 2 (decided by the team on 2026-11-10): option b.** Sravani wrote Q8 in
+[kravspec.md](../specs/kravspec.md), answered by the team: A4 is tested in the backend, and the
+form test shows only that the backend's rejection is displayed and not treated as saved.
+
+**A4 (approved by Sravani on 2026-11-10).** Following Q8:
+
+- check the starting state (two cases) before the action;
+- remove `expect(db.arenden).toHaveLength(2)`, which could never fail, and the check that the
+  title keeps its value, which A4 does not require;
+- rename the test to `A4: the backend's rejection of a category is shown clearly and nothing is
+  passed on`, since it no longer claims to show that nothing is saved;
+- keep the message, `aria-invalid`, alert and `onSaved` checks, and keep `server.use` and
+  `KATEGORI_ERROR` (see Deviations).
+
 ### Review
 
-- **Reviewed by:**
+- **Reviewed by:** Ruben, 2026-11-10, in
+  [PR #16](https://github.com/Ottowski/nors-kundportal-development/pull/16) (with Claude Code).
+  Approved.
 - **What we found:**
-- **Work outside the assignment that was removed:**
-- **Accepted, changed or rejected, and why:**
+  - Q8 leaves A4 unchanged and decides only where it is tested, as for A11.
+  - The simulated 422 in the A4 test has the same shape as the backend's answer from
+    `backend/app/fel.py` (`type`, `loc` and `msg` without the "Value error, " prefix).
+  - The five A4 proof runs match the test's line numbers, and every temporary change is in
+    `ArendeForm.tsx`. CI (Frontend) passed on `13a9137`.
+  - Stale text fixed in the review: two rows in `veckostatus.md` that said A4 was not committed,
+    and three comments that said the backend's error handler did not exist yet (`apiError.ts`,
+    `arendenApi.test.ts`, `constants/arende.ts`). `npm run check` in `frontend/` passed
+    afterwards: 7 test files, 68 tests.
+- **Work outside the assignment that was removed:** None.
+- **Accepted, changed or rejected, and why:** Accepted, since every A4 check has been seen to
+  fail and the backend's API test shows that nothing is saved. A check that the frontend's and
+  the backend's category lists match is left out, as outside the scope.
 
 ### Verification
 
@@ -134,6 +161,10 @@ the form's `validate`, which is the rule A3 tests: a title of only spaces counts
 | `npm run check` in `frontend/` after merging `main` (`c8077a4`) into the branch | Exit 0: format, lint, typecheck and build pass; 7 test files, 68 tests pass, A2 and A3 included; see [log](../testing/evidence/2026-11-09-baseline-after-merge-npm-run-check.txt) | 2026-11-09 |
 | `npx vitest run src/components/ArendeForm.test.tsx -t "A2\|A3"` after the recorder was changed to spy on `fetch` (code review findings 1 and 4) | The no-POST check failed in A2 and A3 with a request fired in the background, and nothing else failed; change undone and checked byte for byte; see [no-POST proof](../testing/evidence/2026-11-09-A2-A3-no-post-can-fail.txt) | 2026-11-09 |
 | `npm run check` in `frontend/` after the recorder change | Exit 0: format, lint, typecheck and build pass; 5 test files, 54 tests pass | 2026-11-09 |
+| `npx vitest run src/components/ArendeForm.test.tsx -t "A4"`, once per temporary change | A4: every check failed in its own run, 5 runs; every change undone and checked byte for byte; see [A4 proof](../testing/evidence/2026-11-10-A4-can-fail.txt) | 2026-11-10 |
+| `npm run check` in `frontend/` after the A4 change | Exit 0: format, lint, typecheck and build pass; 7 test files, 68 tests pass | 2026-11-10 |
+| `npx vitest run src/components/ArendeForm.test.tsx -t "A4"`, once per temporary change, after the code review changes to A4 | A4: every check failed in its own run, 5 runs, all temporary changes in `ArendeForm.tsx`; the new sent-category check failed when the form sent an empty `kategori`; every change undone and checked byte for byte; the whole file then passed, 8 tests; replaces the earlier runs in the [A4 proof](../testing/evidence/2026-11-10-A4-can-fail.txt) | 2026-11-10 |
+| `npm run check` in `frontend/` after the code review changes (A4 checks and the A2/A3 request recorder) | Exit 0: format, lint, typecheck and build pass; 7 test files, 68 tests pass; see [log](../testing/evidence/2026-11-10-baseline-after-review-npm-run-check.txt) | 2026-11-10 |
 
 ### Deviations and open questions
 
@@ -151,3 +182,20 @@ the form's `validate`, which is the rule A3 tests: a title of only spaces counts
   tests, status and results, and adding Sravani as component owner and the 2026-11-09 component
   results for A2 and A3. A4 is Genomförd on `main` although its component test still has the
   weaknesses listed under Goal; the team should confirm this together with checkpoint 2.
+- **Checkpoint 2 and the spec:** the scope says the specs must not change, but option b in
+  checkpoint 2 adds a Q# to kravspec.md. The team chose option b on 2026-11-10, so Sravani added
+  Q8. A4 itself is unchanged.
+- **A4, `server.use` and `KATEGORI_ERROR` kept:** under Q8 the form test shows only that the form
+  displays whatever the backend answers, so the simulated answer is intended. The decided text and
+  the mock's own category check are tested with a real disallowed category in
+  `src/api/arendenApi.test.ts` ("rejects a category and a priority that are not allowed").
+- **A4 and R12:** stripping the "Value error, " prefix is tested in `src/api/arendenApi.test.ts`
+  ("strips Pydantic's prefix"), not in the form test, as planned under Goal.
+- **A4 after the code review (2026-11-10), differs from the approved plan:** the starting-state
+  check (two cases before the action) was removed. Once `server.use` replaces the handler, `db` is
+  never used again, so the check only tested the test's own setup; the old proof could make it
+  fail only by editing the test. A check was added instead: the replaced handler records each
+  request body, and the test checks that the form sent exactly one request with
+  `kategori: "Leverans"`. Before, the simulated 422 answered any POST, so A4 passed even if the
+  form sent the wrong category. The A4 proof was redone with all five runs against the changed
+  test.

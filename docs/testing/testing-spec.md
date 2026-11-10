@@ -8,7 +8,7 @@
 ├───────────────┼──────────────────────────────────────────────────────┤
 │ Owner         │ Sravani Padarthi                                     │
 ├───────────────┼──────────────────────────────────────────────────────┤
-│ State checked │ 2026-11-09                                           │
+│ State checked │ 2026-11-10                                           │
 └───────────────┴──────────────────────────────────────────────────────┘
 ```
 
@@ -120,13 +120,15 @@ but QA has not yet checked the status change against it (open item 5). A compone
 that catches errors could also hide a rejected request, so a test still has to check the result on
 screen.
 
-**Known weaknesses:** A4 in `components/ArendeForm.test.tsx` has checks that cannot fail, and it
-does not send a category that is not allowed. See the
-[skill checklist assignment](../agentuppdrag/2026-11-05-skill-checklista.md) and open items 3–4.
-A2 and A3 were fixed on 2026-11-09: they now check the starting state and that the form sends no
+**Fixed weaknesses:** the
+[skill checklist assignment](../agentuppdrag/2026-11-05-skill-checklista.md) found checks in A2–A4
+in `components/ArendeForm.test.tsx` that could not fail. A2 and A3 were fixed on 2026-11-09: they now check the starting state and that the form sends no
 request, and every check has been seen to fail ([A2 proof](evidence/2026-11-09-A2-can-fail.txt),
 [A3 proof](evidence/2026-11-09-A3-can-fail.txt),
-[agent assignment](../agentuppdrag/2026-11-09-a2-a4-form-tests.md)).
+[agent assignment](../agentuppdrag/2026-11-09-a2-a4-form-tests.md)). A4 was fixed on 2026-11-10
+after Q8 in [kravspec.md](../specs/kravspec.md): the form cannot send a category that is not
+allowed, so the form test shows only that the backend's rejection is displayed, and the backend's
+API test shows that nothing is saved ([A4 proof](evidence/2026-11-10-A4-can-fail.txt)).
 
 ---
 
@@ -560,14 +562,6 @@ Frontend tests that are not named after an A# or SF-A#:
 │    │ collection, and point docs/api/README.md │              │                            │                │
 │    │ at docs/specs/                           │              │                            │                │
 ├────┼──────────────────────────────────────────┼──────────────┼────────────────────────────┼────────────────┤
-│ 3  │ Fix the weaknesses in A4 in              │ QA-1         │ The team's A4 decision     │ Sravani        │
-│    │ ArendeForm.test.tsx (A2 and A3 fixed     │              │                            │                │
-│    │ on 2026-11-09)                           │              │                            │                │
-├────┼──────────────────────────────────────────┼──────────────┼────────────────────────────┼────────────────┤
-│ 4  │ Decide how A4 is tested in the frontend, │ QA-1         │ Team decision              │ Team           │
-│    │ where the form cannot send a category    │              │                            │                │
-│    │ that is not allowed                      │              │                            │                │
-├────┼──────────────────────────────────────────┼──────────────┼────────────────────────────┼────────────────┤
 │ 5  │ Run Hela kedjan mot riktig backend       │ QA-5         │ Nothing                    │ Sravani        │
 ├────┼──────────────────────────────────────────┼──────────────┼────────────────────────────┼────────────────┤
 │ 6  │ Check the CI result on frontend PRs      │ QA-3         │ Nothing                    │ Sravani        │
@@ -577,3 +571,7 @@ Frontend tests that are not named after an A# or SF-A#:
 Closed on 2026-11-09: what A5 and R4 require (now defined in kravspec.md), the CRLF gap in the
 quality gate (fixed by `.gitattributes`), the scope of browser end-to-end tests (QA-6, team
 decision), and the AI review routine (filled in in ai-arbetssatt.md).
+
+Closed on 2026-11-10: items 3 and 4, the weaknesses in A2–A4 and how A4 is tested in the frontend
+(Q8 in kravspec.md, answered by the team; see the
+[agent assignment](../agentuppdrag/2026-11-09-a2-a4-form-tests.md)).
