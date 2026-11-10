@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { API_BASE_URL } from "../api/arendenApi";
 import { seedArenden } from "../mocks/data";
 import { db } from "../mocks/handlers";
@@ -10,6 +10,21 @@ import { ArendeForm } from "./ArendeForm";
 
 // A2, A3 and A4 start with two cases.
 const startWithTwoCases = () => db.reset(seedArenden().slice(0, 2));
+
+// Records every POST /arenden the form sends, so a test can show that the form itself
+// stopped the request, whatever the mock would have answered. It spies on fetch, which the
+// form calls synchronously on submit, so a request is recorded before the click resolves.
+// It matches the exact URL the form builds, so a path prefix or trailing slash in
+// VITE_API_URL is still caught.
+function recordCreateRequests() {
+  const fetchSpy = vi.spyOn(globalThis, "fetch");
+  return () =>
+    fetchSpy.mock.calls.filter(
+      ([input, init]) => String(input) === `${API_BASE_URL}/arenden` && init?.method === "POST",
+    );
+}
+
+afterEach(() => vi.restoreAllMocks());
 
 const KATEGORI_ERROR = "Ogiltig kategori. Välj Fakturering, Teknik, Leverans eller Övrigt.";
 
@@ -50,12 +65,15 @@ describe("ArendeForm – create", () => {
 
   it("A2: a case without a title is rejected with a clear message; still two cases", async () => {
     startWithTwoCases();
+    expect(db.arenden).toHaveLength(2);
+    const createRequests = recordCreateRequests();
     const { onSaved } = renderCreate();
     const user = await fill({ rubrik: "" });
     await user.click(screen.getByRole("button", { name: "Skapa ärende" }));
 
     expect(screen.getByText("Rubrik måste fyllas i.")).toBeInTheDocument();
     expect(screen.getByLabelText("Rubrik")).toHaveAttribute("aria-invalid", "true");
+    expect(createRequests()).toHaveLength(0);
     expect(onSaved).not.toHaveBeenCalled();
     expect(db.arenden).toHaveLength(2);
   });
@@ -68,12 +86,15 @@ describe("ArendeForm – create", () => {
 
   it("A3: a title with only spaces counts as empty; still two cases", async () => {
     startWithTwoCases();
+    expect(db.arenden).toHaveLength(2);
+    const createRequests = recordCreateRequests();
     const { onSaved } = renderCreate();
     const user = await fill({ rubrik: "    " });
     await user.click(screen.getByRole("button", { name: "Skapa ärende" }));
 
     expect(screen.getByText("Rubrik måste fyllas i.")).toBeInTheDocument();
     expect(screen.getByLabelText("Rubrik")).toHaveAttribute("aria-invalid", "true");
+    expect(createRequests()).toHaveLength(0);
     expect(onSaved).not.toHaveBeenCalled();
     expect(db.arenden).toHaveLength(2);
   });
