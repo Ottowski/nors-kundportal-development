@@ -17,8 +17,6 @@ Det här har vi valt bort, se "Ingår inte" i [kravspec.md](specs/kravspec.md).
 
 ### Läget just nu
 
-⚠️ Uppdateras innan inlämningen. Ta bort det som har blivit klart.
-
 - Rubrik och beskrivning har ingen maxlängd, så mycket lång text avvisas inte (Q3 i [kravspec.md](specs/kravspec.md)).
 - En lokal databasfil som skapades innan de tillåtna värdena lades in kan innehålla andra kategorier och prioriteter, till exempel "Support". Backend visar dem som de är, men nya ärenden kan bara få tillåtna värden. Den som vill börja om raderar `backend/app/data/nors.db`, se [beslut.md](beslut.md).
 

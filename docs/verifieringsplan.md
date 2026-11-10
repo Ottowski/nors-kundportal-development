@@ -30,7 +30,7 @@ Om specen visar sig vara fel eller ofullständig ändrar vi inte specen i smyg f
 ## Hur testerna körs
 
 - **Backend:** `python -m pytest` från `backend/`. Testerna finns i [backend/tests/](../backend/tests/).
-- **Frontend:** `npm run check` från `frontend/`. Kommandot kontrollerar format, lint och typer, kör testerna och bygger appen. Bara testerna körs med `npm run test:run`. CI kör `npm run check` på varje PR som ändrar `frontend/`. Testerna finns i [App.test.tsx](../frontend/src/App.test.tsx), [ArendeForm.test.tsx](../frontend/src/components/ArendeForm.test.tsx), [ArendeDetail.test.tsx](../frontend/src/components/ArendeDetail.test.tsx), [filterArenden.test.ts](../frontend/src/utils/filterArenden.test.ts) och [arendenApi.test.ts](../frontend/src/api/arendenApi.test.ts).
+- **Frontend:** `npm run check` från `frontend/`. Kommandot kontrollerar format, lint och typer, kör testerna och bygger appen. Bara testerna körs med `npm run test:run`. CI kör `npm run check` på varje PR som ändrar `frontend/`. Testerna finns i [App.test.tsx](../frontend/src/App.test.tsx), [ArendeForm.test.tsx](../frontend/src/components/ArendeForm.test.tsx), [ArendeDetail.test.tsx](../frontend/src/components/ArendeDetail.test.tsx), [StatusOverview.test.tsx](../frontend/src/components/StatusOverview.test.tsx), [filterArenden.test.ts](../frontend/src/utils/filterArenden.test.ts), [countByStatus.test.ts](../frontend/src/utils/countByStatus.test.ts) och [arendenApi.test.ts](../frontend/src/api/arendenApi.test.ts).
 - **Manuellt:** stegen står under [Manuella kontroller](#manuella-kontroller).
 
 ## Spårbarhet
