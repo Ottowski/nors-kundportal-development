@@ -132,10 +132,23 @@ form test shows only that the backend's rejection is displayed and not treated a
 
 ### Review
 
-- **Reviewed by:**
+- **Reviewed by:** Ruben, 2026-11-10, in
+  [PR #16](https://github.com/Ottowski/nors-kundportal-development/pull/16) (with Claude Code).
+  Approved.
 - **What we found:**
-- **Work outside the assignment that was removed:**
-- **Accepted, changed or rejected, and why:**
+  - Q8 leaves A4 unchanged and decides only where it is tested, as for A11.
+  - The simulated 422 in the A4 test has the same shape as the backend's answer from
+    `backend/app/fel.py` (`type`, `loc` and `msg` without the "Value error, " prefix).
+  - The five A4 proof runs match the test's line numbers, and every temporary change is in
+    `ArendeForm.tsx`. CI (Frontend) passed on `13a9137`.
+  - Stale text fixed in the review: two rows in `veckostatus.md` that said A4 was not committed,
+    and three comments that said the backend's error handler did not exist yet (`apiError.ts`,
+    `arendenApi.test.ts`, `constants/arende.ts`). `npm run check` in `frontend/` passed
+    afterwards: 7 test files, 68 tests.
+- **Work outside the assignment that was removed:** None.
+- **Accepted, changed or rejected, and why:** Accepted, since every A4 check has been seen to
+  fail and the backend's API test shows that nothing is saved. A check that the frontend's and
+  the backend's category lists match is left out, as outside the scope.
 
 ### Verification
 
