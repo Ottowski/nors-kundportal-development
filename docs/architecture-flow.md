@@ -2,7 +2,7 @@
 
 > Svensk version: [architecture-flow.sv.md](architecture-flow.sv.md)
 
-How the frontend, backend, mocks and tests fit together. Requirement ids (R#, A#, Q#) refer to `../kundportal-sdd/specs/`.
+How the frontend, backend, mocks and tests fit together. Requirement ids (R#, A#, Q#) refer to [specs/](specs/).
 
 ## Overview
 
@@ -200,6 +200,6 @@ flowchart LR
 ## Known gaps
 
 - Editing and deleting are outside v1.0 scope (ADR-002, spec "Out of scope"). They work on mocks only. The team must update ADR-002 and the backend must add `PUT`/`DELETE /arenden/{id}` before they work for real.
-- Status change and search filters are not in the backend yet. The UI works on mocks; against the real backend the status change shows "Not Found".
+- Status changes are supported by the backend. Search and filtering remain frontend-only and run on the loaded list.
 - Storage is in-memory, so R5 (survive restart) is not met. Backend task.
 - Categories, priorities, list order and error texts use proposals (Q1, Q2, Q6, Q12).

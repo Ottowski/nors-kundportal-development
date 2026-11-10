@@ -43,8 +43,8 @@ API:t finns på <http://127.0.0.1:8000>. För att prova det interaktivt, öppna
 {
   "rubrik": "Problem med inloggning",
   "beskrivning": "Användaren kan inte logga in.",
-  "kategori": "Support",
-  "prioritet": "Normal"
+  "kategori": "Teknik",
+  "prioritet": "Medel"
 }
 ```
 

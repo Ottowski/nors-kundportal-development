@@ -6,7 +6,7 @@ from app.schemas.arende import Arende, ArendeCreate, ArendeStatus
 
 
 class ArendeRepository(ABC):
-    """Kontrakt för lagring av ärenden. Implementera mot databasen senare."""
+    """Kontrakt för lagring av ärenden."""
 
     @abstractmethod
     def create(self, data: ArendeCreate) -> Arende: ...
@@ -17,9 +17,14 @@ class ArendeRepository(ABC):
     @abstractmethod
     def get_by_id(self, arende_id: int) -> Arende | None: ...
 
+    @abstractmethod
+    def update_status(
+        self, arende_id: int, new_status: ArendeStatus
+    ) -> Arende | None: ...
+
 
 class InMemoryArendeRepository(ArendeRepository):
-    """Tillfällig lagring i minnet tills databaskopplingen finns."""
+    """Lagring i minnet för tester och användning utan SQLite-override."""
 
     def __init__(self) -> None:
         self._arenden: dict[int, Arende] = {}
@@ -45,6 +50,17 @@ class InMemoryArendeRepository(ArendeRepository):
     def get_by_id(self, arende_id: int) -> Arende | None:
         with self._lock:
             return self._arenden.get(arende_id)
+
+    def update_status(
+        self, arende_id: int, new_status: ArendeStatus
+    ) -> Arende | None:
+        with self._lock:
+            arende = self._arenden.get(arende_id)
+            if arende is None:
+                return None
+            uppdaterat = arende.model_copy(update={"status": new_status})
+            self._arenden[arende_id] = uppdaterat
+            return uppdaterat
 
 
 _repository: ArendeRepository = InMemoryArendeRepository()
