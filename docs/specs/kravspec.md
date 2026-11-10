@@ -232,3 +232,7 @@ noll eller flera ärenden.
 - **Q7 – Vilket kvalitetskrav (K1) ska gälla, och hur kontrolleras det?**
   - **Varför det spelar roll:** Kursens övningsmaterial anger minst ett kontrollerbart icke-funktionellt krav, märkt som eget förslag, se [uppdrag.md](../uppdrag.md)
   - **Status:** Besvarad 2026-10-30, Ruben och Nathalie: K1, tangentbord, kontrolleras manuellt
+
+- **Q8 – Gäller A4 för formuläret eller bara för backend?**
+  - **Varför det spelar roll:** I formuläret väljs kategori i en lista med bara tillåtna värden, så handläggaren kan inte ange en otillåten kategori där. Handlingen i A4 kan bara göras mot API:t
+  - **Status:** Besvarad 2026-11-10, teamet: A4 prövas i backend. API-testet visar att en otillåten kategori avvisas med ett begripligt besked och att inget nytt ärende sparas. Formulärets test visar bara att backendens besked visas begripligt och att formuläret inte behandlar svaret som sparat
