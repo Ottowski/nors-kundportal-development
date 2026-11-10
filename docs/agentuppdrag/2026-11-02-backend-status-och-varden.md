@@ -193,14 +193,41 @@ Arbetet på `frontend-v2` ändrar också raderna för A1–A4 och A8–A10 i `do
 
 **Steg 2–5**
 
-- **Granskad av:** Sravani, två gånger: på `d14df76` och på `0ae922b`. Ruben, 2026-11-08 och 2026-11-09. Se vecka 7 och 8 i [veckostatus](../veckostatus.md).
+- **Granskad av:** Sravani, två gånger: på `d14df76` och på `0ae922b`. Ruben, 2026-11-08 (Ottos rättningar i `558ff8d`) och 2026-11-09. Se vecka 7 och 8 i [veckostatus](../veckostatus.md).
 - **Vad vi hittade:**
-  - Sravani: 10 passed på `d14df76`, sedan 12 passed och Newman 20 av 20 på `0ae922b`.
-  - Ruben: PR:en hade en konflikt med `main`. Databasfilen `nors.db` gav konflikter, eftersom den ändras varje gång någon kör appen.
-  - Ruben: `python -m pytest` gav 16 passed efter merge av `main`, 2026-11-09.
+  - **Sravani, första gången (`d14df76`):** 10 passed. Det hon påpekade var rättat till andra gången:
+    - Mycket stora id ger nu 404 på svenska, både för hämtning och statusändring.
+    - `update_status` läser ärendet före commit, på samma anslutning. 400 samtidiga statusändringar fick alla tillbaka den status de bad om.
+    - `nors.db` ligger inte längre i repot, och PR-titeln nämner inte längre PUT.
+  - **Sravani, andra gången (`0ae922b`):** 12 passed, och Newman 20 av 20 i mapparna Health och Ärenden. Frontenden kontrollerades inte, eftersom PR:en inte ändrar den.
+    - Att rätta före merge:
+      - "Edit case" i Postman hade bytt från PUT till POST och gav 405.
+      - Raderna för A8 och A9 i verifieringsplanen hade skrivits över av misstag: "Nathalie (komponent)" och 2026-11-04 hade blivit "Ruben (komponent)" och 2026-11-03.
+      - PR-beskrivningen var tom.
+    - Att rätta nu eller senare:
+      - "Method Not Allowed" och "Not Found" var på engelska (R12).
+      - Ett ensamt Unicode-surrogat gav 500 i stället för 422 på svenska.
+      - Gamla rader med värden som inte längre är tillåtna returneras som de är.
+      - A8 och A9 låg kvar under "Proposed" i Postman. `docs/api/README.md` och kommentarerna i `arendenApi.ts` och `handlers.ts` var inaktuella, och README:n länkade till `README.sv.md`, som inte finns.
+      - Begränsningar i verifieringsplanen sa att A2–A4, A8, A9 och A11 väntade på API-tester.
+      - Minneslagringens `update_status` saknade test.
+      - Testerna `…_avvisas_och_inget_sparas` krävde exakt två sparade ärenden.
+      - `giltig_kategori` och `giltig_prioritet` kunde dela en hjälpfunktion, och några kommentarer låg på fel ställe.
+    - En varning till teamet: eftersom `nors.db` har tagits bort ur repot kan en `git pull` ta bort den lokala filen. Appen skapar en tom databas nästa gång den startar.
+  - **Ruben, 2026-11-08:** testerna gick igenom. Allt som skulle rättas före merge var rättat. Det mesta av det som kunde vänta var också rättat:
+    - 405 och 404 ger svensk text, och ett ensamt surrogat ger 422 på svenska, båda med test.
+    - A8 och A9 ligger i mappen Ärenden i Postman, och README:n, kommentarerna och den döda länken är rättade.
+    - Minneslagringen har ett test för `update_status`, och `…_avvisas_och_inget_sparas` jämför antalet före och efter.
+    - Valideringen delar en hjälpfunktion, och kommentarerna ligger rätt.
+
+    Kvar: verifieringsplanen sa fortfarande att A2–A4, A8, A9 och A11 väntade på API-tester. De fyra nya testerna stod inte i planen, och inget av dem började med ett A-id. Minneslagringens test prövar A8 och kunde heta `test_a8_…`. R12-testerna har inget A# i specen.
+  - **Ruben, 2026-11-09:** `python -m pytest` gav 16 passed efter merge av `main`.
 - **Arbete utanför uppdraget som togs bort:** 
 - **Accepterat, ändrat eller avvisat, och varför:**
-  - **Ändrat (Ruben):** konflikten med `main` löstes och verifieringsplanen rättades. Minneslagringens test döptes om till `test_a8_…`, så att namnet börjar med id:t. Beslutet om `nors.db` skrevs in i [beslut.md](../beslut.md) (2026-11-09). Se commits `1a56c78`, `46d5cb6` och `07c0f41`.
+  - **Ändrat (Otto, `558ff8d`):** allt som skulle rättas före merge, och de punkter som Ruben bockade av 2026-11-08.
+  - **Ändrat (Ruben, 2026-11-09):** konflikten med `main` löstes. Verifieringsplanen rättades och fick de nya testerna, och minneslagringens test döptes om till `test_a8_…`, så att namnet börjar med id:t. Beslutet om `nors.db` skrevs in i [beslut.md](../beslut.md). Se commits `1a56c78`, `46d5cb6` och `07c0f41`.
+  - **Accepterat:** gamla rader med otillåtna värden returneras som de är. Det följer beslutet att inte ha någon CHECK för kategori och prioritet, se [Plan och vårt beslut](#plan-och-vårt-beslut). R12-testerna står i verifieringsplanen utan A#, eftersom specen inte har något A# för dem.
+  - **Godkänt:** Ruben godkände PR:en, och Otto mergade den.
 
 ### Verifiering
 
