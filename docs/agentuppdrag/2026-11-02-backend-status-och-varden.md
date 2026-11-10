@@ -3,7 +3,7 @@
 - **Ansvarig:** Ruben (planering och steg 1), Otto (steg 2–5)
 - **Datum:** 2026-11-02
 - **Agent och verktyg:** Claude Code (Claude Opus 5.5) i VS Code
-- **PR:** steg 1: ?, steg 2–5: ?
+- **PR:** steg 1: [#6](https://github.com/Ottowski/nors-kundportal-development/pull/6), steg 2–5: [#10](https://github.com/Ottowski/nors-kundportal-development/pull/10)
 
 ## Före
 
@@ -193,10 +193,14 @@ Arbetet på `frontend-v2` ändrar också raderna för A1–A4 och A8–A10 i `do
 
 **Steg 2–5**
 
-- **Granskad av:**
+- **Granskad av:** Sravani, två gånger: på `d14df76` och på `0ae922b`. Ruben, 2026-11-08 och 2026-11-09. Se vecka 7 och 8 i [veckostatus](../veckostatus.md).
 - **Vad vi hittade:**
+  - Sravani: 10 passed på `d14df76`, sedan 12 passed och Newman 20 av 20 på `0ae922b`.
+  - Ruben: PR:en hade en konflikt med `main`. Databasfilen `nors.db` gav konflikter, eftersom den ändras varje gång någon kör appen.
+  - Ruben: `python -m pytest` gav 16 passed efter merge av `main`, 2026-11-09.
 - **Arbete utanför uppdraget som togs bort:** 
 - **Accepterat, ändrat eller avvisat, och varför:**
+  - **Ändrat (Ruben):** konflikten med `main` löstes och verifieringsplanen rättades. Minneslagringens test döptes om till `test_a8_…`, så att namnet börjar med id:t. Beslutet om `nors.db` skrevs in i [beslut.md](../beslut.md) (2026-11-09). Se commits `1a56c78`, `46d5cb6` och `07c0f41`.
 
 ### Verifiering
 
@@ -212,9 +216,13 @@ Tabellen visar agentens egna körningar i sandlådan. Teamets körningar i en va
 
 ### Avvikelser och öppna frågor
 
-Utanför uppdraget, att följa upp:
+Utanför uppdraget, att följa upp. Läget 2026-11-10 står efter varje punkt.
 
 - **Mockarna:** `frontend/src/mocks/handlers.ts` kontrollerar inte kategori och prioritet, svarar "Field required" och ger 404 före 422 för statusändringen. Efter uppdraget skiljer de sig från backend.
+  - ✅ **Löst** i steg 3 i [frontenduppdraget](2026-11-03-frontend-mot-spec.md) ([PR #7](https://github.com/Ottowski/nors-kundportal-development/pull/7)). Mocken kontrollerar kategori och prioritet med backendens texter, svarar "Måste fyllas i" och ger 422 före 404. Testerna i `frontend/src/api/arendenApi.test.ts` prövar det.
 - **Postman-samlingen:** samlingen i `docs/api/` hänvisar till den gamla specen och innehåller anrop som specen inte har. Mappen "Proposed" blir inaktuell när statusändringen finns.
+  - 🔄 **Delvis löst.** `docs/api/README.md` hänvisar nu till kravspecen och `sok-filter.md`. A8 och A9 ligger i mappen "Ärenden", och mappen "Proposed" heter nu "Not implemented in backend" och körs inte. Kvar: den mappen innehåller fortfarande anrop som specen inte har, nämligen redigering, radering och "A17", ett id som inte finns i kravspecen.
 - **Starlettes egna svar:** svaren vid fel adress eller metod ("Not Found", "Method Not Allowed") är på engelska. Frontenden når dem inte.
+  - ✅ **Löst.** `backend/app/main.py` svarar "Sidan hittades inte" och "Metoden är inte tillåten". `test_r12_http_fel_for_metod_och_sokvag_ar_pa_svenska` prövar det, se [verifieringsplan.md](../verifieringsplan.md).
 - **Lokala databasfiler:** de kan innehålla otillåtna värden. `nors.db` på datorn där planen gjordes har en rad med kategorin och prioriteten "test".
+  - ✅ **Hanterat** genom beslutet 2026-11-09 i [beslut.md](../beslut.md): `nors.db` ligger inte i repot, och var och en har en egen fil. Gamla värden visas som de är (`test_legacy_varden_returneras_oforandrade`), men nya ärenden kan bara få tillåtna värden. Den som vill börja om raderar filen. Står också i [begransningar.md](../begransningar.md).

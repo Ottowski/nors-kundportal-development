@@ -103,6 +103,15 @@ Om du inte hittar en brist, säg det. Hitta inte på problem.
 [Klistra in ditt utkast här.]
 ```
 
+### Skill och agent: verifiera mot specen
+
+Används när ett test eller en del av frontenden ska kontrolleras mot ett acceptanskriterium.
+
+- **Skillen [`verifiera-mot-spec`](../.claude/skills/verifiera-mot-spec/SKILL.md)** går igenom de sex stegen i [verifieringsplan.md](verifieringsplan.md#kod-som-byggdes-före-specen-frontend-v2), ett acceptanskriterium i taget, och har en checklista för varje test. Claude Code använder den när uppgiften stämmer med skillens beskrivning. Den kan också startas med `/verifiera-mot-spec`.
+- **Agenten [`frontend-developer`](../.claude/agents/frontend-developer.md)** är en underagent för frontenduppgifter i ett agentuppdrag. Den använder skillen.
+
+Skillen användes i [frontenduppdraget](agentuppdrag/2026-11-03-frontend-mot-spec.md), i [A8- och A9-testerna](agentuppdrag/2026-11-04-a9-test.md) och i [statusöversikten](agentuppdrag/2026-11-05-statusoversikt.md). I [skill-uppdraget](agentuppdrag/2026-11-05-skill-checklista.md) jämförde vi skillen före och efter checklistan. Med checklistan hittade agenten 6 av 7 kända svagheter i A4-testet, och utan den 2–5 av 7. Varje variant kördes bara en eller två gånger, och AI svarar olika varje gång, så resultatet är inte säkert.
+
 ### Mallar
 
 - [Spec](mallar/spec.md)
