@@ -112,6 +112,11 @@ if both the form and the mock were broken. The plan:
 - prove each check can fail with one temporary change per run, using `expect.soft` temporarily
   when one change makes several checks fail.
 
+Changed after the plan (2026-11-09): the recorder spies on `fetch` instead of listening on
+`server.events`, and `vi.restoreAllMocks()` in `afterEach` restores it. The form calls `fetch`
+as soon as it submits, so a request is recorded before the click resolves. See the
+[no-POST proof](../testing/evidence/2026-11-09-A2-A3-no-post-can-fail.txt) and Verification.
+
 **A3 (approved by Sravani on 2026-11-09, unchanged).** The same two weaknesses as A2, fixed the
 same way with the same helper. The proof that the message check can fail removes `.trim()` from
 the form's `validate`, which is the rule A3 tests: a title of only spaces counts as empty.
@@ -158,9 +163,9 @@ form test shows only that the backend's rejection is displayed and not treated a
 | `npm run check` in `frontend/` after the A2 change | Exit 0: format, lint, typecheck and build pass; 5 test files, 54 tests pass | 2026-11-09 |
 | `npx vitest run src/components/ArendeForm.test.tsx -t "A3"`, once per temporary change | A3: every check failed at least once, 4 runs; every change undone and checked byte for byte; see [A3 proof](../testing/evidence/2026-11-09-A3-can-fail.txt) | 2026-11-09 |
 | `npm run check` in `frontend/` after the A3 change | Exit 0: format, lint, typecheck and build pass; 5 test files, 54 tests pass | 2026-11-09 |
-| `npm run check` in `frontend/` after merging `main` (`c8077a4`) into the branch | Exit 0: format, lint, typecheck and build pass; 7 test files, 68 tests pass, A2 and A3 included; see [log](../testing/evidence/2026-11-09-baseline-after-merge-npm-run-check.txt) | 2026-11-09 |
 | `npx vitest run src/components/ArendeForm.test.tsx -t "A2\|A3"` after the recorder was changed to spy on `fetch` (code review findings 1 and 4) | The no-POST check failed in A2 and A3 with a request fired in the background, and nothing else failed; change undone and checked byte for byte; see [no-POST proof](../testing/evidence/2026-11-09-A2-A3-no-post-can-fail.txt) | 2026-11-09 |
-| `npm run check` in `frontend/` after the recorder change | Exit 0: format, lint, typecheck and build pass; 5 test files, 54 tests pass | 2026-11-09 |
+| `npm run check` in `frontend/` after the recorder change, before merging `main` | Exit 0: format, lint, typecheck and build pass; 5 test files, 54 tests pass | 2026-11-09 |
+| `npm run check` in `frontend/` after merging `main` (`c8077a4`) into the branch | Exit 0: format, lint, typecheck and build pass; 7 test files, 68 tests pass, A2 and A3 included; see [log](../testing/evidence/2026-11-09-baseline-after-merge-npm-run-check.txt) | 2026-11-09 |
 | `npx vitest run src/components/ArendeForm.test.tsx -t "A4"`, once per temporary change | A4: every check failed in its own run, 5 runs; every change undone and checked byte for byte; see [A4 proof](../testing/evidence/2026-11-10-A4-can-fail.txt) | 2026-11-10 |
 | `npm run check` in `frontend/` after the A4 change | Exit 0: format, lint, typecheck and build pass; 7 test files, 68 tests pass | 2026-11-10 |
 | `npx vitest run src/components/ArendeForm.test.tsx -t "A4"`, once per temporary change, after the code review changes to A4 | A4: every check failed in its own run, 5 runs, all temporary changes in `ArendeForm.tsx`; the new sent-category check failed when the form sent an empty `kategori`; every change undone and checked byte for byte; the whole file then passed, 8 tests; replaces the earlier runs in the [A4 proof](../testing/evidence/2026-11-10-A4-can-fail.txt) | 2026-11-10 |
@@ -189,6 +194,9 @@ form test shows only that the backend's rejection is displayed and not treated a
   displays whatever the backend answers, so the simulated answer is intended. The decided text and
   the mock's own category check are tested with a real disallowed category in
   `src/api/arendenApi.test.ts` ("rejects a category and a priority that are not allowed").
+  The code review on 2026-11-10 flagged the copy again. Accepted for the same reason: A4 would
+  prove the same thing with any text, and exporting `MESSAGES` would change `handlers.ts`, which
+  is outside the scope.
 - **A4 and R12:** stripping the "Value error, " prefix is tested in `src/api/arendenApi.test.ts`
   ("strips Pydantic's prefix"), not in the form test, as planned under Goal.
 - **A4 after the code review (2026-11-10), differs from the approved plan:** the starting-state
