@@ -17,20 +17,15 @@ Det här har vi valt bort, se "Ingår inte" i [kravspec.md](specs/kravspec.md).
 
 ### Läget just nu
 
-⚠️ Uppdateras innan inlämningen. Ta bort det som har blivit klart.
-
 - Rubrik och beskrivning har ingen maxlängd, så mycket lång text avvisas inte (Q3 i [kravspec.md](specs/kravspec.md)).
-- Status kan inte ändras ännu. Backend saknar den funktionen (R8).
-- Kategori och prioritet tar emot vilket värde som helst, eftersom de tillåtna värdena inte är inlagda i koden (R4).
-- Frontend på `main` är bara en startsida. Den nya frontenden finns på branchen `frontend-v2`.
-- Automatiska tester finns bara för en del av kriterierna. Vilka som är körda står i [verifieringsplan.md](verifieringsplan.md).
+- En lokal databasfil som skapades innan de tillåtna värdena lades in kan innehålla andra kategorier och prioriteter, till exempel "Support". Backend visar dem som de är, men nya ärenden kan bara få tillåtna värden. Den som vill börja om raderar `backend/app/data/nors.db`, se [beslut.md](beslut.md).
 
 ## Risker
 
 | Risk | Vad kan hända | Hur vi minskar risken |
 | --- | --- | --- |
 | AI skriver kod som ser rätt ut men gör fel | Fel kommer in i `main` utan att någon märker det | Varje ändring granskas i en PR och kontrolleras med tester mot specen |
-| Frontend på `frontend-v2` byggdes innan specen var klar | Den gör inte exakt det som specen säger | Koden rättas mot specen innan den läggs in i `main`, se [beslut.md](beslut.md) |
+| Frontendens tester skrevs efter koden | Ett test går igenom fast koden gör fel | Varje test har jämförts med specen och setts misslyckas med ett tillfälligt fel, se [frontenduppdraget](agentuppdrag/2026-11-03-frontend-mot-spec.md). En senare granskning med en checklista hittade svagheter som hade missats, se [skill-uppdraget](agentuppdrag/2026-11-05-skill-checklista.md). De rättas i egna agentuppdrag |
 | Granskningsrutinen följs inte alltid | Kod kommer in i `main` utan granskning. Det har hänt en gång (PR #2) | Alla påminns om rutinen. Inställningar på GitHub kan kräva ett godkännande innan merge |
 | Krockar när flera ändrar samma fil | Ändringar skrivs över eller blir fel vid merge | Hämta det senaste innan man börjar, gör små PR:er och skriv i "sin" fil |
 | Databasfilen `nors.db` raderas eller går sönder | Alla ärenden försvinner, eftersom det inte finns någon säkerhetskopia | Godtagbart för en lokal kursuppgift med påhittad data |
