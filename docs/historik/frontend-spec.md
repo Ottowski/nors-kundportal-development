@@ -14,7 +14,7 @@
 └───────────────┴─────────────────────────────────────┘
 ```
 
-**Related:** [Testing specification](testing-spec.md), [architecture flow](../architecture-flow.md)
+**Related:** [Testing specification](testing-spec.md), [architecture flow](architecture-flow.md)
 
 > The R#/A# ids refer to the requirements in `kundportal-sdd/specs/`.
 
