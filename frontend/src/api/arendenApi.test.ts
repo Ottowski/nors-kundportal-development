@@ -51,7 +51,7 @@ describe("arendenApi", () => {
     expect(error.fieldErrors).toEqual({ rubrik: "Får inte vara tomt eller bara mellanslag" });
   });
 
-  // Today's backend still sends Pydantic's prefix until its error handler is in place.
+  // backend/app/fel.py already strips the prefix; the client strips it too (apiError.ts).
   it("strips Pydantic's prefix 'Value error, ' from field errors (R12)", async () => {
     server.use(
       http.post(`${API_BASE_URL}/arenden`, () =>

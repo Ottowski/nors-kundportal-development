@@ -59,10 +59,14 @@ Agenten ställde frågorna i två omgångar. Teamet beslutade:
 
 ### Granskning
 
-- **Granskad av:** ?
-- **Vad vi hittade:** ?
-- **Arbete utanför uppdraget som togs bort:** ?
-- **Accepterat, ändrat eller avvisat, och varför:** ?
+- **Granskad av:** Ruben och Nathalie. Nathalie mergade [PR #4](https://github.com/Ottowski/nors-kundportal-development/pull/4), och specarna kom in i `main` 2026-11-02.
+- **Vad vi hittade:**
+  - Tabellen i kravspecen över var uppdragets krav täcks godkändes efter granskning.
+  - Innehållet i `tillfallig.md`, `examination.md` och `indid.md` var flyttat till `docs/`. Därför raderades filerna 2026-10-30.
+- **Arbete utanför uppdraget som togs bort:** Vi minns inte i detalj. Där agenten föreslog mer än projektet behövde valde vi det som passade projektets omfattning bättre. Till exempel togs `oppna-fragor.md` och B#-id bort, och tre filer per funktion valdes bort, se [beslut.md](../beslut.md) (2026-10-29).
+- **Accepterat, ändrat eller avvisat, och varför:**
+  - **Ändrat:** agenten föreslog B#-id och en rad per beslut i `beslut.md`. Vi invände att det ger merge-konflikter och onödiga uppdateringar mellan filer. Därför skrivs beslut om en spec i specen, och inga B#-id används.
+  - **Accepterat:** övriga beslut under "Plan och vårt beslut".
 
 ### Verifiering
 

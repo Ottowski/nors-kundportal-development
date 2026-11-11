@@ -3,7 +3,7 @@
 - **Ansvarig:** Ruben (planering och steg 1), Otto (steg 2–5)
 - **Datum:** 2026-11-02
 - **Agent och verktyg:** Claude Code (Claude Opus 5.5) i VS Code
-- **PR:** steg 1: ?, steg 2–5: ?
+- **PR:** steg 1: [#6](https://github.com/Ottowski/nors-kundportal-development/pull/6), steg 2–5: [#10](https://github.com/Ottowski/nors-kundportal-development/pull/10)
 
 ## Före
 
@@ -50,7 +50,7 @@ I en vanlig terminal på samma dator tog A5 4,1 s för två starter. Varför sta
 
 `CLAUDE.md` förbjuder git-kommandon och åtkomst till `backend/.env` och `frontend/.env.local`. Det är inte prövat om verktyget stoppar dem tekniskt, så den gränsen vilar på instruktionen. Att installera paket kräver nätverk och ändrar `.venv`; det är inte heller prövat. Under planeringen begränsade instruktionen agenten till att läsa och skriva det här utkastet.
 
-**Steg 2–5 (Otto):** fylls i innan Otto börjar.
+**Steg 2–5 (Otto):** Copilot SDK i VS Code på Windows (PowerShell). Agenten kan läsa och skriva filer i repot, köra skalkommandon och starta lokala servrar. Kontrollerat 2026-11-04 med `backend/.venv`: Python 3.11.0, FastAPI 0.162.0, Pydantic 2.14.2 och pytest 9.2.0; httpx är inte installerat. Förbudet mot git-kommandon och mot `backend/.env` och `frontend/.env.local` vilar på instruktionen i `CLAUDE.md`; det är inte prövat om verktyget stoppar dem tekniskt. Att installera paket är inte prövat.
 
 ### Kontrollpunkter
 
@@ -126,7 +126,7 @@ Agenten stannar och väntar på teamet:
 >
 > Stanna sedan och vänta tills vi har godkänt planen. Skriv ingen kod förrän vi har sagt ja.
 
-**Steg 2–5 (Otto):** instruktionen läggs in här innan Otto börjar.
+**Steg 2–5 (Otto):** Följ planen och besluten under "Efter", steg 2–5, i den ordningen. Stanna vid kontrollpunkterna ovan och ändra ingen kod förrän teamet har sagt ja till planen. Börja varje steg med ett test som misslyckas, eller med en tillfällig ändring när koden redan fungerar. Följ frontendens kontrakt `POST /arenden/{id}/status` och lägg inga nya funktioner till. Kör inga git-kommandon.
 
 ## Efter
 
@@ -191,6 +191,45 @@ Arbetet på `frontend-v2` ändrar också raderna för A1–A4 och A8–A10 i `do
 - **Arbete utanför uppdraget som togs bort:**
 - **Accepterat, ändrat eller avvisat, och varför:**
 
+**Steg 2–5**
+
+- **Granskad av:** Sravani, två gånger: på `d14df76` och på `0ae922b`. Ruben, 2026-11-08 (Ottos rättningar i `558ff8d`) och 2026-11-09. Se vecka 7 och 8 i [veckostatus](../veckostatus.md).
+- **Vad vi hittade:**
+  - **Sravani, första gången (`d14df76`):** 10 passed. Det hon påpekade var rättat till andra gången:
+    - Mycket stora id ger nu 404 på svenska, både för hämtning och statusändring.
+    - `update_status` läser ärendet före commit, på samma anslutning. 400 samtidiga statusändringar fick alla tillbaka den status de bad om.
+    - `nors.db` ligger inte längre i repot, och PR-titeln nämner inte längre PUT.
+  - **Sravani, andra gången (`0ae922b`):** 12 passed, och Newman 20 av 20 i mapparna Health och Ärenden. Frontenden kontrollerades inte, eftersom PR:en inte ändrar den.
+    - Att rätta före merge:
+      - "Edit case" i Postman hade bytt från PUT till POST och gav 405.
+      - Raderna för A8 och A9 i verifieringsplanen hade skrivits över av misstag: "Nathalie (komponent)" och 2026-11-04 hade blivit "Ruben (komponent)" och 2026-11-03.
+      - PR-beskrivningen var tom.
+    - Att rätta nu eller senare:
+      - "Method Not Allowed" och "Not Found" var på engelska (R12).
+      - Ett ensamt Unicode-surrogat gav 500 i stället för 422 på svenska.
+      - Gamla rader med värden som inte längre är tillåtna returneras som de är.
+      - A8 och A9 låg kvar under "Proposed" i Postman. `docs/api/README.md` och kommentarerna i `arendenApi.ts` och `handlers.ts` var inaktuella, och README:n länkade till `README.sv.md`, som inte finns.
+      - Begränsningar i verifieringsplanen sa att A2–A4, A8, A9 och A11 väntade på API-tester.
+      - Minneslagringens `update_status` saknade test.
+      - Testerna `…_avvisas_och_inget_sparas` krävde exakt två sparade ärenden.
+      - `giltig_kategori` och `giltig_prioritet` kunde dela en hjälpfunktion, och några kommentarer låg på fel ställe.
+    - En varning till teamet: eftersom `nors.db` har tagits bort ur repot kan en `git pull` ta bort den lokala filen. Appen skapar en tom databas nästa gång den startar.
+  - **Ruben, 2026-11-08:** testerna gick igenom. Allt som skulle rättas före merge var rättat. Det mesta av det som kunde vänta var också rättat:
+    - 405 och 404 ger svensk text, och ett ensamt surrogat ger 422 på svenska, båda med test.
+    - A8 och A9 ligger i mappen Ärenden i Postman, och README:n, kommentarerna och den döda länken är rättade.
+    - Minneslagringen har ett test för `update_status`, och `…_avvisas_och_inget_sparas` jämför antalet före och efter.
+    - Valideringen delar en hjälpfunktion, och kommentarerna ligger rätt.
+
+    Kvar: verifieringsplanen sa fortfarande att A2–A4, A8, A9 och A11 väntade på API-tester. De fyra nya testerna stod inte i planen, och inget av dem började med ett A-id. Minneslagringens test prövar A8 och kunde heta `test_a8_…`. R12-testerna har inget A# i specen.
+  - **Ruben, 2026-11-09:** `python -m pytest` gav 16 passed efter merge av `main`.
+- **Arbete utanför uppdraget som togs bort:** PUT för statusändringen, som byttes mot POST, se Ändrat. Inget annat togs bort.
+- **Accepterat, ändrat eller avvisat, och varför:**
+  - **Ändrat (Otto):** statusändringen byggdes först med PUT. Efter ett beslut i gruppen bytte Otto till POST, som i frontendens kontrakt (`POST /arenden/{id}/status`, se Kontext).
+  - **Ändrat (Otto, `558ff8d`):** allt som skulle rättas före merge, och de punkter som Ruben bockade av 2026-11-08.
+  - **Ändrat (Ruben, 2026-11-09):** konflikten med `main` löstes. Verifieringsplanen rättades och fick de nya testerna, och minneslagringens test döptes om till `test_a8_…`, så att namnet börjar med id:t. Beslutet om `nors.db` skrevs in i [beslut.md](../beslut.md). Se commits `1a56c78`, `46d5cb6` och `07c0f41`.
+  - **Accepterat:** gamla rader med otillåtna värden returneras som de är. Det följer beslutet att inte ha någon CHECK för kategori och prioritet, se [Plan och vårt beslut](#plan-och-vårt-beslut). R12-testerna står i verifieringsplanen utan A#, eftersom specen inte har något A# för dem.
+  - **Godkänt:** Ruben godkände PR:en, och Otto mergade den.
+
 ### Verifiering
 
 Tabellen visar agentens egna körningar i sandlådan. Teamets körningar i en vanlig terminal läggs till vid varje kontrollpunkt.
@@ -200,12 +239,18 @@ Tabellen visar agentens egna körningar i sandlådan. Teamets körningar i en va
 | Steg 1: `python -m pytest -v` från `backend/` | 3 passed (A1, A5, A10) på 4,4 s | 2026-11-02 |
 | Steg 1: A1 och A10 mot en ändrad kopia av backend (status Pågående i stället för Nytt, tom lista, engelskt besked vid 404) | Varje ändring gav ett misslyckat test | 2026-11-02 |
 | Steg 1, Ruben i vanlig terminal på `backend-steg-1` (utgår från `main`): `python -m pytest -v` från `backend/` | 3 passed (A1, A5, A10) | 2026-11-02 |
+| Steg 2–5, lokal körning med projektets venv: `.venv\Scripts\python.exe -m pytest -v` från `backend/` | 10 passed (A1–A5, A8–A11) på 40,17 s | 2026-11-05 |
+| PR-rättningar, lokal körning med projektets venv: `.venv\Scripts\python.exe -m pytest -v` från `backend/` | 12 passed, inklusive tester för stora id och samtidiga statusändringar, på 42,84 s | 2026-11-06 |
 
 ### Avvikelser och öppna frågor
 
-Utanför uppdraget, att följa upp:
+Utanför uppdraget, att följa upp. Läget 2026-11-10 står efter varje punkt.
 
 - **Mockarna:** `frontend/src/mocks/handlers.ts` kontrollerar inte kategori och prioritet, svarar "Field required" och ger 404 före 422 för statusändringen. Efter uppdraget skiljer de sig från backend.
+  - ✅ **Löst** i steg 3 i [frontenduppdraget](2026-11-03-frontend-mot-spec.md) ([PR #7](https://github.com/Ottowski/nors-kundportal-development/pull/7)). Mocken kontrollerar kategori och prioritet med backendens texter, svarar "Måste fyllas i" och ger 422 före 404. Testerna i `frontend/src/api/arendenApi.test.ts` prövar det.
 - **Postman-samlingen:** samlingen i `docs/api/` hänvisar till den gamla specen och innehåller anrop som specen inte har. Mappen "Proposed" blir inaktuell när statusändringen finns.
+  - 🔄 **Delvis löst.** `docs/api/README.md` hänvisar nu till kravspecen och `sok-filter.md`. A8 och A9 ligger i mappen "Ärenden", och mappen "Proposed" heter nu "Not implemented in backend" och körs inte. Kvar: den mappen innehåller fortfarande anrop som specen inte har, nämligen redigering, radering och "A17", ett id som inte finns i kravspecen.
 - **Starlettes egna svar:** svaren vid fel adress eller metod ("Not Found", "Method Not Allowed") är på engelska. Frontenden når dem inte.
+  - ✅ **Löst.** `backend/app/main.py` svarar "Sidan hittades inte" och "Metoden är inte tillåten". `test_r12_http_fel_for_metod_och_sokvag_ar_pa_svenska` prövar det, se [verifieringsplan.md](../verifieringsplan.md).
 - **Lokala databasfiler:** de kan innehålla otillåtna värden. `nors.db` på datorn där planen gjordes har en rad med kategorin och prioriteten "test".
+  - ✅ **Hanterat** genom beslutet 2026-11-09 i [beslut.md](../beslut.md): `nors.db` ligger inte i repot, och var och en har en egen fil. Gamla värden visas som de är (`test_legacy_varden_returneras_oforandrade`), men nya ärenden kan bara få tillåtna värden. Den som vill börja om raderar filen. Står också i [begransningar.md](../begransningar.md).

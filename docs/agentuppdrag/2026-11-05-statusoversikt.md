@@ -117,16 +117,16 @@ Agenten planerade i Plan mode i en egen chatt, med mina egna filer stängda. Pla
 
 **Plan**
 
-| Steg | Innehåll | Commit |
-| ---- | -------- | ------ |
-| 1 | Räknefunktionen och dess test (SO-A1, SO-A2, SO-A8) | "Räkna ärenden per status" |
-| 2 | Komponenten och dess test (SO-K1, SO-A1, SO-A2), regeln `.overview` | "Komponent för statusöversikt", "Test: tom statusöversikt ger tydlig diff" |
-| 3 | En rad i `App.tsx`, tester SO-A1–SO-A8 i `App.test.tsx` | `8d9e688` "Visa statusöversikten i appen" |
-| 4 | Slutrapport | – |
+| Steg | Innehåll                                                            | Commit                                                                     |
+| ---- | ------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| 1    | Räknefunktionen och dess test (SO-A1, SO-A2, SO-A8)                 | "Räkna ärenden per status"                                                 |
+| 2    | Komponenten och dess test (SO-K1, SO-A1, SO-A2), regeln `.overview` | "Komponent för statusöversikt", "Test: tom statusöversikt ger tydlig diff" |
+| 3    | En rad i `App.tsx`, tester SO-A1–SO-A8 i `App.test.tsx`             | `8d9e688` "Visa statusöversikten i appen"                                  |
+| 4    | Slutrapport                                                         | –                                                                          |
 
 ### Granskning
 
-- **Granskad av:** Nathalie, 2026-11-06. Granskas också av någon i teamet i PR:en.
+- **Granskad av:** Nathalie, 2026-11-06, och Ruben i [granskningen av PR #12](https://github.com/Ottowski/nors-kundportal-development/pull/12), 2026-11-08. Ruben godkände PR:en. Han bekräftade att specen kom före koden och att koden följer SO-R1, SO-R2 och SO-R5. Han bedömde också att han kan bygga och kontrollera utifrån specen utan att fråga, och bockade av den sista punkten i specens checklista.
 - **Vad jag hittade:**
   - Två gånger blev testerna röda av fel anledning. Vid fel 2 låg fel 1 kvar, eftersom jag inte hade kontrollerat med `git status`. Vid fel 3 blev ett mellanslag `{" "}` när filen sparades. Agenten läste felmeddelandena och såg det. Båda kördes om.
   - Vid fel 4 kraschade SO-A2 i en hjälpfunktion i stället för att bli rött på sin kontroll. Agenten sa att planen hade fel och bytte `getAllByRole` mot `queryAllByRole`.
@@ -143,16 +143,17 @@ Agenten planerade i Plan mode i en egen chatt, med mina egna filer stängda. Pla
 
 Felen i steg 1 och 2, och P2, gjorde jag själv. Efter varje fel återställde jag och kontrollerade med `git status`.
 
-| Kommando | Resultat | Datum |
-| -------- | -------- | ----- |
-| `npx vitest run src/utils/countByStatus.test.ts`, fel a–c i `countByStatus.ts` (jag) | a: alla tre röda, Avslutat saknas. b: SO-A1 och SO-A8 röda, SO-A2 grönt som väntat. c: alla tre röda, statusarna med 0 saknas | 2026-11-05 |
-| `npx vitest run src/components/StatusOverview.test.tsx`, fel 1–5 i `StatusOverview.tsx` (jag) | 1: alla tre röda, listan saknar namn. 2: alla tre röda, 8 poster i stället för 4. 3: bara SO-A1 rött (knappar). 4: alla tre röda, nollorna saknas. 5: bara SO-A1 rött (länkar) | 2026-11-06 |
-| Fel i testet, `db.reset()` och utan `server.use` (agenten) | Varje App-test rött på sin rad för utgångsläget | 2026-11-06 |
-| `npx vitest run`, P1 och P3–P6 (agenten) | P1: 7 röda, SO-A6 grönt. P3: SO-A6 och SO-A7 röda. P4: SO-A3 och SO-A4 röda, listan uppdaterades men inte översikten. P5 och P6: 10 röda | 2026-11-06 |
-| `npx vitest run`, P2 `arenden={visible}` i `App.tsx` (jag) | Bara SO-A5 rött, rad 330: Nytt 0, Pågående 0, Avslutat 0 efter sökningen | 2026-11-06 |
-| `git status` efter sista felet | `working tree clean` | 2026-11-06 |
-| Jag: `npm run check` i `frontend/` på `8d9e688` | 68 passed och bygget lyckades | 2026-11-06 |
-| Jag: `npm run dev:mock` | Översikten under rubriken. Siffrorna ändras direkt vid statusändring och nytt ärende, och inte vid sökning. Se [verifieringsplanen](../verifieringsplan.md#statusöversikten-i-appen) | 2026-11-06 |
+| Kommando                                                                                      | Resultat                                                                                                                                                                             | Datum      |
+| --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| `npx vitest run src/utils/countByStatus.test.ts`, fel a–c i `countByStatus.ts` (jag)          | a: alla tre röda, Avslutat saknas. b: SO-A1 och SO-A8 röda, SO-A2 grönt som väntat. c: alla tre röda, statusarna med 0 saknas                                                        | 2026-11-05 |
+| `npx vitest run src/components/StatusOverview.test.tsx`, fel 1–5 i `StatusOverview.tsx` (jag) | 1: alla tre röda, listan saknar namn. 2: alla tre röda, 8 poster i stället för 4. 3: bara SO-A1 rött (knappar). 4: alla tre röda, nollorna saknas. 5: bara SO-A1 rött (länkar)       | 2026-11-06 |
+| Fel i testet, `db.reset()` och utan `server.use` (agenten)                                    | Varje App-test rött på sin rad för utgångsläget                                                                                                                                      | 2026-11-06 |
+| `npx vitest run`, P1 och P3–P6 (agenten)                                                      | P1: 7 röda, SO-A6 grönt. P3: SO-A6 och SO-A7 röda. P4: SO-A3 och SO-A4 röda, listan uppdaterades men inte översikten. P5 och P6: 10 röda                                             | 2026-11-06 |
+| `npx vitest run`, P2 `arenden={visible}` i `App.tsx` (jag)                                    | Bara SO-A5 rött, rad 330: Nytt 0, Pågående 0, Avslutat 0 efter sökningen                                                                                                             | 2026-11-06 |
+| `git status` efter sista felet                                                                | `working tree clean`                                                                                                                                                                 | 2026-11-06 |
+| Jag: `npm run check` i `frontend/` på `8d9e688`                                               | 68 passed och bygget lyckades                                                                                                                                                        | 2026-11-06 |
+| Jag: `npm run dev:mock`                                                                       | Översikten under rubriken. Siffrorna ändras direkt vid statusändring och nytt ärende, och inte vid sökning. Se [verifieringsplanen](../verifieringsplan.md#statusöversikten-i-appen) | 2026-11-06 |
+| Ruben i granskningen, på `bcbb39a`: `npm run check` och stegen i "Statusöversikten i appen"   | Format, lint, typer och bygge gick igenom, 68 passed. Alla fyra stegen som förväntat, och siffrorna ändras inte heller av statusfiltret                                              | 2026-11-08 |
 
 ### Avvikelser och öppna frågor
 

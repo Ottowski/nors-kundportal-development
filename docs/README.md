@@ -16,6 +16,7 @@ Här samlar teamet all dokumentation för projektet. `docs/` är enda källan: s
 | [ai-arbetssatt.md](ai-arbetssatt.md)                 | Hur teamet arbetar med AI, återanvändbara prompter                | Alla                    |
 | [agentuppdrag/](agentuppdrag/)                       | Ett dokument per avgränsat agentuppdrag                           | Den som leder uppdraget |
 | [verifieringsplan.md](verifieringsplan.md)           | Tester: spårbarhet, hur de körs, resultat, begränsningar          | Alla                    |
+| [testing/](testing/README.md)                        | QA-uppgifter, testbevis och felrapporter (på engelska)            | Sravani                 |
 | [veckostatus.md](veckostatus.md)                     | Veckostatus vecka 4–8                                             | Alla                    |
 | [begransningar.md](begransningar.md)                 | Kända begränsningar, risker och fortsatt utveckling               | Alla                    |
 | [historik/](historik/)                               | Historiskt underlag som inte gäller längre: frontend- och testspec samt arkitekturbeskrivning för den ursprungliga frontenden | Sravani |
