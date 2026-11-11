@@ -1,8 +1,10 @@
 # Arkitekturflöde
 
+> **Historiskt underlag.** Filen beskriver arkitekturen för den ursprungliga frontenden från [PR #3](https://github.com/Ottowski/nors-kundportal-development/pull/3), med redigering, borttagning och lagring i minnet. Frontenden i `main` är rättad mot specen, se [PR #7](https://github.com/Ottowski/nors-kundportal-development/pull/7), och ärendena sparas i SQLite. Id som R11.5, F1 och A14 syftar på den tidiga specen, inte på `kravspec.md`. Hur koden är uppbyggd nu står i [CLAUDE.md](../../CLAUDE.md), och det som gäller står i [kravspec.md](../specs/kravspec.md) och [verifieringsplan.md](../verifieringsplan.md).
+
 > English version: [architecture-flow.md](architecture-flow.md)
 
-Hur frontend, backend, mockar och tester hänger ihop. Krav-id (R#, A#, F#/Q#) syftar på [specs/](specs/).
+Hur frontend, backend, mockar och tester hänger ihop. Krav-id (R#, A#, F#/Q#) syftar på [specs/](../specs/).
 
 ## Översikt
 
