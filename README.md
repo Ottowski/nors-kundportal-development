@@ -1,15 +1,24 @@
 # Kundserviceportalen NORS
 
-Ett startprojekt för teamet NORS, med backend i Python/FastAPI och frontend i
-React/TypeScript.
+Teamet NORS kundserviceportal. En handläggare registrerar ärenden, ser listan
+och detaljerna, ändrar status och söker och filtrerar bland ärendena. Backend i
+Python/FastAPI med SQLite, frontend i React/TypeScript.
 
 All projektdokumentation finns i [docs/](docs/README.md).
 
 ## Krav
 
+- Git
 - Python 3.10 eller senare
 - Node.js 20.19+ eller 22.12+
 - npm
+
+## Hämta koden
+
+```powershell
+git clone https://github.com/Ottowski/nors-kundportal-development.git
+cd nors-kundportal-development
+```
 
 ## Kör API:t
 

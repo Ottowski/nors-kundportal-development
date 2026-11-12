@@ -117,6 +117,7 @@ Kan göras när statusändringen finns i backend (steg 4 i [backenduppdraget](ag
 | Datum | Vem | Commit | Utfall |
 | ----- | --- | ------ | ------ |
 | 2026-11-10 | Hela teamet | Appkoden som på `main` `a84f564` | Alla sju steg som förväntat. Backend och frontend kördes lokalt, inte mot mockar |
+| 2026-11-12 | Ruben på sin dator, med hela teamet, på redovisningen | `main` på `4b9fdc5` (samma appkod som `a84f564`) | Hela flödet visades mot riktig backend och fungerade som förväntat med alla krav |
 
 ### K1 – bara tangentbord
 
@@ -132,7 +133,7 @@ Kan göras redan nu, mot mockarna med `npm run dev:mock`, eftersom K1 gäller gr
 
 | Datum | Vem | Commit | Utfall |
 | ----- | --- | ------ | ------ |
-| 2026-11-06 | Ruben (vid tangentbordet), Nathalie (observerade och antecknade) | `main` på `70a31e2` | Godkänd. Alla fem steg gick med bara tangentbord, och fokus syntes hela tiden. Esc stänger också panelen. Förbättringsförslag: när Nytt ärende öppnas stannar fokus på knappen, så man måste tabba genom sökfältet, filtren och listan innan man kommer till Rubrik. Teamet beslutar om fokus ska flyttas till formuläret |
+| 2026-11-06 | Ruben (vid tangentbordet), Nathalie (observerade och antecknade) | `main` på `70a31e2` | Godkänd. Alla fem steg gick med bara tangentbord, och fokus syntes hela tiden. Esc stänger också panelen. Förbättringsförslag: när Nytt ärende öppnas stannar fokus på knappen, så man måste tabba genom sökfältet, filtren och listan innan man kommer till Rubrik. Teamet beslutade 2026-11-12 att inte ändra det. Det står som möjlig förbättring i [begransningar.md](begransningar.md#förslag-på-fortsatt-utveckling) |
 
 ### Statusöversikten i appen
 
@@ -165,6 +166,8 @@ Mot mockarna med `npm run dev:mock`. Prövar det som komponenttesterna inte visa
 | 2026-11-09 | Ej committad, merge av `main` (`c8077a4`) i `qa-frontend-testing` | `npm run check` från `frontend/` | Format, lint, typer och bygge gick igenom. 68 passed (54 tidigare och 14 för statusöversikten), A2 och A3 ingår - se [logg](testing/evidence/2026-11-09-baseline-after-merge-npm-run-check.txt) |
 | 2026-11-10 | Ej committad, branch `qa-frontend-testing` på `bf49dac` ([agentuppdraget](agentuppdrag/2026-11-09-a2-a4-form-tests.md)) | `npm run check` från `frontend/` | Format, lint, typer och bygge gick igenom. 68 passed. Varje kontroll i A4 har setts misslyckas med ett tillfälligt fel - se [logg](testing/evidence/2026-11-10-A4-can-fail.txt) |
 | 2026-11-10 | Ej committad, branch `qa-frontend-testing` på `bf49dac`, efter kodgranskningen av A2–A4. Samma kod committades sedan som `13a9137` ([agentuppdraget](agentuppdrag/2026-11-09-a2-a4-form-tests.md)) | `npm run check` från `frontend/` | Format, lint, typer och bygge gick igenom. 68 passed. A4 kontrollerar nu att formuläret skickade den valda kategorin, och varje kontroll i A4 har setts misslyckas på nytt - se [logg](testing/evidence/2026-11-10-baseline-after-review-npm-run-check.txt) och [A4-bevis](testing/evidence/2026-11-10-A4-can-fail.txt) |
+| 2026-11-12 | Slutkörning: appkoden som på `main` `4b9fdc5`, med dokumentändringar ovanpå som inte är committade | `python -m pytest` från `backend/` | 16 passed |
+| 2026-11-12 | Slutkörning: appkoden som på `main` `4b9fdc5`, med dokumentändringar ovanpå som inte är committade | `npm run check` från `frontend/` | Format, lint, typer och bygge gick igenom. 68 passed |
 
 ## Begränsningar
 
