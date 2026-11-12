@@ -7,7 +7,7 @@ Här beskriver vi hur teamet använder AI i projektet: vilka verktyg, vilka geme
 - **Claude Code** i VS Code: för kod, tester, dokumentation och avgränsade agentuppdrag.
 - **Claude** i webbläsaren: för att diskutera och granska specar.
 
-AI används bara som stöd i utvecklingen. Produkten har ingen AI-funktion.
+AI används bara som stöd i utvecklingen. Produkten har ingen AI-funktion. Varför vi valde Claude står i [beslut.md](beslut.md).
 
 ## Gemensamma instruktioner
 
