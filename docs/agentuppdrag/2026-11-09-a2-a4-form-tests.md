@@ -9,7 +9,10 @@
 - **Date:** 2026-11-09
 - **Agent and tools:** Claude Code, the `frontend-developer` agent with the
   [verifiera-mot-spec](../../.claude/skills/verifiera-mot-spec/SKILL.md) skill
-- **PR:** [#15](https://github.com/Ottowski/nors-kundportal-development/pull/15)
+- **PR:** [#15](https://github.com/Ottowski/nors-kundportal-development/pull/15) (A2 and A3),
+  [#16](https://github.com/Ottowski/nors-kundportal-development/pull/16) (A4 and the first review
+  fixes), [#18](https://github.com/Ottowski/nors-kundportal-development/pull/18) (the remaining
+  review findings)
 
 ## Before
 
